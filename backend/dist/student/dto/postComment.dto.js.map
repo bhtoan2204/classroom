@@ -1,0 +1,1 @@
+{"version":3,"file":"postComment.dto.js","sourceRoot":"","sources":["../../../src/student/dto/postComment.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,qDAAiE;AACjE,qGAAsF;AAEtF,MAAa,cAAc;IAIvB,cAAc,CAAS;IAIvB,OAAO,CAAS;CACnB;AATD,wCASC;AALG;IAHC,IAAA,4BAAU,GAAE;IACZ,IAAA,0BAAQ,GAAE;IACV,IAAA,2CAAe,GAAE;;sDACK;AAIvB;IAFC,IAAA,4BAAU,GAAE;IACZ,IAAA,0BAAQ,GAAE;;+CACK"}

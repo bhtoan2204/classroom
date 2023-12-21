@@ -1,0 +1,81 @@
+# compiled output
+/backend/dist
+/backend/node_modules
+
+# Logs
+/backend/logs
+/backend/*.log
+/backend/npm-debug.log*
+/backend/pnpm-debug.log*
+/backend/yarn-debug.log*
+/backend/yarn-error.log*
+/backend/lerna-debug.log*
+
+# OS
+/backend/.DS_Store
+
+# Tests
+/backend/coverage
+/backend/.nyc_output
+
+# IDEs and editors
+/backend/.idea
+/backend/.project
+/backend/.classpath
+/backend/.c9/
+/backend/*.launch
+/backend/.settings/
+/backend/*.sublime-workspace
+
+# IDE - VSCode
+/backend/.vscode/*
+/backend/!.vscode/settings.json
+/backend/!.vscode/tasks.json
+/backend/!.vscode/launch.json
+/backend/!.vscode/extensions.json
+
+/backend/.vercel
+/backend/.env.development
+/backend/.env.production
+
+/backend/esData01
+/backend/redis
+
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/frontend-admin/node_modules
+/frontend-admin/.pnp
+frontend-admin/.pnp.js
+
+# testing
+/frontend-admin/coverage
+
+# next.js
+/frontend-admin/.next/
+/frontend-admin/out/
+
+# production
+/frontend-admin/build
+
+# misc
+frontend-admin/.DS_Store
+frontend-admin/*.pem
+
+# debug
+frontend-admin/npm-debug.log*
+frontend-admin/yarn-debug.log*
+frontend-admin/yarn-error.log*
+
+# local env files
+frontend-admin/.env.local
+frontend-admin/.env.development.local
+frontend-admin/.env.test.local
+frontend-admin/.env.production.local
+
+# vercel
+frontend-admin/.vercel
+
+# typescript
+frontend-admin/*.tsbuildinfo
