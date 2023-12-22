@@ -3,8 +3,6 @@ import { fetchRefresh } from './api/auth/refresh';
 
 
 export async function middleware(request: NextRequest) {
-    console.log(process.env.NEXT_PUBLIC_API_HOST + "12345");
-
     const accessToken = request.cookies.get('accessToken');
     const refreshToken = request.cookies.get('refreshToken');
     const baseURL = request.nextUrl.pathname;

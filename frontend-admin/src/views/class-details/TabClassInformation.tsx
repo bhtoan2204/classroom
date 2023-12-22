@@ -140,7 +140,6 @@ const ClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
             const fetchUserData = async () => {
                 try {
                     const data = await fetchClassDetail(class_id as string, getCookieCustom('accessToken') as string);
-                    console.log(data);
                     if (data) {
                         setClassDetail(data);
                     }

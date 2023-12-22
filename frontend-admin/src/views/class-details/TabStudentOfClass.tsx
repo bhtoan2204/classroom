@@ -78,7 +78,7 @@ const StudentOfClass: React.FC<ClassDetailProps> = ({ class_id }) => {
             }
         }
         catch (err) {
-            console.log(err);
+
         }
     };
 
