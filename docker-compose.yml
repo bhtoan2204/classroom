@@ -17,7 +17,6 @@ services:
     depends_on:
       - database
       - esOne
-      - redis
     volumes:
       - ./backend/src:/app/src
 
@@ -49,14 +48,6 @@ services:
       - ./backend/esData01:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
-
-  redis:
-    image: redis
-    command: redis-server
-    ports:
-        - 6379:6379
-    volumes:
-        - ./backend/redis:/data
 
   frontend-admin:
     build: ./frontend-admin

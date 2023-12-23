@@ -7,7 +7,6 @@ import { TokenPayload } from '../auth/interface/tokenPayload.interface';
 import { CurrentUser } from '../utils/decorator/current-user.decorator';
 import { EditProfileDTO } from './dto/editProfile.dto';
 import { ChangePassworDto } from './dto/changePassword.dto';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { StorageService } from '../storage/storage.service';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
@@ -35,7 +34,6 @@ export class UserController {
   @Get('/profile')
   @ApiOperation({ summary: 'Get user profile' })
   @UseGuards(JwtAuthGuard)
-  // @UseInterceptors(CacheInterceptor)
   async getProfile(@Req() request) {
     const { _id } = request.user as TokenPayload;
     return await this.usersService.getUserById(_id);

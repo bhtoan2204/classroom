@@ -7,7 +7,6 @@ import { Role } from "src/utils/enum/role.enum";
 import { AccountsService } from "./accounts.service";
 import { GetUserFilterDto } from "./dto/getUserFilter.dto";
 import { SearchService } from "src/elastic/search.service";
-import { CacheInterceptor } from "@nestjs/cache-manager";
 import { SearchUserDto } from "./dto/searchUser.dto";
 
 @ApiTags('Accounts for Admin')
@@ -21,7 +20,6 @@ export class AccountsController {
         private readonly searchService: SearchService
     ) { }
 
-    @UseInterceptors(CacheInterceptor)
     @Post('/getUsers')
     @ApiOperation({ summary: 'Get users' })
     async getUsers(@Body() filter: GetUserFilterDto) {
@@ -42,7 +40,6 @@ export class AccountsController {
         return this.searchService.search(dto.text, dto.page, dto.perPage);
     }
 
-    @UseInterceptors(CacheInterceptor)
     @Get('/userDetail/:userId')
     @ApiOperation({ summary: 'Get user detail' })
     @ApiParam({ name: 'userId', type: String })

@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, UseGu
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { ClassService } from "../service/class.service";
 import { CreateClassDto } from "../dto/createClass.dto";
-import { CacheInterceptor } from "@nestjs/cache-manager";
 import { JwtAuthGuard } from "src/utils/guard/authenticate/jwt-auth.guard";
 import { CurrentUser } from "src/utils/decorator/current-user.decorator";
 import { RolesGuard } from "src/utils/guard/authorize/role.guard";
@@ -27,7 +26,6 @@ export class ClassController {
     }
 
     @HttpCode(HttpStatus.OK)
-    // @UseInterceptors(CacheInterceptor)
     @Get('/getAll')
     @ApiOperation({ summary: 'Get all classes' })
     async getAll(@CurrentUser() host) {
@@ -35,7 +33,6 @@ export class ClassController {
     }
 
     @HttpCode(HttpStatus.OK)
-    // @UseInterceptors(CacheInterceptor)
     @Get('/getJoinedClasses')
     @ApiOperation({ summary: 'Get all classes' })
     async getJoinedClasses(@CurrentUser() host) {
@@ -58,7 +55,6 @@ export class ClassController {
     }
 
     @HttpCode(HttpStatus.OK)
-    // @UseInterceptors(CacheInterceptor)
     @Get('/getTeachers/:classId')
     @ApiOperation({ summary: 'Get teacher of class' })
     @ApiParam({ name: 'classId', type: String })
@@ -67,7 +63,6 @@ export class ClassController {
     }
 
     @HttpCode(HttpStatus.OK)
-    // @UseInterceptors(CacheInterceptor)
     @Get('/getStudents/:classId')
     @ApiOperation({ summary: 'Get students of class' })
     @ApiParam({ name: 'classId', type: String })

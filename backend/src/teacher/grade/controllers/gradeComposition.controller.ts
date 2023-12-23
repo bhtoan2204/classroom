@@ -1,7 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards, Delete, UseInterceptors, Patch } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { CreateGradeCompositionDto } from "../../dto/createGradeComposition.dto";
-import { CacheInterceptor } from "@nestjs/cache-manager";
 import { GradeCompositionService } from "../service/gradeComposition.service";
 import { JwtAuthGuard } from "src/utils/guard/authenticate/jwt-auth.guard";
 import { CurrentUser } from "src/utils/decorator/current-user.decorator";
@@ -29,7 +28,6 @@ export class GradeCompositionController {
     }
 
     @HttpCode(HttpStatus.CREATED)
-    // @UseInterceptors(CacheInterceptor)
     @ApiParam({ name: 'classId', type: String })
     @Get('/getCurentGradeStructure/:classId')
     async getCurentGradeStructure(@CurrentUser() user, @Param() params: any) {

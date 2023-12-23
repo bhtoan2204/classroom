@@ -4,7 +4,6 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { PassportModule } from '@nestjs/passport';
-import { CacheModule } from '@nestjs/cache-manager';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TeacherModule } from './teacher/teacher.module';
@@ -14,7 +13,6 @@ import { NotificationModule } from './notifications/notification.module';
 import { RouteModule } from './route/route.module';
 import { validateSchemaConfig } from './utils/config/validateSchema.config';
 import { DatabaseModule } from './database/database.module';
-import { LocalCacheModule } from './cache/cache.module';
 
 @Module({
   imports: [
@@ -32,7 +30,6 @@ import { LocalCacheModule } from './cache/cache.module';
     NotificationModule,
     PassportModule.register({ session: true }),
     RouteModule,
-    LocalCacheModule,
     DatabaseModule,
   ],
   controllers: [AppController],
