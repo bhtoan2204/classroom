@@ -71,7 +71,3 @@ services:
       - 80:80
     depends_on:
       - frontend-admin
-
-networks: 
-  my-networks:
-    driver: bridge
