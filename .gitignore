@@ -35,8 +35,6 @@
 /backend/!.vscode/extensions.json
 
 /backend/.vercel
-/backend/.env.development
-/backend/.env.production
 
 /backend/esData01
 /backend/redis
@@ -68,11 +66,6 @@ frontend-admin/npm-debug.log*
 frontend-admin/yarn-debug.log*
 frontend-admin/yarn-error.log*
 
-# local env files
-frontend-admin/.env.local
-frontend-admin/.env.development.local
-frontend-admin/.env.test.local
-frontend-admin/.env.production.local
 
 # vercel
 frontend-admin/.vercel
