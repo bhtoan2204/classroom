@@ -326,4 +326,15 @@ export class UserService {
       throw new ConflictException(err);
     }
   }
+
+  async promoteAdmin(user: User) {
+    try {
+      const updatedUser = await this.userRepository.findOneAndUpdate({ _id: user._id }, { role: 'admin' }).exec();
+      await this.searchService.update(updatedUser);
+      return { message: "Assign role successfully" };
+    }
+    catch (err) {
+      throw new ConflictException(err);
+    }
+  }
 }

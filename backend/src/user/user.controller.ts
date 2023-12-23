@@ -104,4 +104,11 @@ export class UserController {
   async assignRole(@CurrentUser() user: User, @Body() dto: RoleDto) {
     return this.usersService.assignRole(user, dto.role);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Patch('/promote-admin')
+  @UseGuards(JwtAuthGuard)
+  async promoteAdmin(@CurrentUser() user: User, @Body() dto: RoleDto) {
+    return this.usersService.promoteAdmin(user);
+  }
 }
