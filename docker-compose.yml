@@ -45,7 +45,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - ./backend/esData01:/usr/share/elasticsearch/data
+      - ./backend/esData01:/var/lib/elasticsearch/data
     ports:
       - 9200:9200
 
