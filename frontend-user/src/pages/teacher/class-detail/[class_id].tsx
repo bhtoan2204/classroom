@@ -14,6 +14,7 @@ import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useRouter } from 'next/router'
 import TabClassDetail from 'src/views/class-detail/TabDetail'
+import GradeStructure from 'src/views/class-detail/TabGradeStructure'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
@@ -35,11 +36,12 @@ const TabName = styled('span')(({ theme }) => ({
 
 const ClassDetail = () => {
     const [value, setValue] = useState<string>('class-detail');
-    const { class_id } = useRouter().query
+    const router = useRouter();
+    const { class_id } = router.query;
     const handleChange = (event: SyntheticEvent, newValue: string) => {
+        console.log(class_id)
         setValue(newValue)
     }
-
     return (
         <Card>
             <TabContext value={value}>
@@ -98,7 +100,7 @@ const ClassDetail = () => {
                     <TabClassDetail class_id={class_id as string} />
                 </TabPanel>
                 <TabPanel sx={{ p: 0 }} value='grade-structure'>
-
+                    <GradeStructure class_id={class_id as string} />
                 </TabPanel>
                 <TabPanel sx={{ p: 0 }} value='grade-management'>
 
