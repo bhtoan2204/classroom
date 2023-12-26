@@ -7,6 +7,7 @@ import { CurrentUser } from "src/utils/decorator/current-user.decorator";
 import { RolesGuard } from "src/utils/guard/authorize/role.guard";
 import { Roles } from "src/utils/decorator/role.decorator";
 import { Role } from "src/utils/enum/role.enum";
+import { PaginateDto } from "../dto/paginate.dto";
 
 @ApiTags('Class for Teacher')
 @Controller('class')
@@ -25,18 +26,19 @@ export class ClassController {
         return this.classService.create(host, dto);
     }
 
+
     @HttpCode(HttpStatus.OK)
-    @Get('/getAll')
-    @ApiOperation({ summary: 'Get all classes' })
-    async getAll(@CurrentUser() host) {
-        return this.classService.getAll(host);
+    @Post('/getMyClasses')
+    @ApiOperation({ summary: 'Get my classes' })
+    async getMyClasses(@CurrentUser() host, @Body() dto: PaginateDto) {
+        return this.classService.getMyClasses(host, dto);
     }
 
     @HttpCode(HttpStatus.OK)
-    @Get('/getJoinedClasses')
-    @ApiOperation({ summary: 'Get all classes' })
-    async getJoinedClasses(@CurrentUser() host) {
-        return this.classService.getJoinedClasses(host);
+    @Post('/getJoinedClasses')
+    @ApiOperation({ summary: 'Get joined classes' })
+    async getJoinedClasses(@CurrentUser() host, @Body() dto: PaginateDto) {
+        return this.classService.getJoinedClasses(host, dto);
     }
 
     @HttpCode(HttpStatus.OK)

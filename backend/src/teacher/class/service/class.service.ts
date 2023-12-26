@@ -8,6 +8,7 @@ import { Class, ClassDocument } from "src/utils/schema/class.schema";
 import { ClassUser, ClassUserDocument } from "src/utils/schema/classUser.schema";
 import { User, UserDocument } from "src/utils/schema/user.schema";
 import { UserGrade, UserGradeDocument } from "src/utils/schema/userGrade.schema";
+import { PaginateDto } from "../dto/paginate.dto";
 
 @Injectable()
 export class ClassService {
@@ -90,42 +91,76 @@ export class ClassService {
         return new HttpException("Delete class successfully", HttpStatus.OK);
     }
 
-    async getAll(user: User): Promise<any> {
-        const classIds = user.classes.map(clazz => clazz.class_id);
-        const classes = await this.classRepository.find({ _id: { $in: classIds } })
-            .select('_id className description')
-            .exec();
+    async getMyClasses(user: User, dto: PaginateDto): Promise<any> {
+        const { page, itemPerPage } = dto;
+        const skip = (page - 1) * itemPerPage;
 
-        if (!classes || classes.length === 0) {
-            return new NotFoundException('No classes found for the given user');
-        }
-
-        return classes;
-    }
-
-    async getJoinedClasses(user: User): Promise<any> {
-        const classes = await this.classRepository.find({ host: user._id })
-            .select('_id className description')
-            .exec();
+        const [classes, totalCount] = await Promise.all([
+            this.classRepository
+                .find({ host: user._id })
+                .select('_id className description')
+                .skip(skip)
+                .limit(itemPerPage)
+                .exec(),
+            this.classRepository.countDocuments({ host: user._id }),
+        ]);
 
         if (!classes || classes.length === 0) {
             return new NotFoundException('No classes found for the given host');
         }
 
-        return classes;
+        return { classes, totalCount };
     }
 
-    async getClassDetail(host: User, classid: string): Promise<any> {
+    async getJoinedClasses(user: User, dto: PaginateDto): Promise<any> {
+        const { page, itemPerPage } = dto;
+        const skip = (page - 1) * itemPerPage;
+
+        const classUsers = await this.classUserRepository.find({ teachers: { $elemMatch: { user_id: user._id } } }).exec();
+        const classIds = classUsers.map(classUser => classUser.class_id);
+
+        const [classes, totalCount] = await Promise.all([
+            this.classRepository
+                .find({ _id: { $in: classIds } })
+                .select('_id className description')
+                .skip(skip)
+                .limit(itemPerPage)
+                .exec(),
+            this.classRepository.countDocuments({ _id: { $in: classIds } }),
+        ]);
+
+        if (!classes || classes.length === 0) {
+            return new NotFoundException('No classes found for the given host');
+        }
+
+        return { classes, totalCount };
+    }
+
+    async getClassDetail(host: User, classid: string) {
+        const classId = new Types.ObjectId(classid);
+        this.checkInClass(host, classId);
+        const classDetail = await this.classRepository
+            .findOne({ _id: new Types.ObjectId(classId) })
+            .populate({
+                path: 'host',
+                model: 'User',
+                select: 'fullname avatar',
+            })
+            .exec();
+        return classDetail;
+    }
+
+    async asd(host: User, classid: string): Promise<any> {
         const classId = new Types.ObjectId(classid);
         this.checkInClass(host, classId);
 
         const clazz = await this.classRepository.findOne({ _id: classId, host: host._id })
-            .select('_id className description')
+            .select('_id className description is_active host')
             .exec();
 
         if (!clazz) return new ConflictException("You already in this class");
-
-        return clazz;
+        const hostName = await this.userRepository.findOne({ _id: clazz.host }).select('name').exec();
+        return { ...clazz, hostName };
     }
 
     async getTeachers(user: User, classid: string): Promise<any> {
