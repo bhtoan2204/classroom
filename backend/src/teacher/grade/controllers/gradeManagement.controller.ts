@@ -12,6 +12,7 @@ import { InputGradeDto } from "src/teacher/dto/inputGrade.dto";
 import { dot } from "node:test/reporters";
 import { MapStudentIdDto } from "src/teacher/dto/mapStudentId.dto";
 import { UploadGradeAssignmentDto } from "src/teacher/dto/uploadGradeAssignment.dto";
+import { Types } from "mongoose";
 
 @ApiTags('Grade Management for Teacher')
 @Controller('gradeManagement')
@@ -21,15 +22,15 @@ import { UploadGradeAssignmentDto } from "src/teacher/dto/uploadGradeAssignment.
 export class GradeManagementController {
     constructor(
         private readonly gradeManagementService: GradeManagementService,
-        private readonly storageService: StorageService
     ) { }
 
     @HttpCode(HttpStatus.OK)
     @ApiParam({ name: 'classId', type: String })
-    @Get('/downloadListStudentTemplate/:classId/')
+    @Get('/downloadListStudentTemplate/:classId')
     @Header('Content-Type', 'text/xlsx')
     async downloadListStudentTemplate(@CurrentUser() user, @Param() params: any, @Res() res) {
-        const result = await this.gradeManagementService.downloadListStudentTemplate(user, params.classId);
+        const classId = new Types.ObjectId(params.classId);
+        const result = await this.gradeManagementService.downloadListStudentTemplate(user, classId);
         res.download(`${result}`);
     }
 
@@ -69,7 +70,6 @@ export class GradeManagementController {
     @Get('/downloadTemplateByAssignment/:classId/:gradeCompo_name')
     @ApiParam({ name: 'classId', type: String })
     @ApiParam({ name: 'gradeCompo_name', type: String })
-    @Header('Content-Type', 'text/xlsx')
     async downloadTemplateByAssignment(@CurrentUser() user, @Param() params: any, @Res() res) {
         const result = await this.gradeManagementService.downloadTemplateByAssignment(user, params.classId, params.gradeCompo_name);
         res.download(`${result}`);

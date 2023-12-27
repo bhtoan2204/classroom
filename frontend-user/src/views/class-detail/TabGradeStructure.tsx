@@ -10,7 +10,7 @@ import { fetchUpdateGradeComposition } from "src/api/teacher/grade/updateGradeCo
 import { getCookieCustom } from "src/utils/cookies";
 
 const style = {
-    position: 'absolute' as 'absolute',
+    position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',

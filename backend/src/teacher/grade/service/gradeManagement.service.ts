@@ -9,7 +9,6 @@ import { User, UserDocument } from "src/utils/schema/user.schema";
 import { Class, ClassDocument } from "src/utils/schema/class.schema";
 import { UserGrade, UserGradeDocument } from "src/utils/schema/userGrade.schema";
 import { InputGradeDto } from "src/teacher/dto/inputGrade.dto";
-import { MapStudentIdDto } from "src/teacher/dto/mapStudentId.dto";
 import { UploadGradeAssignmentDto } from "src/teacher/dto/uploadGradeAssignment.dto";
 
 @Injectable()
@@ -52,11 +51,13 @@ export class GradeManagementService {
 
     private async getStudentOfClass(classId: Types.ObjectId): Promise<User[]> {
         const classUser = await this.classUserRepository.find({ class_id: classId }).exec();
-        if (classUser == null) {
+        if (classUser.length === 0) {
             throw new HttpException('Class not found', HttpStatus.NOT_FOUND);
         }
-        const studentids = classUser.map((classUser) => classUser.students.map((student) => student.user_id));
-        const users = await this.userRepository.find({ _id: { $in: studentids } }).exec();
+
+        const studentIds = classUser.flatMap((cu) => cu.students.map((student) => student.user_id));
+
+        const users = await this.userRepository.find({ _id: { $in: studentIds } }).exec();
         return users;
     }
 
@@ -67,17 +68,18 @@ export class GradeManagementService {
         }
     }
 
-    async downloadListStudentTemplate(currentUser: User, classid: string) {
-        const classId = new Types.ObjectId(classid);
-
+    async downloadListStudentTemplate(currentUser: User, classId: Types.ObjectId) {
         this.checkInClass(currentUser, classId);
         const users = await this.getStudentOfClass(classId);
+        const classUser = await this.classUserRepository.findOne({ class_id: classId }).exec();
+        const students = classUser.students;
         let rows = [];
-        users.forEach(async (user) => {
-            const classUser = await this.classUserRepository.findOne({ class_id: classId }).exec();
-            const studentId = classUser.students.find((student) => student.user_id == user._id).student_id;
+
+        for (const user of users) {
+            const studentId = students.find(entry => entry.user_id.toString() === user._id.toString()).student_id;
             rows.push(Object.values({ Name: user.fullname, Id: studentId }));
-        });
+        }
+
         let book = new Workbook();
         let sheet = book.addWorksheet('List Student');
         rows.unshift(Object.values({ studentName: 'Student Name', studentId: 'Student Id' }));
@@ -123,29 +125,38 @@ export class GradeManagementService {
 
     async showStudentsListxGradesBoard(currentUser: User, classid: string) {
         const classId = new Types.ObjectId(classid);
+
         await this.checkInClass(currentUser, classId);
+
         try {
             const classUser = await this.classUserRepository.findOne({ class_id: classId });
             const students = classUser.students;
-            const rows = [];
 
-            for (const student of students) {
-                const studentName = (await this.userRepository.findOne({ _id: student.user_id }).exec()).fullname;
+            // Use Promise.all to parallelize fetching student information and grades
+            const rows = await Promise.all(students.map(async (student) => {
+                const [userInfo, userGrade] = await Promise.all([
+                    this.userRepository.findOne({ _id: student.user_id }).exec(),
+                    this.userGradeRepository.findOne({ user_id: student.user_id, class_id: classId }).exec(),
+                ]);
+
+                const studentName = userInfo.fullname;
                 const studentId = student.student_id;
-                const userGrade = await this.userGradeRepository.findOne({ user_id: student.user_id, class_id: classId }).exec();
-                const grades = userGrade.grades;
-                const row = {
+                const grades = {};
+
+                if (userGrade) {
+                    userGrade.grades.forEach((grade) => {
+                        grades[grade.gradeCompo_name] = grade.current_grade;
+                    });
+                }
+
+                return {
                     user_id: student.user_id,
                     studentName: studentName,
                     studentId: studentId,
+                    grades: grades,
                 };
+            }));
 
-                grades.forEach((grade) => {
-                    row[grade.gradeCompo_name] = grade.current_grade;
-                });
-
-                rows.push(row);
-            }
             return rows;
 
         } catch (err) {
@@ -158,61 +169,40 @@ export class GradeManagementService {
         const userId = new Types.ObjectId(dto.user_id);
         this.checkInClass(currentUser, classId);
 
-        const user = await this.userRepository.findOne({ _id: userId }).exec();
-        if (!user) {
-            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-        }
-        const clazz = await this.classRepository.findOne({ _id: classId }).exec();
-        if (!clazz) {
-            throw new HttpException('Class not found', HttpStatus.NOT_FOUND);
-        }
-        const classUser = await this.classUserRepository.findOne({ class_id: classId }).exec();
-        const check = classUser.students.find((student) => student.user_id == user._id);
-        if (!check) {
-            throw new HttpException('Student not found', HttpStatus.NOT_FOUND);
-        }
-        const gradeCompo_name = this.userGradeRepository.findOne({ class_id: dto.class_id, user_id: dto.user_id, "class_grades.grades.gradeCompo_name": dto.gradeCompo_name }).exec();
-        if (!gradeCompo_name) {
-            throw new HttpException('Grade composition not found', HttpStatus.NOT_FOUND);
-        }
-        const grade = await this.userGradeRepository.findOneAndUpdate(
-            { class_id: dto.class_id, user_id: dto.user_id, "class_grades.grades.gradeCompo_name": dto.gradeCompo_name },
-            { $set: { "class_grades.$.grades.$.current_grade": dto.input_grade } },
-            { new: true }
-        ).exec();
-
-        return {
-            grade,
-            message: 'Input grade successful'
-        };
+        const result = await this.userGradeRepository.updateOne(
+            { user_id: userId, class_id: classId, 'grades.gradeCompo_name': dto.gradeCompo_name },
+            {
+                $set: {
+                    'grades.$.current_grade': dto.input_grade,
+                },
+            },
+        );
+        return result;
     }
 
     async downloadTemplateByAssignment(currentUser: User, classid: string, targetGradeCompoName: string) {
         const classId = new Types.ObjectId(classid);
         this.checkInClass(currentUser, classId);
         try {
-            const classUser = await this.classUserRepository.findOne({ class_id: classId });
+            const users = await this.getStudentOfClass(classId);
+            const classUser = await this.classUserRepository.findOne({ class_id: classId }).exec();
             const students = classUser.students;
-            const rows = [];
+            let rows = [];
 
-            for (const student of students) {
-                const studentInfo = await this.userRepository.findOne({ _id: student.user_id }).exec();
-                const studentName = studentInfo.fullname;
-                const studentId = student.student_id;
-                const userGrade = await this.userGradeRepository.findOne({ user_id: student.user_id, class_id: classId }).exec();
-                const targetGrade = userGrade.grades.find((grade) => grade.gradeCompo_name === targetGradeCompoName);
-                const row = {
-                    studentName: studentName,
-                    studentId: studentId
-                };
-                row[targetGradeCompoName] = targetGrade.current_grade;
-                rows.push(Object.values(row));
+            for (const user of users) {
+                const studentId = students.find(entry => entry.user_id.toString() === user._id.toString()).student_id;
+                const userxgrade = await this.userGradeRepository.findOne({ user_id: user._id, class_id: classId }).exec();
+                const grades = userxgrade.grades;
+                const current_grade = grades.find((grade) => grade.gradeCompo_name == targetGradeCompoName).current_grade;
+                console.log(user.fullname, studentId, current_grade)
+                rows.push(Object.values({ Name: user.fullname, Id: studentId, [targetGradeCompoName]: current_grade }));
             }
-            rows.unshift(Object.values({ studentName: 'Student Name', studentId: 'Student Id', [targetGradeCompoName]: targetGradeCompoName }));
+            rows.unshift(Object.values({ Name: 'Student Name', Id: 'Student Id', [targetGradeCompoName]: targetGradeCompoName }));
             let book = new Workbook();
             let sheet = book.addWorksheet('List Grade Student of ' + targetGradeCompoName);
             sheet.addRows(rows);
             this.styleSheet(sheet);
+
             let File = await new Promise((resolve, rejects) => {
                 tmp.file(
                     {

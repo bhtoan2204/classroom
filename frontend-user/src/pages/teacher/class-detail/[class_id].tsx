@@ -17,6 +17,7 @@ import TabClassDetail from 'src/views/class-detail/TabDetail'
 import GradeStructure from 'src/views/class-detail/TabGradeStructure'
 import ListStudent from 'src/views/class-detail/TabListStudent'
 import ListTeacher from 'src/views/class-detail/TabListTeacher'
+import GradeManagement from 'src/views/class-detail/TabGradeManagement'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
@@ -104,7 +105,7 @@ const ClassDetail = () => {
                     <GradeStructure class_id={class_id as string} />
                 </TabPanel>
                 <TabPanel sx={{ p: 0 }} value='grade-management'>
-
+                    <GradeManagement class_id={class_id as string} ></GradeManagement>
                 </TabPanel>
                 <TabPanel sx={{ p: 0 }} value='list-student'>
                     <ListStudent class_id={class_id as string} />
