@@ -43,7 +43,6 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
                     const data = await fetchClassDetailTeacher(class_id as string, getCookieCustom('accessToken') as string);
                     if (data) {
                         setClassDetail(data);
-                        console.log(data);
                     }
                     else {
                         setClassDetail(null);

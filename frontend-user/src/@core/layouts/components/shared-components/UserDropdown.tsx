@@ -52,7 +52,6 @@ const UserDropdown = () => {
   }
 
   const handleLogout = () => {
-    console.log("logout")
     removeCookieCustom('accessToken')
     removeCookieCustom('refreshToken')
     removeCookieCustom('role')

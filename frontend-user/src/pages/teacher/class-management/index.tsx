@@ -34,7 +34,6 @@ const MyClass = () => {
                 setTotalItem(response.data.totalCount);
             }
             else {
-                console.log(response.errorData.message);
             }
         }
         fetchData();

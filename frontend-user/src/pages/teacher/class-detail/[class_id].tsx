@@ -39,7 +39,6 @@ const ClassDetail = () => {
     const router = useRouter();
     const { class_id } = router.query;
     const handleChange = (event: SyntheticEvent, newValue: string) => {
-        console.log(class_id)
         setValue(newValue)
     }
     return (

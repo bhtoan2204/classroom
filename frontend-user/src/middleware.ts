@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { fetchRefresh } from 'src/api/auth/refresh';
 import { setCookieCustom } from './utils/cookies';
 import { fetchProfile } from './api/user/getProfile';
+import { Socket, io } from 'socket.io-client';
+
 
 export async function middleware(request: NextRequest) {
     const accessToken = request.cookies.get('accessToken');
@@ -10,6 +12,14 @@ export async function middleware(request: NextRequest) {
 
     const baseURL = request.nextUrl.pathname;
     const url = request.nextUrl.clone();
+
+    if (accessToken !== undefined) {
+        const socket: Socket = io(process.env.NEXT_PUBLIC_API_HOST + '/notification', {
+            extraHeaders: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+    }
 
     if (baseURL === '/auth/google/callback/' || baseURL === '/auth/facebook/callback/') {
         const searchParams = new URLSearchParams(request.nextUrl.search);
@@ -109,7 +119,6 @@ export async function middleware(request: NextRequest) {
                 return NextResponse.redirect(url);
             }
             else if (role != 'null' && baseURL === '/assign-role/') {
-                console.log('goes here')
                 url.pathname = '/';
 
                 return NextResponse.redirect(url);
