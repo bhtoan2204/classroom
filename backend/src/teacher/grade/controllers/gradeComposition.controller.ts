@@ -48,7 +48,7 @@ export class GradeCompositionController {
     }
 
     @HttpCode(HttpStatus.OK)
-    @Patch('/swapGradeCompositions/:classId')
+    @Patch('/swapGradeCompositions')
     @ApiOperation({ summary: 'Swap grade composition' })
     async swapGradeCompositions(@CurrentUser() user, @Body() dto: SwapGradeCompositionDto) {
         return this.gradeService.swapGradeCompositions(user, dto);

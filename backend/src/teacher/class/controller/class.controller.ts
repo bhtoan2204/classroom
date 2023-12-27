@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { ClassService } from "../service/class.service";
 import { CreateClassDto } from "../dto/createClass.dto";
@@ -8,6 +8,8 @@ import { RolesGuard } from "src/utils/guard/authorize/role.guard";
 import { Roles } from "src/utils/decorator/role.decorator";
 import { Role } from "src/utils/enum/role.enum";
 import { PaginateDto } from "../dto/paginate.dto";
+import { GetUserDto } from "../dto/listPaginate.dto";
+import { MapStudentDto } from "../dto/mapStudent.dto";
 
 @ApiTags('Class for Teacher')
 @Controller('class')
@@ -25,7 +27,6 @@ export class ClassController {
     async create(@CurrentUser() host, @Body() dto: CreateClassDto) {
         return this.classService.create(host, dto);
     }
-
 
     @HttpCode(HttpStatus.OK)
     @Post('/getMyClasses')
@@ -65,10 +66,15 @@ export class ClassController {
     }
 
     @HttpCode(HttpStatus.OK)
-    @Get('/getStudents/:classId')
+    @Post('/getStudents')
     @ApiOperation({ summary: 'Get students of class' })
-    @ApiParam({ name: 'classId', type: String })
-    async getStudents(@CurrentUser() user, @Param() params: any) {
-        return this.classService.getStudents(user, params.classId);
+    async getStudents(@CurrentUser() user, @Body() dto: GetUserDto) {
+        return this.classService.getStudents(user, dto.class_id, dto.page, dto.itemPerPage);
+    }
+
+    @Patch('/manualMapStudentId')
+    @ApiOperation({ summary: 'Manual map student id' })
+    async manualMapStudentId(@CurrentUser() user, @Body() dto: MapStudentDto) {
+        return this.classService.manualMapStudentId(user, dto.class_id, dto.user_id, dto.student_id);
     }
 }

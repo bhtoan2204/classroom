@@ -48,6 +48,7 @@
     "@emotion/react": "^11.7.0",
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.6.0",
+    "@hello-pangea/dnd": "^16.5.0",
     "@mui/icons-material": "^5.15.2",
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.3",

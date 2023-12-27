@@ -153,25 +153,6 @@ export class GradeManagementService {
         }
     }
 
-    async mapStudentId(user: User, dto: MapStudentIdDto) {
-        const classId = new Types.ObjectId(dto.class_id);
-        this.checkInClass(user, classId);
-        const userId = new Types.ObjectId(dto.user_id);
-        const updatedClassUser = await this.classUserRepository.findOneAndUpdate(
-            { class_id: classId, 'students.user_id': userId },
-            { $set: { 'students.$.student_id': dto.new_studentId } },
-            { new: true }
-        ).exec();
-
-        if (!updatedClassUser) {
-            throw new HttpException('Student not found or student_id not updated', HttpStatus.NOT_FOUND);
-        }
-
-        return {
-            message: 'Map student id successful'
-        };
-    }
-
     async inputGradeForStudent(currentUser: User, dto: InputGradeDto) {
         const classId = new Types.ObjectId(dto.class_id);
         const userId = new Types.ObjectId(dto.user_id);

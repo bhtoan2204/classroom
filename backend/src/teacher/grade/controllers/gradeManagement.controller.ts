@@ -58,13 +58,6 @@ export class GradeManagementController {
     }
 
     @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: 'Map StudentId of a student in class' })
-    @Patch('/mapStudentId')
-    async mapStudentId(@CurrentUser() user, @Body() dto: MapStudentIdDto) {
-        return this.gradeManagementService.mapStudentId(user, dto);
-    }
-
-    @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'Input grade composition of a student' })
     @Patch('/inputGradeForStudentAtSpecificAssignment')
     async inputGradeForStudentAtSpecificAssignment(@CurrentUser() user, @Body() dto: InputGradeDto) {

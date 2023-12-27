@@ -15,6 +15,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { useRouter } from 'next/router'
 import TabClassDetail from 'src/views/class-detail/TabDetail'
 import GradeStructure from 'src/views/class-detail/TabGradeStructure'
+import ListStudent from 'src/views/class-detail/TabListStudent'
+import ListTeacher from 'src/views/class-detail/TabListTeacher'
 
 const Tab = styled(MuiTab)<TabProps>(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
@@ -81,7 +83,7 @@ const ClassDetail = () => {
                         label={
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <LockOpenOutline />
-                                <TabName>List Teacher</TabName>
+                                <TabName>List Student</TabName>
                             </Box>
                         }
                     />
@@ -90,7 +92,7 @@ const ClassDetail = () => {
                         label={
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <LockOpenOutline />
-                                <TabName>List Student</TabName>
+                                <TabName>List Teacher</TabName>
                             </Box>
                         }
                     />
@@ -105,10 +107,10 @@ const ClassDetail = () => {
 
                 </TabPanel>
                 <TabPanel sx={{ p: 0 }} value='list-student'>
-
+                    <ListStudent class_id={class_id as string} />
                 </TabPanel>
                 <TabPanel sx={{ p: 0 }} value='list-teacher'>
-
+                    <ListTeacher class_id={class_id as string} />
                 </TabPanel>
             </TabContext>
         </Card >)
