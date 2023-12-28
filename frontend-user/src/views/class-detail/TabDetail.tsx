@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
-import { Card, Divider, InputAdornment, styled } from "@mui/material";
+import { Button, Card, Divider, InputAdornment, styled } from "@mui/material";
 import AccountOutline from "mdi-material-ui/AccountOutline";
-import { PeopleAltOutlined } from "@mui/icons-material";
+import { AddBox, AddBoxOutlined, ContentCopy, PeopleAltOutlined } from "@mui/icons-material";
 import format from 'date-fns/format';
 import { getCookieCustom } from "../../utils/cookies";
 import { TimerOutline } from "mdi-material-ui";
 import fetchClassDetailTeacher from "src/api/teacher/class/getClassDetail";
+import { fetchInvitationCode } from "src/api/teacher/invitation/getInvitationCode";
+import { fetchGenerateCode } from "src/api/teacher/invitation/generateCode";
 
 const ImgStyled = styled('img')(({ theme }) => ({
     width: 250,
@@ -35,26 +37,38 @@ interface ClassDetailProps {
 
 const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
     const [classDetail, setClassDetail] = useState<ClassDetailData | null>(null);
+    const [invitationCode, setInvitationCode] = useState<string>('');
+    const [invitationLink, setInvitationLink] = useState<string>('');
 
+    const generateCode = () => {
+        const accessToken = getCookieCustom('accessToken') as string;
+        const fetchGenerate = async () => {
+            const data = await fetchGenerateCode(class_id, accessToken);
+            setInvitationCode(data.class_token);
+            setInvitationLink(`${process.env.NEXT_PUBLIC_BASE_URL}/join-class?code=${data.class_token}&class_id=${class_id}`)
+        }
+        fetchGenerate();
+    }
     useEffect(() => {
         if (class_id != undefined) {
             const fetchUserData = async () => {
                 try {
                     const data = await fetchClassDetailTeacher(class_id as string, getCookieCustom('accessToken') as string);
+                    const code = await fetchInvitationCode(class_id as string, getCookieCustom('accessToken') as string);
+                    console.log(data)
                     if (data) {
                         setClassDetail(data);
                     }
-                    else {
-                        setClassDetail(null);
+                    if (code.status !== 400) {
+                        setInvitationCode(code.class_token);
+                        setInvitationLink(`${process.env.NEXT_PUBLIC_BASE_URL}/join-class?code=${code.class_token}&class_id=${class_id}`)
                     }
                 }
                 catch (error) {
                     setClassDetail(null);
                 }
             };
-            if (class_id) {
-                fetchUserData()
-            }
+            fetchUserData()
         }
     }, [class_id]);
 
@@ -69,7 +83,6 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
                     />
                 </Grid>
                 <Grid item xs={12} sm={9} container spacing={2}>
-                    <Grid item sm={12}><Divider /></Grid>
                     <Grid item xs={12}>
                         <TextField
                             fullWidth
@@ -100,7 +113,7 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={3}>
                         <TextField
                             fullWidth
                             label='Host Name'
@@ -116,7 +129,7 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={4}>
+                    <Grid item xs={12} sm={3}>
                         <TextField
                             fullWidth
                             label='Created At'
@@ -141,6 +154,44 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position='start' />
+                                ),
+                                readOnly: true
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                        <TextField
+                            fullWidth
+                            label='Invite code'
+                            minRows={2}
+                            value={invitationCode}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position='start'>
+                                        <AccountOutline />
+                                    </InputAdornment>
+                                ),
+                                readOnly: true
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={1}>
+                        <Button variant='contained' color='primary' sx={{ height: '90%' }} onClick={generateCode}>
+                            <AddBoxOutlined />
+                        </Button>
+                    </Grid>
+                    <Grid item sm={12}><Divider /></Grid>
+                    <Grid item xs={12} sm={12}>
+                        <TextField
+                            fullWidth
+                            label='Link invitation'
+                            minRows={2}
+                            value={invitationLink}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position='start'>
+                                        <AccountOutline />
+                                    </InputAdornment>
                                 ),
                                 readOnly: true
                             }}

@@ -30,6 +30,7 @@ export class NotificationGateway implements OnModuleInit {
         this.server.on('connection', async (socket) => {
             try {
                 const token = socket.handshake.headers.authorization.split(' ')[1];
+                console.log(token)
                 if (!token) throw new UnauthorizedException('Token not found');
                 const payload = await this.jwtService.verifyAsync(token) as TokenPayload;
                 if (!payload) throw new UnauthorizedException('Token not found');
@@ -54,7 +55,10 @@ export class NotificationGateway implements OnModuleInit {
     @UseGuards(WsJwtAuthGuard)
     async emitNotification(@ConnectedSocket() client: Socket, @WsCurrentUser() user: User, @MessageBody() notification: NotificationDto) {
         try {
-            const notifications = await this.notificationService.createNotification(user._id, notification);
+            //const notifications = await this.notificationService.createNotification(user._id, notification);
+            console.log(notification)
+            console.log(user)
+            console.log(this.socketMap)
             const receiverSocket = Array.from(this.socketMap.values()).find((socket) => socket._id === notification.receiver_id);
             if (receiverSocket) {
                 this.server.to(receiverSocket.socketId).emit('onNotification', notification);

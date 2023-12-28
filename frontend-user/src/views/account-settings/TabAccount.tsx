@@ -225,12 +225,12 @@ const TabAccount = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Role</InputLabel>
-              <Select label='Role' defaultValue='admin'>
-                <MenuItem value='admin'>Admin</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              fullWidth
+              type="role"
+              label="Role"
+              value={profile.role}
+            />
           </Grid>
           {openAlert ? (
             <Grid item xs={12} sx={{ mb: 3 }}>

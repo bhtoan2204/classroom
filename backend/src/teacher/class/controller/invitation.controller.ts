@@ -22,8 +22,16 @@ export class InvitationController {
     @Get('/:classId')
     @ApiOperation({ summary: 'Get invitations of class' })
     @ApiParam({ name: 'classId', type: String })
-    async getInvitations(@CurrentUser() user, @Param() params: any, @Req() req: Request) {
-        return this.invitationService.getInvitations(user, params.classId, req);
+    async getInvitations(@CurrentUser() user, @Param() params: any) {
+        return this.invitationService.getInvitations(user, params.classId);
+    }
+
+    @HttpCode(HttpStatus.CREATED)
+    @Get('/code/:classId')
+    @ApiOperation({ summary: 'Get invitations of class' })
+    @ApiParam({ name: 'classId', type: String })
+    async getCodeInvitation(@CurrentUser() user, @Param() params: any, @Req() req: Request) {
+        return this.invitationService.getCodeInvitation(user, params.classId);
     }
 
     @HttpCode(HttpStatus.OK)

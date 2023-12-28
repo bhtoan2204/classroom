@@ -24,7 +24,6 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ src, alt }) => {
             router.push('/');
         }
         else {
-            console.log(response.error)
         }
     }
 

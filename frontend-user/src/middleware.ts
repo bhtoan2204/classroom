@@ -3,6 +3,7 @@ import { fetchRefresh } from 'src/api/auth/refresh';
 import { setCookieCustom } from './utils/cookies';
 import { fetchProfile } from './api/user/getProfile';
 
+
 export async function middleware(request: NextRequest) {
     const accessToken = request.cookies.get('accessToken');
     const refreshToken = request.cookies.get('refreshToken');
@@ -109,7 +110,6 @@ export async function middleware(request: NextRequest) {
                 return NextResponse.redirect(url);
             }
             else if (role != 'null' && baseURL === '/assign-role/') {
-                console.log('goes here')
                 url.pathname = '/';
 
                 return NextResponse.redirect(url);

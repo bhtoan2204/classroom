@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { IsValidObjectId } from "src/utils/customValidator/isValidObjectId.validator";
 
 export class SwapGradeCompositionDto {
@@ -12,16 +12,16 @@ export class SwapGradeCompositionDto {
     class_id: string;
 
     @ApiProperty({
-        description: 'First name'
+        description: 'index 1'
     })
     @IsNotEmpty()
-    @IsString()
-    firstName: string;
+    @IsNumber()
+    source_index: number;
 
     @ApiProperty({
-        description: 'Second name'
+        description: 'index 2'
     })
     @IsNotEmpty()
-    @IsString()
-    secondName: string;
+    @IsNumber()
+    destination_index: number;
 }

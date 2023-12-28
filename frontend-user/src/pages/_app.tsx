@@ -61,6 +61,7 @@ const App = (props: ExtendedAppProps) => {
   return (
     <CacheProvider value={emotionCache}>
       <Head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
         <meta
           name='description'
