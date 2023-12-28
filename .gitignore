@@ -98,6 +98,8 @@ frontend-admin/.pnp.js
 /frontend-user/npm-debug.log*
 /frontend-user/yarn-debug.log*
 /frontend-user/yarn-error.log*
+/frontend-user/package-lock.json
+/frontend-user/yarn.lock
 
 # vercel
 /frontend-user/.vercel
