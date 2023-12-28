@@ -16,9 +16,11 @@ const JoinClassPage = () => {
             const accessToken = getCookieCustom('accessToken') as string;
             await fetchJoinClass(class_id as string, code as string, accessToken);
         }
-        if (role === 'teacher') {
-            joinClassByTeacher();
-            router.push(`/teacher/class-detail/${class_id}`);
+        if (class_id !== undefined && code !== undefined) {
+            if (role === 'teacher') {
+                joinClassByTeacher();
+                router.push(`/teacher/class-detail/${class_id}`);
+            }
         }
     }, [code, class_id])
 
