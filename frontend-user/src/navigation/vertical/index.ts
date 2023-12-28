@@ -42,7 +42,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Dashboard',
       icon: HomeOutline,
-      path: '/'
+      path: '/student/'
     },
     {
       title: 'Account Settings',
@@ -55,17 +55,17 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Class Management',
       icon: AccountCogOutline,
-      path: '/account-settings'
+      path: '/student/class/'
     },
     {
       title: 'My Grade',
       icon: AccountCogOutline,
-      path: '/account-settings'
+      path: '/student/grade/'
     },
     {
       title: 'My Review',
       icon: AccountCogOutline,
-      path: '/account-settings'
+      path: '/student/review'
     },
   ]
 

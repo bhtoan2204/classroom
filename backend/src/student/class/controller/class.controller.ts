@@ -7,6 +7,7 @@ import { Role } from "src/utils/enum/role.enum";
 import { CurrentUser } from "src/utils/decorator/current-user.decorator";
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { MapStudentIdDto } from "src/student/dto/mapStudentId.dto";
+import { User } from "src/utils/schema/user.schema";
 
 @ApiTags('Class for student')
 @Controller('class')
@@ -38,7 +39,7 @@ export class ClassController {
     @HttpCode(HttpStatus.OK)
     @Get('/getJoinedClasses')
     @ApiOperation({ summary: 'Get joined classes' })
-    async getJoinedClasses(@CurrentUser() user) {
+    async getJoinedClasses(@CurrentUser() user: User) {
         return this.classService.getJoinedClasses(user);
     }
 

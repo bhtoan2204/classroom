@@ -131,8 +131,9 @@ export class ClassService {
         return { message: "Join class successfully" };
     }
 
-    getJoinedClasses(user: User) {
-        return user.classes;
+    async getJoinedClasses(user: User) {
+        const clazz = await this.userRepository.findOne({_id:user._id}).select('classes');
+        return clazz;
     }
 
     async viewGradeStructure(user: User, classid: string) {
