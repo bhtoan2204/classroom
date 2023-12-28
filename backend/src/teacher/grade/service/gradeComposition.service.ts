@@ -152,6 +152,8 @@ export class GradeCompositionService {
 
     async swapGradeCompositions(user: User, dto: SwapGradeCompositionDto) {
         try {
+            const index1 = dto.source_index;
+            const index2 = dto.destination_index;
             this.checkIsHost(user, dto.class_id);
             const classId = new Types.ObjectId(dto.class_id);
             const clazz = await this.classRepository.findOne({ _id: classId }).exec();
@@ -159,28 +161,9 @@ export class GradeCompositionService {
                 return new HttpException("Class not found", HttpStatus.NOT_FOUND);
             }
 
-            const index1 = clazz.grade_compositions.findIndex((item) => item.gradeCompo_name == dto.firstName);
-            const index2 = clazz.grade_compositions.findIndex((item) => item.gradeCompo_name == dto.secondName);
-            if (index1 == -1 || index2 == -1) {
-                return new HttpException("Grade composition not found", HttpStatus.NOT_FOUND);
-            }
-
             const temp = clazz.grade_compositions[index1];
             clazz.grade_compositions[index1] = clazz.grade_compositions[index2];
             clazz.grade_compositions[index2] = temp;
-
-            await this.userGradeRepository.updateOne(
-                { class_id: classId, 'grades.gradeCompo_name': { $in: [dto.firstName, dto.secondName] } },
-                [
-                    {
-                        $set: {
-                            'grades.$[grade1]': '$grades.$[grade2]',
-                            'grades.$[grade2]': '$grades.$[grade1]',
-                        }
-                    },
-                ],
-                { arrayFilters: [{ 'grade1.gradeCompo_name': dto.firstName }, { 'grade2.gradeCompo_name': dto.secondName }] }
-            ).exec();
 
             return await clazz.save();
 

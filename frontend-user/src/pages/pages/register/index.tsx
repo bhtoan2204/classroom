@@ -105,7 +105,6 @@ const RegisterPage = () => {
   }
   const handleSendOTP = async () => {
     const response = await fetchSendOtpRegister(values.email);
-    console.log(response.data)
     if (response.status === 200) {
       setIsError(true);
       setColor('green');

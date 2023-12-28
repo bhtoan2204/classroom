@@ -37,7 +37,21 @@ export class InvitationService {
         }
     }
 
-    async getInvitations(user: User, classid: string, req: Request): Promise<any> {
+    async getCodeInvitation(user: User, classid: string): Promise<any> {
+        const classId = new Types.ObjectId(classid);
+
+        this.checkIsHost(user, classId);
+
+        const existingInvitation = await this.invitationRepository.findOne({ class_id: classId });
+
+        if (!existingInvitation) return new NotFoundException("Invitation not found");
+
+        return {
+            class_token: existingInvitation.class_token
+        };
+    }
+
+    async getInvitations(user: User, classid: string): Promise<any> {
         const classId = new Types.ObjectId(classid);
 
         this.checkIsHost(user, classId);
