@@ -263,37 +263,23 @@ export class GradeManagementService {
         };
     }
 
-
-    async exportGradeBoard(currentUser: User, classid: string, gradeCompo_name: string) {
-        const classId = new Types.ObjectId(classid);
-        this.checkInClass(currentUser, classId);
-        const users = await this.getStudentOfClass(classId);
-        let rows = [];
-        users.forEach(async (user) => {
-            const userxgrade = await this.userGradeRepository.findOne({ user_id: user._id, class_id: classId }).exec();
-            const classUser = await this.classUserRepository.findOne({ class_id: classId }).exec();
-            const studentId = classUser.students.find((student) => student.user_id == user._id).student_id;
-            rows.push(Object.values({ Name: user.fullname, Id: studentId, Grade: userxgrade.grades.find((grade) => grade.gradeCompo_name == gradeCompo_name).current_grade }));
-        })
-        let book = new Workbook();
-        let sheet = book.addWorksheet('List Student');
-        let column = {};
-
-        rows.unshift(Object.values({ studentName: 'Student Name', studentId: 'Student Id' }));
-        sheet.addRows(rows);
-    }
-
-    async markGradeCompositionAsFinal(currentUser: User, gradeCompositionName: string, classid: string) {
+    async markGradeCompositionAsFinal(currentUser: User, gradeCompoName: string, classid: string) {
         const classId = new Types.ObjectId(classid);
         this.checkInClass(currentUser, classId);
 
-        const clazz = await this.classRepository.findOneAndUpdate(
-            { _id: classId, "grade_compositions.gradeCompo_name": gradeCompositionName },
-            { $set: { "grade_compositions.$.isFinal": true } },
-            { new: true }
-        ).exec();
+        const result = await this.classRepository.updateOne(
+            {
+                _id: classId,
+                "grade_compositions.gradeCompo_name": gradeCompoName,
+            },
+            {
+                $set: {
+                    "grade_compositions.$.is_finalized": true,
+                },
+            }
+        );
 
-        return clazz.grade_compositions;
+        return result;
     }
 
 }

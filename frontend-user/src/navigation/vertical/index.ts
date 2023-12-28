@@ -27,11 +27,6 @@ const navigation = (): VerticalNavItemsType => {
       path: '/teacher/class-management'
     },
     {
-      title: 'Invitation',
-      icon: AccountCogOutline,
-      path: '/teacher/class-invitation'
-    },
-    {
       title: 'Grade Review',
       icon: AccountCogOutline,
       path: '/teacher/grade-review'

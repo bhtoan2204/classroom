@@ -165,16 +165,6 @@ export class GradeCompositionService {
             clazz.grade_compositions[index1] = clazz.grade_compositions[index2];
             clazz.grade_compositions[index2] = temp;
 
-            await this.userGradeRepository.updateMany(
-                { class_id: classId },
-                {
-                    $set: {
-                        [`grades.${index1}`]: clazz.grade_compositions[index1].gradeCompo_name,
-                        [`grades.${index2}`]: clazz.grade_compositions[index2].gradeCompo_name,
-                    }
-                },
-            ).exec();
-
             return await clazz.save();
 
         } catch (err) {

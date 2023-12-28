@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, SyntheticEvent, Fragment, ReactNode } from 'react'
+import { useState, SyntheticEvent, Fragment, ReactNode, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -18,6 +18,8 @@ import BellOutline from 'mdi-material-ui/BellOutline'
 
 // ** Third Party Components
 import PerfectScrollbarComponent from 'react-perfect-scrollbar'
+import { io, Socket } from 'socket.io-client'
+import { getCookieCustom } from 'src/utils/cookies'
 
 // ** Styled Menu component
 const Menu = styled(MuiMenu)<MenuProps>(({ theme }) => ({
@@ -82,7 +84,7 @@ const MenuItemSubtitle = styled(Typography)<TypographyProps>({
 const NotificationDropdown = () => {
   // ** States
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(null)
-
+  const [socket, setSocket] = useState<Socket | null>(null)
   // ** Hook
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
 
@@ -103,6 +105,12 @@ const NotificationDropdown = () => {
       )
     }
   }
+
+  useEffect(() => {
+    const accessToken = getCookieCustom('accessToken') as string;
+    
+  })
+
 
   return (
     <Fragment>

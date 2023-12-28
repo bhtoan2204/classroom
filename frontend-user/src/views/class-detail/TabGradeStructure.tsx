@@ -7,6 +7,7 @@ import { fetchDeleteGradeComposition } from "src/api/teacher/grade/deleteGradeCo
 import { fetchGradeStructure } from "src/api/teacher/grade/getGradeComposition";
 import { fetchSwapIndex } from "src/api/teacher/grade/swapGradeComposition";
 import { fetchUpdateGradeComposition } from "src/api/teacher/grade/updateGradeComposition";
+import { fetchMarkGrade } from "src/api/teacher/gradeManagement/markGrade";
 import { getCookieCustom } from "src/utils/cookies";
 
 const style = {
@@ -83,7 +84,15 @@ const GradeStructure: React.FC<ClassDetailProps> = ({ class_id }) => {
             setRows(updateData.data);
         }
     };
-
+    const handleMarkFinal = async (gradeCompo_name: string, is_finalized: boolean) => {
+        if (is_finalized) return;
+        const accessToken = getCookieCustom('accessToken') as string;
+        await fetchMarkGrade(class_id, gradeCompo_name, accessToken);
+        const updateData = await fetchGradeStructure(class_id, getCookieCustom('accessToken') as string);
+        if (updateData.status === 200) {
+            setRows(updateData.data);
+        }
+    }
     const handleDeleteGradeCompo = (gradeCompo_name: string) => {
         return async () => {
             const accessToken = getCookieCustom('accessToken') as string;
@@ -162,7 +171,11 @@ const GradeStructure: React.FC<ClassDetailProps> = ({ class_id }) => {
                                                             row.gradeCompo_scale
                                                         )}
                                                     </TableCell>
-                                                    <TableCell align='center'>
+                                                    <TableCell align='center'
+                                                        sx={{
+                                                            '&:last-of-type td, &:last-of-type th': { border: 0 },
+                                                            '&:hover': { backgroundColor: '#f5f5f5', cursor: 'pointer' },
+                                                        }} onClick={() => handleMarkFinal(row.gradeCompo_name, row.is_finalized)}>
                                                         {row.is_finalized ? 'Yes' : 'No'}
                                                     </TableCell>
                                                     <TableCell align='center'>

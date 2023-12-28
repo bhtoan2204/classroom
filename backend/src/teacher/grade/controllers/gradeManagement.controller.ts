@@ -7,10 +7,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { RolesGuard } from "src/utils/guard/authorize/role.guard";
 import { Roles } from "src/utils/decorator/role.decorator";
 import { Role } from "src/utils/enum/role.enum";
-import { StorageService } from "src/storage/storage.service";
 import { InputGradeDto } from "src/teacher/dto/inputGrade.dto";
-import { dot } from "node:test/reporters";
-import { MapStudentIdDto } from "src/teacher/dto/mapStudentId.dto";
 import { UploadGradeAssignmentDto } from "src/teacher/dto/uploadGradeAssignment.dto";
 import { Types } from "mongoose";
 
@@ -99,20 +96,10 @@ export class GradeManagementController {
 
     @HttpCode(HttpStatus.OK)
     @UseGuards(JwtAuthGuard)
-    @ApiParam({ name: 'classId', type: String })
-    @Get('/exportGradeBoard/:classId/:gradeCompo_name')
-    async exportGradeBoard(@CurrentUser() user, @Param() params: any) {
-        const result = await this.gradeManagementService.exportGradeBoard(user, params.classId, params.gradeCompo_name);
-        return result
-    }
-
-    @HttpCode(HttpStatus.OK)
-    @UseGuards(JwtAuthGuard)
     @Patch('/markGradeAsFinal/:classId/:gradeCompositionName')
     @ApiParam({ name: 'gradeCompositionName', type: String })
     @ApiParam({ name: 'classId', type: String })
     async markGradeAsFinal(@CurrentUser() user, @Param() params: any) {
         return this.gradeManagementService.markGradeCompositionAsFinal(user, params.gradeCompositionName, params.classId);
     }
-
 }
