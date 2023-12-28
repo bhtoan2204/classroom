@@ -44,6 +44,7 @@ const ClassDetail = () => {
     const handleChange = (event: SyntheticEvent, newValue: string) => {
         setValue(newValue)
     }
+
     return (
         <Card>
             <TabContext value={value}>

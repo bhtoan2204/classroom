@@ -1,9 +1,4 @@
-'use server';
-
-import { el } from "date-fns/locale";
 import { getCookieCustom } from "src/utils/cookies";
-
-
 
 export async function GET_getStudentJoinedClasses()
 {
@@ -33,10 +28,12 @@ export async function GET_getStudentJoinedClasses()
         {
             data = await response.json()
         }
+        
         return {status, data}
     }
     catch(err)
     {
+
         return {status: 500, data: undefined}
     }
 }

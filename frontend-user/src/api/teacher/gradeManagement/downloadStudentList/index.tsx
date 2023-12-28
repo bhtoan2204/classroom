@@ -11,5 +11,6 @@ export const fetchDownloadStudentList = async (class_id: string, accessToken: st
     }
 
     const blobData = await response.blob();
+
     return blobData;
 }

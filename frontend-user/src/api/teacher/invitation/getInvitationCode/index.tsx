@@ -8,9 +8,11 @@ export const fetchInvitationCode = async (class_id: string, accessToken: string)
                 'Authorization': `Bearer ${accessToken}`
             }
         })
+
         return await response.json();
     }
     catch (error) {
+
         return { status: 500, message: 'Internal Server Error' }
     }
 }

@@ -10,14 +10,17 @@ export const fetchGradeStructure = async (class_id: string, accessToken: string)
         });
         if (response.ok) {
             const data = await response.json();
+
             return { status: 200, data: data };
         }
         else {
             const error = await response.json();
+
             return { status: 400, errorData: error };
         }
     }
     catch (error) {
+
         return {
             status: 500, errorData: { message: error }
         }

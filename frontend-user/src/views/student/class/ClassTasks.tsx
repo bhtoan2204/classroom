@@ -1,13 +1,9 @@
-'use client';
-
 import { Card, CardContent, Stack, Typography } from "@mui/material";
-import { Box } from "mdi-material-ui";
 
-function ClassTasks()
-{
-    return(
+function ClassTasks() {
+    return (
         <>
-            <div style={{width:"100%"}}>
+            <div style={{ width: "100%" }}>
                 <Stack direction={"column"} spacing={3}>
                     <Card>
                         <CardContent>

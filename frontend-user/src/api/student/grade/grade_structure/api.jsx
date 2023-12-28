@@ -1,8 +1,4 @@
-'use server'
-
 import { getCookieCustom } from "src/utils/cookies"
-
-
 
 export async function GET_getGradeStructure(class_id)
 {
@@ -23,12 +19,12 @@ export async function GET_getGradeStructure(class_id)
 
         const status = response.status
         const data = await response.json()
-        console.log(status)
-        console.log(data)
+
         return {status, data}
     }
     catch(err)
     {
+        
         return {status: 500, data: undefined}
     }
 }

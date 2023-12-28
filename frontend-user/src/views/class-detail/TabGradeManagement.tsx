@@ -1,4 +1,4 @@
-import { Button, FormControl, Grid, MenuItem, Modal, Paper, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
+import { Button, FormControl, Grid, MenuItem, Modal, Paper, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { fetchDownloadAssignment } from "src/api/teacher/gradeManagement/downloadSpecifiedAssignment";
 import { fetchDownloadStudentList } from "src/api/teacher/gradeManagement/downloadStudentList";
@@ -150,7 +150,7 @@ const GradeManagement: React.FC<ClassDetailProps> = ({ class_id }) => {
                         data={gradeData}
                         editable={{
                             onRowUpdate: (newData: any, oldData: any) =>
-                                new Promise<void>((resolve, reject) => {
+                                new Promise<void>((resolve) => {
                                     setTimeout(() => {
                                         const index = oldData ? gradeData.indexOf(oldData) : -1;
                                         if (index !== -1) {

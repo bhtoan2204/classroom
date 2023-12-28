@@ -11,5 +11,6 @@ export const fetchDownloadAssignment = async (class_id: string, gradeCompo_name:
     }
 
     const blobData = await response.blob();
+
     return blobData;
 }

@@ -15,10 +15,12 @@ export const fetchListStudent = async (class_id: string, page: number, itemPerPa
         });
         if (response.ok) {
             const data = await response.json();
+
             return { status: 200, data: data };
         }
         else {
             const error = await response.json();
+
             return { status: 400, errorData: error };
         }
     }

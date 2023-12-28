@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import { Button, Card, Divider, InputAdornment, styled } from "@mui/material";
 import AccountOutline from "mdi-material-ui/AccountOutline";
-import { AddBox, AddBoxOutlined, ContentCopy, PeopleAltOutlined } from "@mui/icons-material";
+import { AddBoxOutlined, PeopleAltOutlined } from "@mui/icons-material";
 import format from 'date-fns/format';
 import { getCookieCustom } from "../../utils/cookies";
 import { TimerOutline } from "mdi-material-ui";

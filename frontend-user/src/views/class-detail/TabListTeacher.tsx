@@ -1,16 +1,7 @@
-import { CardHeader, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, styled } from "@mui/material";
-import { Card } from "mdi-material-ui";
-import { useRouter } from "next/router";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { useEffect, useState } from "react";
 import { fetchTeacherOfClass } from "src/api/teacher/user/getTeacher";
 import { getCookieCustom } from "src/utils/cookies";
-
-const ImgStyled = styled('img')(({ theme }) => ({
-    width: 250,
-    height: 250,
-    marginRight: theme.spacing(6.25),
-    borderRadius: theme.shape.borderRadius
-}))
 
 
 interface TeacherData {
@@ -28,7 +19,6 @@ interface ClassDetailProps {
 
 const ListTeacher: React.FC<ClassDetailProps> = ({ class_id }) => {
     const [teacherData, setTeacherData] = useState<TeacherData[]>([]);
-    const router = useRouter();
     useEffect(() => {
         const fetchTeachers = async () => {
             const data = await fetchTeacherOfClass(class_id as string, getCookieCustom('accessToken') as string);

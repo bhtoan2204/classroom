@@ -9,7 +9,9 @@ export class NotificationClient {
                 Authorization: 'Bearer ' + accessToken,
             },
         });
-        this.socket.on('connect', () => { })
+        this.socket.on('connect', () => {
+            console.log('connected');
+        })
     }
 
     public sendNotification() {

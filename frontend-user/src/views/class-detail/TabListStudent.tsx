@@ -1,5 +1,5 @@
-import { Box, Button, ButtonProps, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography, styled } from "@mui/material";
-import { ChangeEvent, ElementType, useEffect, useState } from "react";
+import { Box, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import { getCookieCustom } from "../../utils/cookies";
 import { fetchListStudent } from "src/api/teacher/user/getStudent";
@@ -89,6 +89,8 @@ const StudentOfClass: React.FC<ClassDetailProps> = ({ class_id }) => {
                 console.log(data, status)
                 if (status === 200) {
                     setRows(data);
+                    setContent('');
+                    setIsUpdate(false);
                 }
             }
             fetchStudentData();

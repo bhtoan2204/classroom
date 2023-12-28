@@ -1,16 +1,9 @@
-'use client';
-
 import { Button, Card, CardActions, CardContent, Dialog, DialogContent, DialogTitle, Divider, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
-import { left } from "@popperjs/core";
-import { da } from "date-fns/locale";
-import { Box } from "mdi-material-ui";
-import { useRouter } from "next/router";
-import { MouseEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GET_getClassMembers, GET_getTeachers } from "src/api/student/class/get_member/api";
 
 
-function ClassSupportedFeature({ClassId}: any)
-{
+function ClassSupportedFeature({ ClassId }: any) {
     const [memberDialogOpen, setMemberDialogOpen] = useState<any>(false)
     const [teachers, setTeachers] = useState<any>([])
     const [students, setStudents] = useState<any>([])
@@ -25,17 +18,13 @@ function ClassSupportedFeature({ClassId}: any)
     //     }
     // ]
 
-    useEffect(() =>
-    {
-        async function fetchTeachers()
-        {
-            const {status, data} = await GET_getTeachers(ClassId)
-            if(status == 200)
-            {
+    useEffect(() => {
+        async function fetchTeachers() {
+            const { status, data } = await GET_getTeachers(ClassId)
+            if (status == 200) {
                 setTeachers(data)
             }
-            else
-            {
+            else {
                 setTeachers([])
             }
         }
@@ -43,18 +32,14 @@ function ClassSupportedFeature({ClassId}: any)
         fetchTeachers()
     }, [ClassId])
 
-    useEffect(() =>
-    {
-        async function fetchStudents()
-        {
-            const {status, data} = await GET_getClassMembers(ClassId)
-            
-            if(status == 200)
-            {
+    useEffect(() => {
+        async function fetchStudents() {
+            const { status, data } = await GET_getClassMembers(ClassId)
+
+            if (status == 200) {
                 setStudents(data)
             }
-            else
-            {
+            else {
                 setStudents([])
             }
         }
@@ -62,13 +47,11 @@ function ClassSupportedFeature({ClassId}: any)
         fetchStudents()
     }, [ClassId])
 
-    function handleMemberDialogOnClose()
-    {
+    function handleMemberDialogOnClose() {
         setMemberDialogOpen(false)
     }
 
-    function handleOpenMemberDialog(event: MouseEvent)
-    {
+    function handleOpenMemberDialog() {
         setMemberDialogOpen(true)
     }
 
@@ -81,45 +64,43 @@ function ClassSupportedFeature({ClassId}: any)
     //     }
     // ]
     const teachersOfTheClass = teachers.length > 0 ?
-    teachers.map((teacher: any, index: Number) =>
-    {
-        return(
+        teachers.map((teacher: any) => {
+            return (
+                <>
+                    <ListItem disableGutters key={teacher._id}>
+                        <ListItemButton style={{ display: "flex", justifyContent: "left", flexDirection: "column", alignItems: "start" }}>
+                            <ListItemText primary={teacher.fullname ? teacher.fullname : "Teacher Name"} />
+                            <ListItemText primary={teacher.email} />
+                        </ListItemButton>
+                    </ListItem>
+                    <Divider />
+                </>
+            )
+        }) :
+        <ListItem>
+            <ListItemText primary="No member found" />
+        </ListItem>
+
+    const studentOfTheClass = students.length > 0 ?
+        students.map((student: any) => {
             <>
-            <ListItem disableGutters key={teacher._id}>
-                <ListItemButton style={{display:"flex", justifyContent:"left", flexDirection:"column", alignItems:"start"}}>
-                    <ListItemText primary={teacher.fullname ? teacher.fullname: "Teacher Name"}/>
-                    <ListItemText primary={teacher.email}/>
-                </ListItemButton>
-            </ListItem>
-            <Divider/>
+                <ListItem disableGutters key={student._id}>
+                    <ListItemButton style={{ display: "flex", justifyContent: "left", flexDirection: "column", alignItems: "start" }}>
+                        <ListItemText primary={student.fullname ? student.fullname : "Student Name"} />
+                        <ListItemText primary={student.email} />
+                    </ListItemButton>
+                </ListItem>
+                <Divider />
             </>
-        )
-    }):
-    <ListItem>
-        <ListItemText primary="No member found"/>
-    </ListItem>
+        }) :
+        <ListItem>
+            <ListItemText primary="No member found" />
+        </ListItem>
 
-    const studentOfTheClass = students.length > 0?
-    students.map((student: any, index: Number) =>
-    {
-        <>
-            <ListItem disableGutters key={student._id}>
-                <ListItemButton style={{display:"flex", justifyContent:"left", flexDirection:"column", alignItems:"start"}}>
-                    <ListItemText primary={student.fullname ? student.fullname: "Student Name"}/>
-                    <ListItemText primary={student.email}/>
-                </ListItemButton>
-            </ListItem>
-            <Divider/>
-        </>
-    }) :
-    <ListItem>
-        <ListItemText primary="No member found"/>
-    </ListItem>
-
-    return(
-        <div style={{position: "sticky", zIndex:10, overflowY:'auto', width: "30%", minWidth:"150px"}}>
+    return (
+        <div style={{ position: "sticky", zIndex: 10, overflowY: 'auto', width: "30%", minWidth: "150px" }}>
             <Stack spacing={2} height={'100%'}>
-                <Card style={{width: 250, maxWidth: 250}}>
+                <Card style={{ width: 250, maxWidth: 250 }}>
                     <CardContent>
                         <Typography component={"div"}>
                             Grade
@@ -129,7 +110,7 @@ function ClassSupportedFeature({ClassId}: any)
                         <Button key={'view grade button'} href={`/student/class/${ClassId}/grade`}>Go detail</Button>
                     </CardActions>
                 </Card>
-                <Card style={{width: 250, maxWidth: 250}}>
+                <Card style={{ width: 250, maxWidth: 250 }}>
                     <CardContent>
                         <Typography component={"div"}>
                             Members
@@ -141,7 +122,7 @@ function ClassSupportedFeature({ClassId}: any)
                 </Card>
             </Stack>
 
-            <Dialog 
+            <Dialog
                 open={memberDialogOpen}
                 onClose={handleMemberDialogOnClose}
                 fullWidth={true}
@@ -158,7 +139,7 @@ function ClassSupportedFeature({ClassId}: any)
                     <List>
                         {studentOfTheClass}
                     </List>
-                </DialogContent>    
+                </DialogContent>
             </Dialog>
         </div>
     )

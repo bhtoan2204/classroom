@@ -1,5 +1,3 @@
-'use server';
-
 import { getCookieCustom } from "src/utils/cookies";
 
 
@@ -48,11 +46,13 @@ export async function GET_getTeachers(class_id)
         })
 
         const status = response.status
-        const data = await response.json()
+        const data = await response.json();
+
         return {status, data}
     }
     catch(err)
     {
-        return {status: 500, data: undefined}
+
+        return {status: 500, data: undefined};
     }
 }

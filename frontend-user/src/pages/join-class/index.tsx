@@ -22,7 +22,7 @@ const JoinClassPage = () => {
                 router.push(`/teacher/class-detail/${class_id}`);
             }
         }
-    }, [code, class_id])
+    }, [code, class_id, router])
 
     return (
         <Box
