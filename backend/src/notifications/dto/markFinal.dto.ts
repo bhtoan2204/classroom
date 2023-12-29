@@ -1,10 +1,10 @@
 import { IsEnum, IsNotEmpty, IsString } from "class-validator";
 import { IsValidObjectId } from "src/utils/customValidator/isValidObjectId.validator";
 
-export class NotificationDto {
+export class MarkFinalNotificationDto {
     @IsNotEmpty()
     @IsString()
-    receiver_id: string;
+    class_id: string;
 
     @IsNotEmpty()
     @IsString()

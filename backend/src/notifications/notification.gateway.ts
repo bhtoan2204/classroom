@@ -8,6 +8,7 @@ import { NotificationDto } from "./dto/notification.dto";
 import { WsJwtAuthGuard } from "src/utils/guard/authenticate/ws-jwt-auth.guard";
 import { WsCurrentUser } from "src/utils/decorator/current-user.decorator";
 import { User } from "src/utils/schema/user.schema";
+import { MarkFinalNotificationDto } from "./dto/markFinal.dto";
 
 export interface socketMetaPayload extends TokenPayload {
     socketId: string;
@@ -96,4 +97,25 @@ export class NotificationGateway implements OnModuleInit {
         }
     }
 
+    @SubscribeMessage('multipleNotifications')
+    @UseGuards(WsJwtAuthGuard)
+    async emitMultipleNotifications(@ConnectedSocket() client: Socket, @WsCurrentUser() user: User, @MessageBody() notifications: MarkFinalNotificationDto) {
+        try {
+            const studentIds = await this.notificationService.markFinalNotifications(user, notifications);
+
+            studentIds.forEach(async student => {
+                const user_id = student.user_id.toString();
+                const receiverSocketIds = this.socketMap.get(user_id);
+                if (receiverSocketIds) {
+                    for (const socketId of receiverSocketIds) {
+                        client.to(socketId).emit('onMultipleNotifications', notifications);
+                    }
+                }
+            });
+        }
+        catch (error) {
+            client.disconnect(true);
+            throw error;
+        }
+    }
 }

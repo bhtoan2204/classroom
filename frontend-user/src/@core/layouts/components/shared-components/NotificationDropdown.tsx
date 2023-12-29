@@ -18,6 +18,7 @@ import { createConnection, getSocket } from 'src/api/socket'
 import { fetchNotification } from 'src/api/notification'
 import { getCookieCustom } from 'src/utils/cookies'
 import { Badge, Snackbar } from '@mui/material'
+import { fetchMarkRead } from 'src/api/notification/markRead'
 
 const Menu = styled(MuiMenu)<MenuProps>(({ theme }) => ({
   '& .MuiMenu-paper': {
@@ -111,8 +112,15 @@ const NotificationDropdown = () => {
     }
   }
 
-  const handleNavigate = (type: string, id: string) => () => {
-    console.log(type, id);
+  const handleNavigate = async (type: string, url_id: string, _id: string) => {
+    const accessToken = getCookieCustom('accessToken') as string;
+    await fetchMarkRead(_id, accessToken);
+    if (type === 'grade_review') {
+      console.log('grade_review');
+    }
+    else if (type === 'mark_final') {
+      console.log('comment');
+    }
   }
 
   useEffect(() => {
@@ -185,7 +193,7 @@ const NotificationDropdown = () => {
         </MenuItem>
         <ScrollWrapper>
           {notifications.map((notification) => (
-            <MenuItem key={notification._id} onClick={handleNavigate(notification.type, notification.url_id)}>
+            <MenuItem key={notification._id} onClick={() => handleNavigate(notification.type, notification.url_id, notification._id)}>
               <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
                 <Avatar alt='Flora' src={notification.sender_avatar} />
                 <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
