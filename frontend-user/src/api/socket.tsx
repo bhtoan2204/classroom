@@ -1,24 +1,34 @@
 import { Socket, io } from "socket.io-client";
+import { getCookieCustom } from "src/utils/cookies";
 
-export class NotificationClient {
-    private socket: Socket;
+let socket: Socket | null = null;
 
-    constructor(accessToken: string) {
-        this.socket = io('http://localhost:8080/notification', {
-            extraHeaders: {
-                Authorization: 'Bearer ' + accessToken,
-            },
-        });
-        this.socket.on('connect', () => {
-            console.log('connected');
-        })
+export const createConnection = () => {
+    const accessToken = getCookieCustom('accessToken');
+    if (accessToken === undefined) {
+        closeConnection();
+        return;
     }
+    closeConnection();
+    socket = io(process.env.NEXT_PUBLIC_API_HOST + '/notification', {
+        extraHeaders: {
+            Authorization: 'Bearer ' + accessToken,
+        },
+    });
+    console.log("connected");
 
-    public sendNotification() {
-        this.socket.emit('newNotification', { message: "test data" });
+}
+
+export const sendNotification = (data: any) => {
+    if (socket !== null) {
+        socket.emit('newNotification', data);
     }
+};
 
-    public closeConnection() {
-        this.socket.disconnect();
+export const closeConnection = () => {
+    if (socket !== null) {
+        socket.disconnect();
     }
 }
+
+export const getSocket = () => socket;

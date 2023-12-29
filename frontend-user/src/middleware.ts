@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { fetchRefresh } from 'src/api/auth/refresh';
 import { setCookieCustom } from './utils/cookies';
 import { fetchProfile } from './api/user/getProfile';
+import { createConnection } from './api/socket';
 
 
 export async function middleware(request: NextRequest) {
