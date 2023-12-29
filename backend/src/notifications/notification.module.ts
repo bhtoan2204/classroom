@@ -7,6 +7,7 @@ import { AuthModule } from "src/auth/auth.module";
 import { UserModule } from "src/user/user.module";
 import { WsJwtStrategy } from "src/utils/strategies/ws-jwt.strategy";
 import { UserSchema } from "src/utils/schema/user.schema";
+import { NotificationController } from "./notification.controller";
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { UserSchema } from "src/utils/schema/user.schema";
         AuthModule,
         UserModule,
     ],
+    controllers: [NotificationController],
     providers: [NotificationGateway, NotificationService, WsJwtStrategy]
 })
 export class NotificationModule { }

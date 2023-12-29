@@ -12,16 +12,45 @@ export class NotificationService {
         @InjectModel(User.name) private userRepository: Model<UserDocument>,
     ) { }
 
+    async getNotifications(currentUser: User) {
+        const notifications = await this.notificationRepository.findOne({
+            receiver_id: currentUser._id
+        });
+        if (!notifications) {
+            return { notifications: [], unreadNotifications: 0 };
+        }
 
-    async createNotification(currentUser: any, notification: NotificationDto) {
+        const unreadNotifications = notifications.notifications.reduce((count, notification) =>
+            count + (notification.is_read ? 0 : 1), 0);
+
+        return {
+            notifications: notifications.notifications,
+            unreadNotifications
+        };
+    }
+
+    async markRead(currentUser: User, notificationId: string) {
+
+    }
+
+    async createNotification(currentUser: User, notification: NotificationDto) {
         const receiver = this.userRepository.find({ _id: new Types.ObjectId(notification.receiver_id) });
         if (!receiver) {
             throw new Error("Receiver not found");
         }
+        const sender = await this.userRepository.findOne({ _id: new Types.ObjectId(currentUser._id) });
+        if (!sender) {
+            throw new Error("Sender not found");
+        }
+
         const notificationDetail = {
+            _id: new Types.ObjectId(),
             sender_id: currentUser._id,
+            sender_avatar: sender.avatar,
             title: notification.title,
             content: notification.content,
+            type: notification.type,
+            url_id: notification.id,
             is_read: false
         }
         const newNotification = await this.notificationRepository.findOne({

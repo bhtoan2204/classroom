@@ -1,18 +1,14 @@
-export const fetchListStudent = async (class_id: string, page: number, itemPerPage: number, accessToken: string) => {
+export const fetchNotification = async (accessToken: string) => {
     try {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_HOST + `/teacher/class/getStudents`, {
-            method: 'POST',
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/notification`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             },
-            body: JSON.stringify({
-                class_id: class_id,
-                page: page,
-                itemPerPage: itemPerPage
-            })
         });
+
         if (response.ok) {
             const data = await response.json();
 
@@ -26,8 +22,7 @@ export const fetchListStudent = async (class_id: string, page: number, itemPerPa
         }
     }
     catch (error) {
-        return {
-            status: 500, errorData: { message: error }
-        }
+
+        return { status: 500, message: error }
     }
 }
