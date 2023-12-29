@@ -4,6 +4,7 @@ export const fetchMarkRead = async (notificationId: string, accessToken: string)
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             }
         });
@@ -14,7 +15,9 @@ export const fetchMarkRead = async (notificationId: string, accessToken: string)
             return data;
         }
 
-        throw new Error(data.message);
+        else {
+            return data;
+        }
     }
 
     catch (error) {

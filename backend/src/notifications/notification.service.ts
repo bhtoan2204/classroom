@@ -33,20 +33,28 @@ export class NotificationService {
     }
 
     async markRead(currentUser: User, notificationId: string) {
-        // const notification = await this.notificationRepository.findOne({
-        //     receiver_id: currentUser._id
-        // });
-        // if (!notification) {
-        //     throw new Error("Notification not found");
-        // }
-        // const notificationIndex = notification.notifications.findIndex(notification => notification._id.toString() === notificationId);
-        // if (notificationIndex === -1) {
-        //     throw new Error("Notification not found");
-        // }
-        // notification.notifications[notificationIndex].is_read = true;
-        // await notification.save();
-        // return notification.notifications;
-        return {};
+        console.log(notificationId);
+        const notification = await this.notificationRepository.findOne({
+            receiver_id: currentUser._id
+        });
+        if (!notification) {
+            throw new Error("Notification not found");
+        }
+        const notificationIndex = notification.notifications.findIndex(notification => notification._id.toString() === notificationId);
+
+        if (notificationIndex === -1) {
+            throw new Error("Notification not found");
+        }
+
+        await this.notificationRepository.updateOne({
+            receiver_id: currentUser._id
+        }, {
+            $set: {
+                [`notifications.${notificationIndex}.is_read`]: true
+            }
+        });
+
+        return notification.notifications;
     }
 
     async createNotification(currentUser: User, notification: NotificationDto) {
