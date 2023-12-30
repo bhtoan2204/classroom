@@ -30,6 +30,16 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @UseGuards(LocalAuthGuard)
+  @Post('localAdmin/login')
+  async loginAdmin(
+    @Body() dto: LoginDto,
+    @CurrentUser() currentUser: User,
+  ) {
+    return await this.authService.loginAdmin(currentUser);
+  }
+
+  @HttpCode(HttpStatus.OK)
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   async refresh(@CurrentUser() currentUser: User) {

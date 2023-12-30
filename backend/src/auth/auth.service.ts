@@ -19,6 +19,27 @@ export class AuthService {
   ) { }
 
   async login(user: User) {
+    if (user.role === 'admin') {
+      throw new UnauthorizedException("This is admin account, can't login here");
+    }
+    const { accessToken, refreshToken } = await this.getToken(user._id, user.role);
+
+    try {
+      this.userService.updateRefresh(user._id, refreshToken);
+
+      return {
+        accessToken,
+        refreshToken,
+      };
+    } catch (err) {
+      throw new ConflictException(err);
+    }
+  }
+
+  async loginAdmin(user: User) {
+    if (user.role !== 'admin') {
+      throw new UnauthorizedException("This is not admin account, can't login here");
+    }
     const { accessToken, refreshToken } = await this.getToken(user._id, user.role);
 
     try {

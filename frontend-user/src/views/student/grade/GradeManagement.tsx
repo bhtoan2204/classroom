@@ -1,10 +1,5 @@
-'use client';
-
-
-
-function GradeManagement()
-{
-    return(
+function GradeManagement() {
+    return (
         <>
         </>
     )

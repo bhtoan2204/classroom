@@ -2,7 +2,6 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { fetchRefresh } from 'src/api/auth/refresh';
 import { setCookieCustom } from './utils/cookies';
 import { fetchProfile } from './api/user/getProfile';
-import { createConnection } from './api/socket';
 
 
 export async function middleware(request: NextRequest) {
@@ -25,7 +24,7 @@ export async function middleware(request: NextRequest) {
             `refreshToken=${refreshToken}; Max-Age=${3 * 24 * 60 * 60}; Path=/;`,
             `role=${role}; Max-Age=${100}; Path=/;`,
         ];
-        url.pathname = '/';
+        url.pathname = '/dashboard';
         url.search = '';
 
         return NextResponse.redirect(url, {
@@ -52,15 +51,20 @@ export async function middleware(request: NextRequest) {
         }
 
         if (baseURL === '/pages/login/' && accessToken !== undefined && refreshToken !== undefined) {
-            url.pathname = '/404';
+            url.pathname = '/dashboard';
 
             return NextResponse.redirect(url);
         }
 
         if (baseURL !== '/pages/login/' && accessToken === undefined && refreshToken === undefined) {
-            url.pathname = '/pages/login/';
+            if (baseURL === '/') {
+                return NextResponse.next();
+            }
+            else {
+                url.pathname = '/pages/login/';
 
-            return NextResponse.redirect(url);
+                return NextResponse.redirect(url);
+            }
         }
 
         if (accessToken === undefined && refreshToken !== undefined) {
@@ -77,7 +81,7 @@ export async function middleware(request: NextRequest) {
                     },
                 });
             } else {
-                url.pathname = '/pages/login/'
+                url.pathname = '/'
                 const setCookieHeaders = [
                     `refreshToken=; Max-Age=${0}; Path=/;`,
                 ];
@@ -111,7 +115,7 @@ export async function middleware(request: NextRequest) {
                 return NextResponse.redirect(url);
             }
             else if (role != 'null' && baseURL === '/assign-role/') {
-                url.pathname = '/';
+                url.pathname = '/dashboard';
 
                 return NextResponse.redirect(url);
             }
@@ -121,7 +125,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         '/page/login',
-        '/',
+        '/dashboard',
         '/((?!api|static|.*\\..*|_next).*)'
     ],
 };

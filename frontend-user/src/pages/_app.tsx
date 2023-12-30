@@ -15,7 +15,9 @@ import ThemeComponent from 'src/@core/theme/ThemeComponent'
 import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsContext'
 import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'
 import 'react-perfect-scrollbar/dist/css/styles.css'
+import 'slick-carousel/slick/slick.css'
 import '../../styles/globals.css'
+import '../../styles/react-slick.css'
 
 type ExtendedAppProps = AppProps & {
   Component: NextPage
@@ -45,12 +47,11 @@ const App = (props: ExtendedAppProps) => {
     <CacheProvider value={emotionCache}>
       <Head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-        <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
+        <title>{`${themeConfig.templateName}`}</title>
         <meta
           name='description'
-          content={`${themeConfig.templateName} – Material Design React Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
+          content={`${themeConfig.templateName} – Educa User Dashboard.`}
         />
-        <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
 

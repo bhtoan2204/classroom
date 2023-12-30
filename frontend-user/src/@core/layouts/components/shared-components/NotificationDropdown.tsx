@@ -2,7 +2,6 @@ import { useState, SyntheticEvent, Fragment, ReactNode, useEffect } from 'react'
 
 import Box from '@mui/material/Box'
 import Chip from '@mui/material/Chip'
-import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import { styled, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -19,6 +18,8 @@ import { fetchNotification } from 'src/api/notification'
 import { getCookieCustom } from 'src/utils/cookies'
 import { Badge, Snackbar } from '@mui/material'
 import { fetchMarkRead } from 'src/api/notification/markRead'
+import { GradingOutlined } from '@mui/icons-material'
+import { BookMarkerOutline } from 'mdi-material-ui'
 
 const Menu = styled(MuiMenu)<MenuProps>(({ theme }) => ({
   '& .MuiMenu-paper': {
@@ -32,7 +33,7 @@ const Menu = styled(MuiMenu)<MenuProps>(({ theme }) => ({
   '& .MuiMenu-list': {
     padding: 0
   }
-}))
+}));
 
 const MenuItem = styled(MuiMenuItem)<MenuItemProps>(({ theme }) => ({
   paddingTop: theme.spacing(3),
@@ -114,12 +115,21 @@ const NotificationDropdown = () => {
 
   const handleNavigate = async (type: string, url_id: string, _id: string) => {
     const accessToken = getCookieCustom('accessToken') as string;
-    await fetchMarkRead(_id, accessToken);
+    await fetchMarkRead(_id.toString(), accessToken);
     if (type === 'grade_review') {
-      console.log('grade_review');
+      console.log('grade_review' + url_id);
     }
     else if (type === 'mark_final') {
       console.log('comment');
+    }
+  }
+
+  const fetchData = async () => {
+    const accessToken = getCookieCustom('accessToken') as string;
+    const data = await fetchNotification(accessToken);
+    if (data.status === 200) {
+      setNotifications(data.data.notifications.reverse());
+      setUnread(data.data.unreadNotifications);
     }
   }
 
@@ -134,15 +144,6 @@ const NotificationDropdown = () => {
       setNotifications((prevNotifications) => [data, ...prevNotifications]);
       setShowNotification(true);
     };
-
-    const fetchData = async () => {
-      const accessToken = getCookieCustom('accessToken') as string;
-      const data = await fetchNotification(accessToken);
-      if (data.status === 200) {
-        setNotifications(data.data.notifications.reverse());
-        setUnread(data.data.unreadNotifications);
-      }
-    }
     fetchData();
 
     if (socket) {
@@ -193,24 +194,81 @@ const NotificationDropdown = () => {
         </MenuItem>
         <ScrollWrapper>
           {notifications.map((notification) => (
-            <MenuItem key={notification._id} onClick={() => handleNavigate(notification.type, notification.url_id, notification._id)}>
+            <MenuItem
+              key={notification._id}
+              onClick={() => handleNavigate(notification.type, notification.url_id, notification._id)}
+              sx={{
+                backgroundColor: notification.is_read ? 'f0f0f0' : 'inherit',
+                color: notification.is_read ? 'gray' : 'inherit',
+                position: 'relative',
+              }}
+            >
               <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-                <Avatar alt='Flora' src={notification.sender_avatar} />
+                <Badge
+                  overlap="circular"
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  badgeContent={
+                    <div
+                      style={{
+                        width: '15px',
+                        height: '15px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {notification.type === 'grade_review' ? (
+                        <Avatar sx={{ width: '18px', height: '18px', backgroundColor: '#abf4ef' }}>
+                          <GradingOutlined sx={{ width: '12px', height: '12px' }} />
+                        </Avatar>
+                      ) : (
+                        <Avatar sx={{ width: '18px', height: '18px', backgroundColor: '#abf4ef' }}>
+                          <BookMarkerOutline sx={{ width: '12px', height: '12px' }} />
+                        </Avatar>
+                      )}
+                    </div>
+                  }
+                >
+                  <Avatar
+                    alt='Flora'
+                    src={notification.sender_avatar}
+                    style={{ opacity: notification.is_read ? 0.5 : 1 }}
+                  />
+                </Badge>
+
                 <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
-                  <MenuItemTitle>{notification.title}</MenuItemTitle>
-                  <MenuItemSubtitle variant='body2'>{notification.content}</MenuItemSubtitle>
+                  <MenuItemTitle style={{ fontSize: '1.0rem', color: notification.is_read ? 'gray' : 'inherit' }}>
+                    {notification.title}
+                  </MenuItemTitle>
+                  <MenuItemSubtitle variant='body2' style={{ fontSize: '0.8rem', color: notification.is_read ? 'gray' : 'inherit' }}>
+                    {notification.content}
+                  </MenuItemSubtitle>
                 </Box>
+                {!notification.is_read && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      right: 0,
+                      transform: 'translateY(-50%)',
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      backgroundColor: '#abf4ef',
+                      marginRight: '10px',
+                    }}
+                  />
+                )}
               </Box>
             </MenuItem>
           ))}
         </ScrollWrapper>
+
         <MenuItem
           disableRipple
           sx={{ py: 3.5, borderBottom: 0, borderTop: theme => `1px solid ${theme.palette.divider}` }}
         >
-          <Button fullWidth variant='contained' onClick={handleDropdownClose}>
-            Read All Notifications
-          </Button>
         </MenuItem>
       </Menu>
     </Fragment>

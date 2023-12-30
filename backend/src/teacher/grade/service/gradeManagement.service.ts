@@ -43,10 +43,10 @@ export class GradeManagementService {
     }
 
     private async checkInClass(user: User, classId: Types.ObjectId): Promise<any> {
-        // const classUser = await this.classUserRepository.findOne({ user_id: user._id, class_id: classId }).exec();
-        // if (classUser == null) {
-        //     return new HttpException('You are not in this class', HttpStatus.FORBIDDEN);
-        // }
+        const classUser = await this.classUserRepository.findOne({ user_id: user._id, class_id: classId }).exec();
+        if (classUser == null) {
+            return new HttpException('You are not in this class', HttpStatus.FORBIDDEN);
+        }
     }
 
     private async getStudentOfClass(classId: Types.ObjectId): Promise<User[]> {

@@ -1,6 +1,7 @@
 export const fetchLogin = async (email: string, password: string) => {
     try {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_HOST + '/auth/local/login', {
+        console.log(process.env.NEXT_PUBLIC_API_HOST + '/auth/localAdmin/login');
+        const response = await fetch(process.env.NEXT_PUBLIC_API_HOST + '/auth/localAdmin/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

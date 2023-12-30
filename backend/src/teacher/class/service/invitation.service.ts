@@ -1,7 +1,6 @@
-import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { ForbiddenException, HttpException, HttpStatus, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { Request } from "express";
 import { Invitation, InvitationDocument } from "src/utils/schema/invitation.schema";
 import { Class, ClassDocument } from "src/utils/schema/class.schema";
 import { ClassUser, ClassUserDocument } from "src/utils/schema/classUser.schema";
@@ -35,6 +34,18 @@ export class InvitationService {
         if (classUser == null) {
             return new HttpException('You are not in this class', HttpStatus.FORBIDDEN);
         }
+    }
+
+    async checkInClassForJoin(user: User, classId: Types.ObjectId): Promise<any> {
+        const classUser = await this.classUserRepository.findOne({
+            class_id: classId,
+        });
+
+        classUser.teachers.forEach(teacher => {
+            if (teacher.user_id.equals(user._id)) {
+                throw new ForbiddenException('You are already in this class');
+            }
+        });
     }
 
     async getCodeInvitation(user: User, classid: string): Promise<any> {
@@ -78,39 +89,44 @@ export class InvitationService {
 
     async joinClass(user: User, classToken: string, classid: string): Promise<any> {
         const classId = new Types.ObjectId(classid);
-        this.checkInClass(user, classId);
+        try {
+            this.checkInClassForJoin(user, classId);
 
-        const invitation = await this.invitationRepository.findOne({ class_id: classId, class_token: classToken }).exec();
+            const invitation = await this.invitationRepository.findOne({ class_id: classId, class_token: classToken }).exec();
 
-        if (!invitation) return new NotFoundException("Invitation not found");
+            if (!invitation) return new NotFoundException("Invitation not found");
 
-        const classUser = await this.classUserRepository.findOne(
-            { class_id: classId }
-        )
-        const clazz = await this.classRepository.findOne({ _id: classId }).exec();
-        if (classUser.teachers.findIndex(teacher => teacher.user_id == user._id) == -1) {
-            classUser.teachers.push({ user_id: user._id });
-            await classUser.save();
-            const updatedUser = await this.userRepository.findOneAndUpdate(
-                { _id: user._id },
-                {
-                    $push: {
-                        classes: {
-                            class_id: classId,
-                            class_name: clazz.className,
-                            class_description: clazz.description,
+            const classUser = await this.classUserRepository.findOne(
+                { class_id: classId }
+            )
+            const clazz = await this.classRepository.findOne({ _id: classId }).exec();
+            if (classUser.teachers.findIndex(teacher => teacher.user_id == user._id) == -1) {
+                classUser.teachers.push({ user_id: user._id });
+                await classUser.save();
+                const updatedUser = await this.userRepository.findOneAndUpdate(
+                    { _id: user._id },
+                    {
+                        $push: {
+                            classes: {
+                                class_id: classId,
+                                class_name: clazz.className,
+                                class_description: clazz.description,
+                            }
                         }
                     }
-                }
-            ).exec();
-            await this.searchService.update(updatedUser);
+                ).exec();
+                await this.searchService.update(updatedUser);
 
-            return {
-                message: 'Join class successfully'
-            };
+                return {
+                    message: 'Join class successfully'
+                };
+            }
+            else {
+                return new HttpException('You are already in this class', HttpStatus.FORBIDDEN);
+            }
         }
-        else {
-            return new HttpException('You are already in this class', HttpStatus.FORBIDDEN);
+        catch (err) {
+            throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
         }
     }
 }

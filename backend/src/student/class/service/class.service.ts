@@ -34,105 +34,132 @@ export class ClassService {
         return false;
     }
 
+    async checkInClassForJoin(user: User, classId: Types.ObjectId): Promise<any> {
+        const classUser = await this.classUserRepository.findOne({
+            class_id: classId,
+        });
+
+        classUser.students.forEach(student => {
+            if (student.user_id.equals(user._id)) {
+                throw new ForbiddenException('You are already in this class');
+            }
+        });
+    }
+
     async joinClass(user: User, classToken: string, classid: string): Promise<any> {
         const classId = new Types.ObjectId(classid);
         const clazzz = await this.classRepository.findOne({ _id: classId }).exec();
         if (!clazzz) {
             return new NotFoundException("Class not found");
         }
-        const invitation = await this.invitationRepository.findOne({ class_id: classId, class_token: classToken }).exec();
-        if (!invitation) {
-            return new NotFoundException("Invitation not found");
-        }
-        const classUser = await this.classUserRepository.findOne(
-            { class_id: classId },
-        )
-        classUser.students.push({
-            user_id: user._id,
-            student_id: `${classUser.students.length + 1}-2023`
-        });
-        classUser.save();
-        const clazz = await this.classRepository.findOne({ _id: classId }).exec();
-        const updatedUser = await this.userRepository.findOneAndUpdate(
-            { _id: user._id },
-            {
-                $push: {
-                    classes: {
-                        class_id: classId,
-                        class_name: clazz.className,
-                        class_description: clazz.description,
+        try {
+            this.checkInClassForJoin(user, classId);
+
+            const invitation = await this.invitationRepository.findOne({ class_id: classId, class_token: classToken }).exec();
+            if (!invitation) {
+                return new NotFoundException("Invitation not found");
+            }
+            const classUser = await this.classUserRepository.findOne(
+                { class_id: classId },
+            )
+            classUser.students.push({
+                user_id: user._id,
+                student_id: `${classUser.students.length + 1}-2023`
+            });
+            classUser.save();
+            const clazz = await this.classRepository.findOne({ _id: classId }).exec();
+            const updatedUser = await this.userRepository.findOneAndUpdate(
+                { _id: user._id },
+                {
+                    $push: {
+                        classes: {
+                            class_id: classId,
+                            class_name: clazz.className,
+                            class_description: clazz.description,
+                        }
                     }
                 }
+            ).exec();
+            await this.searchService.update(updatedUser);
+
+            const grades = clazz.grade_compositions.map(comp => ({
+                gradeCompo_name: comp.gradeCompo_name,
+                gradeCompo_scale: comp.gradeCompo_scale,
+                current_grade: null,
+            }));
+
+            const newUserGrade = {
+                user_id: user._id,
+                classId: classId,
+                grades: grades,
             }
-        ).exec();
-        await this.searchService.update(updatedUser);
+            await this.userGradeRepository.create(newUserGrade);
 
-        const grades = clazz.grade_compositions.map(comp => ({
-            gradeCompo_name: comp.gradeCompo_name,
-            gradeCompo_scale: comp.gradeCompo_scale,
-            current_grade: null,
-        }));
-
-        const newUserGrade = {
-            user_id: user._id,
-            classId: classId,
-            grades: grades,
+            return { message: "Join class successfully" };
         }
-        await this.userGradeRepository.create(newUserGrade);
-
-        return { message: "Join class successfully" };
+        catch (err) {
+            return new HttpException(err, HttpStatus.BAD_REQUEST);
+        }
     }
 
     async joinClassByClassId(user: User, classid: string): Promise<any> {
         const classId = new Types.ObjectId(classid);
         const clazzz = await this.classRepository.findOne({ _id: classId }).exec();
+
         if (!clazzz) {
             return new NotFoundException("Class not found");
         }
-        const classUser = await this.classUserRepository.findOne(
-            { class_id: classId },
-        )
-        classUser.students.push({
-            user_id: user._id,
-            student_id: `${classUser.students.length + 1}-2023`
-        });
-        classUser.save();
 
-        const clazz = await this.classRepository.findOne({ _id: classId }).exec();
+        try {
+            this.checkInClassForJoin(user, classId);
+            const classUser = await this.classUserRepository.findOne(
+                { class_id: classId },
+            )
+            classUser.students.push({
+                user_id: user._id,
+                student_id: `${classUser.students.length + 1}-2023`
+            });
+            classUser.save();
 
-        const updatedUser = await this.userRepository.findOneAndUpdate(
-            { _id: user._id },
-            {
-                $push: {
-                    classes: {
-                        class_id: classId,
-                        class_name: clazz.className,
-                        class_description: clazz.description,
+            const clazz = await this.classRepository.findOne({ _id: classId }).exec();
+
+            const updatedUser = await this.userRepository.findOneAndUpdate(
+                { _id: user._id },
+                {
+                    $push: {
+                        classes: {
+                            class_id: classId,
+                            class_name: clazz.className,
+                            class_description: clazz.description,
+                        }
                     }
                 }
+            ).exec();
+            await this.searchService.update(updatedUser);
+
+            const grades = clazz.grade_compositions.map(comp => ({
+                gradeCompo_name: comp.gradeCompo_name,
+                gradeCompo_scale: comp.gradeCompo_scale,
+                current_grade: null,
+            }));
+
+            const newUserGrade = {
+                user_id: user._id,
+                class_id: classId,
+                grades: grades,
             }
-        ).exec();
-        await this.searchService.update(updatedUser);
 
-        const grades = clazz.grade_compositions.map(comp => ({
-            gradeCompo_name: comp.gradeCompo_name,
-            gradeCompo_scale: comp.gradeCompo_scale,
-            current_grade: null,
-        }));
+            await this.userGradeRepository.create(newUserGrade);
 
-        const newUserGrade = {
-            user_id: user._id,
-            class_id: classId,
-            grades: grades,
+            return { message: "Join class successfully" };
         }
-
-        await this.userGradeRepository.create(newUserGrade);
-
-        return { message: "Join class successfully" };
+        catch (err) {
+            return new HttpException(err, HttpStatus.BAD_REQUEST);
+        }
     }
 
     async getJoinedClasses(user: User) {
-        const clazz = await this.userRepository.findOne({_id:user._id}).select('classes');
+        const clazz = await this.userRepository.findOne({ _id: user._id }).select('classes');
         return clazz;
     }
 
