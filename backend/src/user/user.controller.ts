@@ -106,7 +106,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Patch('/promote-admin')
   @UseGuards(JwtAuthGuard)
-  async promoteAdmin(@CurrentUser() user: User, @Body() dto: RoleDto) {
-    return this.usersService.promoteAdmin(user);
+  async promoteAdmin(@CurrentUser() user: User, @Body() code: any) {
+    return this.usersService.promoteAdmin(user, code);
   }
 }

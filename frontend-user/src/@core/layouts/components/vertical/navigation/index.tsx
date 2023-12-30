@@ -59,17 +59,12 @@ const Navigation = (props: Props) => {
     verticalNavMenuContent: userVerticalNavMenuContent
   } = props
 
-  // ** States
   const [groupActive, setGroupActive] = useState<string[]>([])
   const [currentActiveGroup, setCurrentActiveGroup] = useState<string[]>([])
 
-  // ** Ref
   const shadowRef = useRef(null)
-
-  // ** Hooks
   const theme = useTheme()
 
-  // ** Fixes Navigation InfiniteScroll
   const handleInfiniteScroll = (ref: HTMLElement) => {
     if (ref) {
       // @ts-ignore

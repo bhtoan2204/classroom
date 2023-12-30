@@ -239,10 +239,10 @@ const NotificationDropdown = () => {
                 </Badge>
 
                 <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
-                  <MenuItemTitle style={{ fontSize: '1.1rem', color: notification.is_read ? 'gray' : 'inherit' }}>
+                  <MenuItemTitle style={{ fontSize: '1.0rem', color: notification.is_read ? 'gray' : 'inherit' }}>
                     {notification.title}
                   </MenuItemTitle>
-                  <MenuItemSubtitle variant='body2' style={{ color: notification.is_read ? 'gray' : 'inherit' }}>
+                  <MenuItemSubtitle variant='body2' style={{ fontSize: '0.8rem', color: notification.is_read ? 'gray' : 'inherit' }}>
                     {notification.content}
                   </MenuItemSubtitle>
                 </Box>
@@ -256,7 +256,7 @@ const NotificationDropdown = () => {
                       width: '12px',
                       height: '12px',
                       borderRadius: '50%',
-                      backgroundColor: 'blue',
+                      backgroundColor: '#abf4ef',
                       marginRight: '10px',
                     }}
                   />
@@ -270,9 +270,6 @@ const NotificationDropdown = () => {
           disableRipple
           sx={{ py: 3.5, borderBottom: 0, borderTop: theme => `1px solid ${theme.palette.divider}` }}
         >
-          <Button fullWidth variant='contained' onClick={handleDropdownClose}>
-            Read All Notifications
-          </Button>
         </MenuItem>
       </Menu>
     </Fragment>

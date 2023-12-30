@@ -1,51 +1,71 @@
-// ** MUI Imports
-import Box from '@mui/material/Box'
-import Link from '@mui/material/Link'
-import { Theme } from '@mui/material/styles'
-import Typography from '@mui/material/Typography'
-import useMediaQuery from '@mui/material/useMediaQuery'
+import * as React from "react";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import { Facebook, Instagram, Twitter } from "@mui/icons-material";
+import { Box } from "@mui/material";
+
 
 const FooterContent = () => {
-  // ** Var
-  const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
-
   return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Typography sx={{ mr: 2 }}>
-        {`© ${new Date().getFullYear()}, Made with `}
-        <Box component='span' sx={{ color: 'error.main' }}>
-          ❤️
+    <Box
+      component="footer"
+    >
+      <Container maxWidth="lg">
+        <Grid container spacing={5}>
+          <Grid item xs={12} sm={4}>
+            <Typography variant="h6" color="text.primary" gutterBottom>
+              About Us
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              This is a demo website for a school project.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Typography variant="h6" color="text.primary" gutterBottom>
+              Contact Us
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              227 Đ. Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Email: banhhaotoan2002@gmail.com
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Phone: +84 0971308623
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Typography variant="h6" color="text.primary" gutterBottom>
+              Follow Us
+            </Typography>
+            <Link href="https://www.facebook.com/" color="inherit">
+              <Facebook />
+            </Link>
+            <Link
+              href="https://www.instagram.com/"
+              color="inherit"
+              sx={{ pl: 1, pr: 1 }}
+            >
+              <Instagram />
+            </Link>
+            <Link href="https://www.twitter.com/" color="inherit">
+              <Twitter />
+            </Link>
+          </Grid>
+        </Grid>
+        <Box mt={5}>
+          <Typography variant="body2" color="text.secondary" align="center">
+            {"Copyright © "}
+            <Link color="inherit" href="/">
+              Your Website
+            </Link>{" "}
+            {new Date().getFullYear()}
+            {"."}
+          </Typography>
         </Box>
-        {` by `}
-        <Link target='_blank' href='https://themeselection.com/'>
-          ThemeSelection
-        </Link>
-      </Typography>
-      {hidden ? null : (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', '& :not(:last-child)': { mr: 4 } }}>
-          <Link
-            target='_blank'
-            href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/blob/main/LICENSE'
-          >
-            MIT License
-          </Link>
-          <Link target='_blank' href='https://themeselection.com/'>
-            More Themes
-          </Link>
-          <Link
-            target='_blank'
-            href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/blob/main/README.md'
-          >
-            Documentation
-          </Link>
-          <Link
-            target='_blank'
-            href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/issues'
-          >
-            Support
-          </Link>
-        </Box>
-      )}
+      </Container>
     </Box>
   )
 }

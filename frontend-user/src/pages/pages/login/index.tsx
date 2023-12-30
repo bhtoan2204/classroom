@@ -1,11 +1,8 @@
-// ** React Imports
 import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react'
 
-// ** Next Imports
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-// ** MUI Components
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
@@ -26,13 +23,10 @@ import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormCo
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
-// ** Configs
 import themeConfig from 'src/configs/themeConfig'
 
-// ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
-// ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 import { fetchLogin } from 'src/api/auth/login'
 import { getCookieCustom, setCookieCustom } from '../../../utils/cookies'

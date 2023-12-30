@@ -13,6 +13,7 @@ import { SearchService } from 'src/elastic/search.service';
 import { Role } from 'src/utils/enum/role.enum';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
@@ -22,6 +23,7 @@ export class UserService {
     @InjectModel(ResetOtp.name) private resetOtpRepository: Model<ResetOtpDocument>,
     @Inject(MailService) private readonly mailService: MailService,
     @Inject(SearchService) private readonly searchService: SearchService,
+    @Inject(ConfigService) private readonly configService: ConfigService,
   ) { }
 
   async create(createUserDto: CreateUserDto): Promise<any> {
@@ -327,8 +329,12 @@ export class UserService {
     }
   }
 
-  async promoteAdmin(user: User) {
+  async promoteAdmin(user: User, code: any) {
     try {
+      console.log(this.configService.get('PROMOTE_ADMIN_CODE'))
+      console.log(code)
+      if (code.code !== this.configService.get('PROMOTE_ADMIN_CODE')) throw new ConflictException("Code not match");
+
       const updatedUser = await this.userRepository.findOneAndUpdate({ _id: user._id }, { role: 'admin' }).exec();
       await this.searchService.update(updatedUser);
       return { message: "Assign role successfully" };
