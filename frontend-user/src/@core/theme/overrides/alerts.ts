@@ -9,7 +9,7 @@ const Alert = (theme: Theme) => {
     MuiAlert: {
       styleOverrides: {
         root: {
-          borderRadius: 5, 
+          borderRadius: 5,
           '& .MuiAlertTitle-root': {
             marginBottom: theme.spacing(1.6)
           },

@@ -48,7 +48,7 @@ const CustomInput = forwardRef((props, ref) => {
 })
 
 const TabAccount = () => {
-  // ** State
+
   const [openAlert, setOpenAlert] = useState<boolean>(false)
   const [content, setContent] = useState<string>('')
   const [severity, setSeverity] = useState<'success' | 'info' | 'warning' | 'error'>('success')

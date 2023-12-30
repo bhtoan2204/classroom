@@ -8,16 +8,6 @@ function ClassSupportedFeature({ ClassId }: any) {
     const [teachers, setTeachers] = useState<any>([])
     const [students, setStudents] = useState<any>([])
 
-
-    // [
-    //     {
-    //       "_id": "658bc428e13d3096dae6a30c",
-    //       "email": "lhphuong20@clc.fitus.edu.vn",
-    //       "fullname": "",
-    //       "id": "658bc428e13d3096dae6a30c"
-    //     }
-    // ]
-
     useEffect(() => {
         async function fetchTeachers() {
             const { status, data } = await GET_getTeachers(ClassId)
@@ -55,14 +45,6 @@ function ClassSupportedFeature({ ClassId }: any) {
         setMemberDialogOpen(true)
     }
 
-    // [
-    //     {
-    //       "_id": "658bc428e13d3096dae6a30c",
-    //       "email": "lhphuong20@clc.fitus.edu.vn",
-    //       "fullname": "",
-    //       "id": "658bc428e13d3096dae6a30c"
-    //     }
-    // ]
     const teachersOfTheClass = teachers.length > 0 ?
         teachers.map((teacher: any) => {
             return (

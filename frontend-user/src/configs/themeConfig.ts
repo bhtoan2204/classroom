@@ -14,18 +14,18 @@ type ThemeConfig = {
 }
 
 const themeConfig: ThemeConfig = {
-  // ** Layout Configs
+
   templateName: 'Educa',
-  mode: 'light' /* light | dark */,
-  contentWidth: 'boxed' /* full | boxed */,
+  mode: 'light',
+  contentWidth: 'boxed',
 
-  routingLoader: true /* true | false */,
+  routingLoader: true,
 
-  menuTextTruncate: true /* true | false */,
+  menuTextTruncate: true,
   navigationSize: 260,
 
-  responsiveFontSizes: true /* true | false */,
-  disableRipple: false /* true | false */
+  responsiveFontSizes: true,
+  disableRipple: false
 }
 
 export default themeConfig

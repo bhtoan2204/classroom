@@ -1,11 +1,11 @@
-// ** React Imports
+
 import { ElementType, ReactNode } from 'react'
 
-// ** Next Imports
+
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-// ** MUI Imports
+
 import Chip from '@mui/material/Chip'
 import ListItem from '@mui/material/ListItem'
 import { styled } from '@mui/material/styles'
@@ -14,17 +14,17 @@ import Box, { BoxProps } from '@mui/material/Box'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemButton, { ListItemButtonProps } from '@mui/material/ListItemButton'
 
-// ** Configs Import
+
 import themeConfig from 'src/configs/themeConfig'
 
-// ** Types
+
 import { NavLink } from 'src/@core/layouts/types'
 import { Settings } from 'src/@core/context/settingsContext'
 
-// ** Custom Components Imports
+
 import UserIcon from 'src/layouts/components/UserIcon'
 
-// ** Utils
+
 import { handleURLQueries } from 'src/@core/layouts/utils'
 
 interface Props {
@@ -34,7 +34,7 @@ interface Props {
   toggleNavVisibility: () => void
 }
 
-// ** Styled Components
+
 const MenuNavLink = styled(ListItemButton)<
   ListItemButtonProps & { component?: ElementType; target?: '_blank' }
 >(({ theme }) => ({
@@ -63,7 +63,7 @@ const MenuItemTextMetaWrapper = styled(Box)<BoxProps>({
 })
 
 const VerticalNavLink = ({ item, navVisible, toggleNavVisibility }: Props) => {
-  // ** Hooks
+
   const router = useRouter()
 
   const IconTag: ReactNode = item.icon

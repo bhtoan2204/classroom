@@ -5,14 +5,14 @@ import ClassCard from "src/views/student/class/ClassCard";
 
 const StudentRoute = () => {
 
-    //  "classes": [
-    // {
-    //     "_id": "658bf5a063abdfb1dc18cc14",
-    //     "className": "Physics II",
-    //     "description": "This is a Physics II class",
-    //     "id": "658bf5a063abdfb1dc18cc14"
-    //   }
-    // ],
+
+
+
+
+
+
+
+
     const [classes, setClasses] = useState<any>([])
 
     useEffect(() => {

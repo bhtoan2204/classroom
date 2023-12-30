@@ -42,7 +42,7 @@ const TabSecurity = () => {
   const [content, setContent] = useState<string>('')
   const [severity, setSeverity] = useState<'success' | 'info' | 'warning' | 'error'>('success')
 
-  // Handle Current Password
+
   const handleCurrentPasswordChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value })
   }
@@ -53,7 +53,7 @@ const TabSecurity = () => {
     event.preventDefault()
   }
 
-  // Handle New Password
+
   const handleNewPasswordChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value })
   }
@@ -64,7 +64,7 @@ const TabSecurity = () => {
     event.preventDefault()
   }
 
-  // Handle Confirm New Password
+
   const handleConfirmNewPasswordChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value })
   }

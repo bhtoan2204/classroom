@@ -1,4 +1,4 @@
-// ** React Import
+
 import { ReactNode, useRef, useState } from 'react'
 
 import List from '@mui/material/List'
@@ -74,7 +74,7 @@ const Navigation = (props: Props) => {
     }
   }
 
-  // ** Scroll Menu
+
   const scrollMenu = (container: any) => {
     container = hidden ? container.target : container
     if (shadowRef && container.scrollTop > 0) {

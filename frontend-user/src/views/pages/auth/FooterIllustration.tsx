@@ -1,7 +1,7 @@
-// ** React Imports
+
 import { Fragment, ReactNode } from 'react'
 
-// ** MUI Components
+
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { styled, useTheme } from '@mui/material/styles'
 
@@ -10,7 +10,7 @@ interface FooterIllustrationsProp {
   image2?: ReactNode
 }
 
-// Styled Components
+
 const MaskImg = styled('img')(() => ({
   bottom: 0,
   zIndex: -1,
@@ -31,13 +31,13 @@ const Tree2Img = styled('img')(() => ({
 }))
 
 const FooterIllustrationsV1 = (props: FooterIllustrationsProp) => {
-  // ** Props
+
   const { image1, image2 } = props
 
-  // ** Hook
+
   const theme = useTheme()
 
-  // ** Vars
+
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
 
   if (!hidden) {

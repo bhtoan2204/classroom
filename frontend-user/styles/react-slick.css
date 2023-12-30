@@ -1,35 +1,9 @@
-/* Arrows */
 .slick-prev,
 .slick-next {
   position: absolute;
-  /*top: 50%;*/
   bottom: -56px;
-
-  /*display: block;*/
-
-  /*-webkit-transform: translate(0, -50%);*/
-  /*-ms-transform: translate(0, -50%);*/
-  /*transform: translate(0, -50%);*/
-
-  /*cursor: pointer;*/
-
-  /*border: none;*/
-  /*outline: none;*/
 }
-/* .slick-prev:hover,
-.slick-prev:focus,
-.slick-next:hover,
-.slick-next:focus {
-  outline: none;
-  background: transparent;
-} */
-/*.slick-prev:hover:before,*/
-/*.slick-prev:focus:before,*/
-/*.slick-next:hover:before,*/
-/*.slick-next:focus:before*/
-/*{*/
-/*    opacity: 1;*/
-/*}*/
+
 .slick-prev.slick-disabled:before,
 .slick-next.slick-disabled:before {
   opacity: 0.25;
@@ -44,7 +18,6 @@
 }
 
 .slick-next {
-  /*right: -25px;*/
   left: 100px;
 }
 [dir='rtl'] .slick-next {
@@ -52,7 +25,6 @@
   left: -25px;
 }
 
-/* Dots */
 .slick-dotted.slick-slider {
   margin-bottom: 30px;
 }

@@ -1,18 +1,18 @@
-// ** React Import
+
 import { ReactNode } from 'react'
 
-// ** Next Import
+
 import Link from 'next/link'
 
-// ** MUI Imports
+
 import Box, { BoxProps } from '@mui/material/Box'
 import { styled, useTheme } from '@mui/material/styles'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 
-// ** Type Import
+
 import { Settings } from 'src/@core/context/settingsContext'
 
-// ** Configs
+
 import themeConfig from 'src/configs/themeConfig'
 
 interface Props {
@@ -23,7 +23,7 @@ interface Props {
   verticalNavMenuBranding?: (props?: any) => ReactNode
 }
 
-// ** Styled Components
+
 const MenuHeaderWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -48,10 +48,10 @@ const StyledLink = styled('a')({
 })
 
 const VerticalNavHeader = (props: Props) => {
-  // ** Props
+
   const { verticalNavMenuBranding: userVerticalNavMenuBranding } = props
 
-  // ** Hooks
+
   const theme = useTheme()
 
   return (
@@ -66,8 +66,8 @@ const VerticalNavHeader = (props: Props) => {
               height={25}
               version='1.1'
               viewBox='0 0 30 23'
-              xmlns='http://www.w3.org/2000/svg'
-              xmlnsXlink='http://www.w3.org/1999/xlink'
+              xmlns='http:
+              xmlnsXlink='http:
             >
               <g stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
                 <g id='Artboard' transform='translate(-95.000000, -51.000000)'>

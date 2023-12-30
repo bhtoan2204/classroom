@@ -61,18 +61,6 @@ function GradeStructure({ ClassId }: any) {
 
     }, [needToRefetchData, ClassId, dataSource])
 
-
-    // function onDragEnd({ active, over }: any) {
-    //     if (active.id !== over?.id) {
-    //         setDataSource((previous: any) => {
-    //             const activeIndex = previous.findIndex((i: any) => i.key === active.id);
-    //             const overIndex = previous.findIndex((i: any) => i.key === over?.id);
-
-    //             return arrayMove(previous, activeIndex, overIndex);
-    //         });
-    //     }
-    // };
-
     return (
         <>
             <div className="w-full h-full px-40">

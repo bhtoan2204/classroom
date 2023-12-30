@@ -42,7 +42,7 @@ const StyledButtonRoot = styled('button', {
   outline: 'none !important',
   transition: theme.transitions.create(['transform']),
 
-  // hover
+
   '&:hover': {
     ...(!disableHoverEffect && {
       transform: 'translateY(-3px)',
@@ -53,7 +53,7 @@ const StyledButtonRoot = styled('button', {
     fontSize: 20,
   },
 
-  // sizes and variants
+
   ...(size === 'small' &&
     variant === 'outlined' && {
     padding: '4px 10px',
@@ -82,13 +82,13 @@ const StyledButtonRoot = styled('button', {
     fontSize: 15,
   }),
 
-  // variants
+
   ...(variant !== 'contained' && {
     backgroundColor: 'transparent',
     boxShadow: 'none !important',
   }),
 
-  // colors & varians
+
   ...(color === 'default' &&
     variant === 'contained' && {
     backgroundColor: theme.palette.text.primary,

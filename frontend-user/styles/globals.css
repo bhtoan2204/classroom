@@ -46,11 +46,6 @@ code[class*='language-'] {
   background: var(--color-scrollbar);
   border-radius: 10px;
 }
-::-webkit-scrollbar-track,
-::-webkit-scrollbar-corner {
-  background: var(--color-background);
-  border-radius: 10px;
-}
 
 body {
   /* background-color: var(--color-background); */

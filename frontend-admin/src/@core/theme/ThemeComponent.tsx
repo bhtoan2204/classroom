@@ -25,7 +25,7 @@ const ThemeComponent = (props: Props) => {
 
   const coreThemeConfig = themeOptions(settings)
 
-  // ** Pass ThemeOptions to CreateTheme Function to create partial theme without component overrides
+
   let theme = createTheme(coreThemeConfig)
 
   theme = createTheme(theme, {
@@ -33,7 +33,7 @@ const ThemeComponent = (props: Props) => {
     typography: { ...typography(theme) }
   })
 
-  // ** Set responsive font sizes to true
+
   if (themeConfig.responsiveFontSizes) {
     theme = responsiveFontSizes(theme)
   }

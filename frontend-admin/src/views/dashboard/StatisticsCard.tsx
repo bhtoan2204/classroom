@@ -1,7 +1,7 @@
-// ** React Imports
+
 import { ReactElement, useEffect, useState } from 'react'
 
-// ** MUI Imports
+
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -11,13 +11,13 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 
-// ** Icons Imports
+
 import TrendingUp from 'mdi-material-ui/TrendingUp'
 import DotsVertical from 'mdi-material-ui/DotsVertical'
 import CellphoneLink from 'mdi-material-ui/CellphoneLink'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 
-// ** Types
+
 import { ThemeColor } from 'src/@core/layouts/types'
 import { fetchStatistics } from 'src/api/statistics'
 import { getCookieCustom } from '../../utils/cookies'

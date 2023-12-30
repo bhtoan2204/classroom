@@ -1,4 +1,4 @@
-// ** React Imports
+
 import { useState, SyntheticEvent, Fragment } from 'react'
 import { useRouter } from 'next/router'
 import Box from '@mui/material/Box'
@@ -14,7 +14,7 @@ import AccountOutline from 'mdi-material-ui/AccountOutline'
 import { removeCookieCustom } from 'src/utils/cookies'
 import { closeConnection } from 'src/api/socket'
 
-// ** Styled Components
+
 const BadgeContentSpan = styled('span')(({ theme }) => ({
   width: 8,
   height: 8,
