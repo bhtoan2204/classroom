@@ -40,7 +40,6 @@ interface State {
   showPassword: boolean
 }
 
-// ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
 }))

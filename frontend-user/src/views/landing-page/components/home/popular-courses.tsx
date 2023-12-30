@@ -20,6 +20,7 @@ interface SliderArrowArrow {
 
 const SliderArrow: FC<SliderArrowArrow> = (props) => {
   const { onClick, type, className } = props
+
   return (
     <IconButton
       sx={{

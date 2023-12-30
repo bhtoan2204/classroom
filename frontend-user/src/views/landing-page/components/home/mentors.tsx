@@ -19,6 +19,7 @@ interface SliderArrowArrow {
 
 const SliderArrow: FC<SliderArrowArrow> = (props) => {
   const { onClick, type, className } = props
+
   return (
     <IconButton
       sx={{
@@ -63,7 +64,7 @@ const HomeOurMentors: FC = () => {
 
   const sliderConfig: Settings = {
     infinite: true,
-    // autoplay: true,
+    autoplay: true,
     speed: 300,
     slidesToShow: matchMobileView ? 1 : 3,
     slidesToScroll: 1,

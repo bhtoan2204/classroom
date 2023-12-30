@@ -2,7 +2,6 @@ import { useState, SyntheticEvent, Fragment, ReactNode, useEffect } from 'react'
 
 import Box from '@mui/material/Box'
 import Chip from '@mui/material/Chip'
-import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import { styled, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -19,7 +18,7 @@ import { fetchNotification } from 'src/api/notification'
 import { getCookieCustom } from 'src/utils/cookies'
 import { Badge, Snackbar } from '@mui/material'
 import { fetchMarkRead } from 'src/api/notification/markRead'
-import { GradingOutlined, VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material'
+import { GradingOutlined } from '@mui/icons-material'
 import { BookMarkerOutline } from 'mdi-material-ui'
 
 const Menu = styled(MuiMenu)<MenuProps>(({ theme }) => ({

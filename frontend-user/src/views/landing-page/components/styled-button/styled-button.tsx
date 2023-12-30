@@ -4,9 +4,7 @@ import { Theme } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { ButtonProps } from '@mui/material/Button'
 
-export const fontFamily = [
-  '"Cabin",-apple-system, BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"',
-].join(',')
+const fontFamily = 'Roboto, sans-serif'
 
 interface BaseButtonProps extends Pick<ButtonProps, 'onClick' | 'type' | 'startIcon' | 'endIcon'> {
   variant?: 'contained' | 'outlined' | 'text'
@@ -163,8 +161,9 @@ interface Props extends BaseButtonProps {
 
 const StyledButton: FC<Props> = (props: Props) => {
   const { children, onClick, disableHoverEffect, startIcon, endIcon, ...rest } = props
+
   return (
-    <StyledButtonRoot startIcon={undefined} endIcon={undefined} onClick={onClick} disableHoverEffect={disableHoverEffect} {...rest}>
+    <StyledButtonRoot onClick={onClick} disableHoverEffect={disableHoverEffect} {...rest}>
       {startIcon && (
         <Box component="span" sx={{ display: 'inherit', mr: 1, ml: -0.5 }}>
           {startIcon}

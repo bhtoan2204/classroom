@@ -7,6 +7,7 @@ export const createConnection = () => {
     const accessToken = getCookieCustom('accessToken');
     if (accessToken === undefined) {
         closeConnection();
+
         return;
     }
     closeConnection();

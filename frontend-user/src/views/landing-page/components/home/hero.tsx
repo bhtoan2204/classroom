@@ -33,6 +33,7 @@ const exps: Array<Exp> = [
 
 const ExpItem: FC<ExpItemProps> = ({ item }) => {
   const { value, label } = item
+
   return (
     <Box sx={{ textAlign: 'center', mb: { xs: 1, md: 0 } }}>
       <Typography

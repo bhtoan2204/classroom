@@ -13,7 +13,6 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle'
 
-// ** Icons Imports
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Close from 'mdi-material-ui/Close'
@@ -30,7 +29,6 @@ interface State {
 }
 
 const TabSecurity = () => {
-  // ** States
   const [values, setValues] = useState<State>({
     newPassword: '',
     currentPassword: '',

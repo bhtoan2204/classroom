@@ -32,7 +32,7 @@ const UserDropdown = () => {
     setAnchorEl(event.currentTarget)
   }
 
-  const handleDropdownClose = (url?: string) => {
+  const handleDropdownClose = () => {
     router.push('/account-settings')
     setAnchorEl(null)
   }
