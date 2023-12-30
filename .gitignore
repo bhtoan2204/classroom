@@ -58,17 +58,51 @@ frontend-admin/.pnp.js
 /frontend-admin/build
 
 # misc
-frontend-admin/.DS_Store
-frontend-admin/*.pem
+/frontend-admin/.DS_Store
+/frontend-admin/*.pem
 
 # debug
-frontend-admin/npm-debug.log*
-frontend-admin/yarn-debug.log*
-frontend-admin/yarn-error.log*
+/frontend-admin/npm-debug.log*
+/frontend-admin/yarn-debug.log*
+/frontend-admin/yarn-error.log*
 
 
 # vercel
-frontend-admin/.vercel
+/frontend-admin/.vercel
 
 # typescript
-frontend-admin/*.tsbuildinfo
+/frontend-admin/*.tsbuildinfo
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/frontend-user/node_modules
+/frontend-user/.pnp
+/frontend-user/.pnp.js
+
+# testing
+/frontend-user/coverage
+
+# next.js
+/frontend-user/.next/
+/frontend-user/out/
+
+# production
+/frontend-user/build
+
+# misc
+/frontend-user/.DS_Store
+/frontend-user/*.pem
+
+# debug
+/frontend-user/npm-debug.log*
+/frontend-user/yarn-debug.log*
+/frontend-user/yarn-error.log*
+/frontend-user/package-lock.json
+/frontend-user/yarn.lock
+
+# vercel
+/frontend-user/.vercel
+
+# typescript
+/frontend-user/*.tsbuildinfo

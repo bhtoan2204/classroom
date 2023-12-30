@@ -2,7 +2,7 @@ version: '3'
 services:
   backend:
     build: ./backend
-    command: npm run start:dev
+    command: npm run start:prod
     environment:
       - PORT=8080
       - DATABASE_NAME=classroom
@@ -55,6 +55,13 @@ services:
       - backend
     ports:
       - 3000:3000
+  
+  frontend-user:
+    build: ./frontend-user
+    depends_on:
+      - backend
+    ports:
+      - 4000:4000
     
   nginx:
     build: ./nginx
