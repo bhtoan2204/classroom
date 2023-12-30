@@ -118,8 +118,9 @@ const RegisterPage = () => {
   }
   const handleRegister = async () => {
     const response = await fetchRegister(values.email, values.fullname, values.password, values.birthday.toDateString(), parseInt(values.otp));
-    if (response.status === 201) {
+    if (response.status === 200) {
       setOpen(true);
+      setValues({ ...values, email: '', fullname: '', password: '', otp: '' });
     }
     else {
       setIsError(true);

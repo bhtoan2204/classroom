@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
             `refreshToken=${refreshToken}; Max-Age=${3 * 24 * 60 * 60}; Path=/;`,
             `role=${role}; Max-Age=${100}; Path=/;`,
         ];
-        url.pathname = '/';
+        url.pathname = '/dashboard';
         url.search = '';
 
         return NextResponse.redirect(url, {

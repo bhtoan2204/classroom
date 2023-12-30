@@ -92,7 +92,7 @@ const LoginPage = () => {
         const response = await fetchProfile(getCookieCustom('accessToken') as string);
         const { role }: Role = response.data;
         setCookieCustom('role', role, 100);
-        router.push('/')
+        router.push('/dashboard')
       }
       else {
         setError((data as { errorData: { message: string } }).errorData.message)
