@@ -4,7 +4,6 @@ import { Model, Types } from "mongoose";
 import { PostCommentDto } from "src/student/dto/postComment.dto";
 import { RequestReviewDto } from "src/student/dto/requestReview.dto";
 import { Class, ClassDocument } from "src/utils/schema/class.schema";
-import { ClassUser, ClassUserDocument } from "src/utils/schema/classUser.schema";
 import { GradeReview, GradeReviewDocument } from "src/utils/schema/gradeReview.schema";
 import { User } from "src/utils/schema/user.schema";
 import { UserGrade, UserGradeDocument } from "src/utils/schema/userGrade.schema";

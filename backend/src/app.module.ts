@@ -42,8 +42,6 @@ export class AppModule {
   }
   static getBaseUrl(app: INestApplication): string {
     let baseUrl = app.getHttpServer().address().address;
-    if (baseUrl == '0.0.0.0' || baseUrl == '::') {
-      return (baseUrl = 'localhost');
-    }
+    return baseUrl;
   }
 }

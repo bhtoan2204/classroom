@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsBoolean, IsInt, Min, Max, IsNotEmpty, IsString } from 'class-validator';
+import { IsOptional, IsInt, Min, Max, IsNotEmpty, IsString } from 'class-validator';
 import { IsValidObjectId } from 'src/utils/customValidator/isValidObjectId.validator';
 
 export class GetUserDto {

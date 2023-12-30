@@ -10,7 +10,6 @@ import { User, UserDocument } from 'src/utils/schema/user.schema';
 import { RegisterOtp, RegisterOtpDocument } from 'src/utils/schema/registerOtp.schema';
 import { ResetOtp, ResetOtpDocument } from 'src/utils/schema/resetOtp.schema';
 import { SearchService } from 'src/elastic/search.service';
-import { Role } from 'src/utils/enum/role.enum';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
@@ -233,7 +232,7 @@ export class UserService {
     const passwordIsValid = await bcrypt.compare(dto.old_password, user.password);
     if (!passwordIsValid) throw new UnauthorizedException("Old password not match");
 
-    if (!(dto.password === dto.rewrite_password)) {
+    if (dto.password !== dto.rewrite_password) {
       throw new UnauthorizedException('Two password are not match');
     }
 

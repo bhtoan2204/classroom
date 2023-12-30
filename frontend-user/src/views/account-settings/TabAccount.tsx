@@ -196,7 +196,7 @@ const TabAccount = () => {
               fullWidth
               label="Fullname"
               value={profile.fullname}
-              onChange={(text) => setProfile({ ...profile, fullname: text.target.value as any })}
+              onChange={(text) => setProfile({ ...profile, fullname: text.target.value })}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -207,7 +207,7 @@ const TabAccount = () => {
                 showMonthDropdown
                 id="account-settings-date"
                 customInput={<CustomInput />}
-                onChange={(date) => setProfile({ ...profile, birthday: date as any })}
+                onChange={(date) => setProfile({ ...profile, birthday: date as Date })}
               />
             </DatePickerWrapper>
           </Grid>

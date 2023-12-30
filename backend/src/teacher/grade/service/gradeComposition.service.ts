@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { CreateGradeCompositionDto } from "../../dto/createGradeComposition.dto";
@@ -61,15 +61,16 @@ export class GradeCompositionService {
             await clazz.save();
 
             const students = await this.userGradeRepository.find({ class_id: classId }).exec();
-            for (let i = 0; i < students.length; i++) {
+            for (const student of students) {
                 const newGrade = {
                     gradeCompo_name: dto.name,
                     gradeCompo_scale: dto.scale,
                     current_grade: null,
-                }
-                students[i].grades.push(newGrade);
-                students[i].save();
-            };
+                };
+                student.grades.push(newGrade);
+                student.save();
+            }
+
 
             return {
                 message: "Create GradeComposition successful",

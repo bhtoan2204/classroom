@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import { IsDateString, IsString } from 'class-validator';
 
 export class EditProfileDTO {
     @ApiProperty({

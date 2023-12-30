@@ -25,7 +25,7 @@ export class AuthService {
     const { accessToken, refreshToken } = await this.getToken(user._id, user.role);
 
     try {
-      this.userService.updateRefresh(user._id, refreshToken);
+      await this.userService.updateRefresh(user._id, refreshToken);
 
       return {
         accessToken,
@@ -43,7 +43,7 @@ export class AuthService {
     const { accessToken, refreshToken } = await this.getToken(user._id, user.role);
 
     try {
-      this.userService.updateRefresh(user._id, refreshToken);
+      await this.userService.updateRefresh(user._id, refreshToken);
 
       return {
         accessToken,

@@ -167,7 +167,8 @@ export class ClassService {
         const classId = new Types.ObjectId(classid);
         const clazzz = await this.classRepository.findOne({ _id: classId }).exec();
         if (!clazzz) return new NotFoundException("Class not found");
-        if (!this.checkInClassForView(user, new Types.ObjectId(classId))) {
+        const check = await this.checkInClassForView(user, classId);
+        if (!check) {
             return new ForbiddenException('You are already in this class')
         }
         const clazz = await this.classRepository.findOne({ _id: classId });
@@ -179,8 +180,9 @@ export class ClassService {
         const clazzz = await this.classRepository.findOne({ _id: classId }).exec();
         if (!clazzz) return new NotFoundException("Class not found");
 
-        if (!this.checkInClassForView(user, classId)) {
-            return new ForbiddenException('You are not in in this class')
+        const check = await this.checkInClassForView(user, classId);
+        if (!check) {
+            return new ForbiddenException('You are already in this class')
         }
         const classUser = await this.classUserRepository.findOne({
             class_id: new Types.ObjectId(classId)
@@ -195,8 +197,10 @@ export class ClassService {
         const classId = new Types.ObjectId(classid);
         const clazzz = await this.classRepository.findOne({ _id: classId }).exec();
         if (!clazzz) return new NotFoundException("Class not found");
-        if (!this.checkInClassForView(user, new Types.ObjectId(classId))) {
-            return new ForbiddenException('You are not in in this class')
+
+        const check = await this.checkInClassForView(user, classId);
+        if (!check) {
+            return new ForbiddenException('You are already in this class')
         }
         const classUser = await this.classUserRepository.findOne({
             class_id: new Types.ObjectId(classId)

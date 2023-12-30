@@ -1,8 +1,5 @@
-// ** MUI Imports
-import { Theme } from '@mui/material/styles'
-import { lighten, darken } from '@mui/material/styles'
+import { Theme, lighten, darken } from '@mui/material/styles'
 
-// ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
 const Alert = (theme: Theme) => {
@@ -12,7 +9,7 @@ const Alert = (theme: Theme) => {
     MuiAlert: {
       styleOverrides: {
         root: {
-          borderRadius: 5,
+          borderRadius: 5, 
           '& .MuiAlertTitle-root': {
             marginBottom: theme.spacing(1.6)
           },

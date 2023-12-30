@@ -26,7 +26,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, "facebook") {
         profile: Profile,
     ): Promise<any> {
         try {
-            return this.userService.validateFacebookUser(profile);
+            return await this.userService.validateFacebookUser(profile);
         }
         catch (error) {
             throw new UnauthorizedException('Credentials are not valid');
