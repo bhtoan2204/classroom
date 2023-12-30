@@ -11,13 +11,7 @@ export const fetchMarkRead = async (notificationId: string, accessToken: string)
 
         const data = await response.json();
 
-        if (response.ok) {
-            return data;
-        }
-
-        else {
-            return data;
-        }
+        return data;
     }
 
     catch (error) {

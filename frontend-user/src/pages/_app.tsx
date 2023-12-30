@@ -1,9 +1,7 @@
-
 import Head from 'next/head'
 import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-
 
 import NProgress from 'nprogress'
 
@@ -46,7 +44,7 @@ const App = (props: ExtendedAppProps) => {
   return (
     <CacheProvider value={emotionCache}>
       <Head>
-        <link rel="stylesheet" href="https:
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <title>{`${themeConfig.templateName}`}</title>
         <meta
           name='description'

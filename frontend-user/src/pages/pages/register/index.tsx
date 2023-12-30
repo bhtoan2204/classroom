@@ -1,9 +1,6 @@
-
 import { useState, Fragment, ChangeEvent, MouseEvent, ReactNode } from 'react'
 
-
 import Link from 'next/link'
-
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -28,12 +25,9 @@ import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-
 import themeConfig from 'src/configs/themeConfig'
 
-
 import BlankLayout from 'src/@core/layouts/BlankLayout'
-
 
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 import { DateField, LocalizationProvider } from '@mui/x-date-pickers'
@@ -52,7 +46,6 @@ interface State {
   otp: string
   showPassword: boolean
 }
-
 
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
@@ -75,7 +68,6 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 
 
 const RegisterPage = () => {
-
   const [values, setValues] = useState<State>({
     email: '',
     fullname: '',
@@ -139,8 +131,8 @@ const RegisterPage = () => {
               height={29}
               version='1.1'
               viewBox='0 0 30 23'
-              xmlns='http:
-              xmlnsXlink='http:
+              xmlns='http://www.w3.org/2000/svg'
+              xmlnsXlink='http://www.w3.org/1999/xlink'
             >
               <g stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
                 <g id='Artboard' transform='translate(-95.000000, -51.000000)'>

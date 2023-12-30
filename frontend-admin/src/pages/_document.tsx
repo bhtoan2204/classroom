@@ -1,12 +1,8 @@
-
 import { Children } from 'react'
-
 
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 
-
 import createEmotionServer from '@emotion/server/create-instance'
-
 
 import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'
 
@@ -15,11 +11,11 @@ class CustomDocument extends Document {
     return (
       <Html lang='en'>
         <Head>
-          <link rel='preconnect' href='https:
-          <link rel='preconnect' href='https:
+          <link rel='preconnect' href='https://fonts.googleapis.com' />
+          <link rel='preconnect' href='https://fonts.gstatic.com' />
           <link
             rel='stylesheet'
-            href='https:
+            href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
           />
           <link rel='apple-touch-icon' sizes='180x180' href='/images/apple-touch-icon.png' />
           <link rel='shortcut icon' href='/images/favicon.png' />
@@ -43,7 +39,7 @@ CustomDocument.getInitialProps = async ctx => {
       enhanceApp: App => props =>
       (
         <App
-          {...props}
+          {...props} // @ts-ignore
           emotionCache={cache}
         />
       )

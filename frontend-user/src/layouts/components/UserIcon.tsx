@@ -10,16 +10,13 @@ interface UserIconProps {
 }
 
 const UserIcon = (props: UserIconProps) => {
-
   const { icon, iconProps } = props
 
   const IconTag = icon
 
   let styles
 
-
-
-
+  // @ts-ignore
   return <IconTag {...iconProps} style={{ ...styles }} />
 }
 
