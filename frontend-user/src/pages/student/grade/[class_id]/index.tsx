@@ -1,7 +1,8 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Card, CardContent, Tab } from "@mui/material";
+import { Box, Button, Card, CardContent, Stack, Tab } from "@mui/material";
 import { useRouter } from "next/router";
 import { SyntheticEvent, useState } from "react";
+import GradeManagement from "src/views/student/grade/GradeManagement";
 import GradeStructure from "src/views/student/grade/GradeStructure";
 
 
@@ -21,6 +22,13 @@ function StudentGrade() {
         <>
             <Card>
                 <CardContent>
+                    <Box marginY={4}>
+                        <Stack direction={"row"}>
+                            <Button href={`/student/class/${class_id}`}>
+                                Go to class
+                            </Button>
+                        </Stack>
+                    </Box>
                     <TabContext value={tabValue}>
                         <TabList
                             onChange={handleTabOnChange}
@@ -30,7 +38,7 @@ function StudentGrade() {
                             <Tab label="Grade review" value={"3"} />
                         </TabList>
                         <TabPanel value="1">
-                            Grade management
+                            <GradeManagement ClassId={class_id}/>
                         </TabPanel>
                         <TabPanel value="2">
                             <GradeStructure ClassId={class_id} />

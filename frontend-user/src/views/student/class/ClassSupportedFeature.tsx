@@ -20,6 +20,12 @@ function ClassSupportedFeature({ ClassId }: any) {
 
     useEffect(() => {
         async function fetchTeachers() {
+            if(ClassId === undefined)
+            {
+
+                return
+            }
+
             const { status, data } = await GET_getTeachers(ClassId)
             if (status == 200) {
                 setTeachers(data)
@@ -34,6 +40,13 @@ function ClassSupportedFeature({ ClassId }: any) {
 
     useEffect(() => {
         async function fetchStudents() {
+
+            if(ClassId === undefined)
+            {
+                
+                return;
+            }
+
             const { status, data } = await GET_getClassMembers(ClassId)
 
             if (status == 200) {
@@ -107,7 +120,7 @@ function ClassSupportedFeature({ ClassId }: any) {
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <Button key={'view grade button'} href={`/student/class/${ClassId}/grade`}>Go detail</Button>
+                        <Button key={'view grade button'} href={`/student/grade/${ClassId}`}>Go detail</Button>
                     </CardActions>
                 </Card>
                 <Card style={{ width: 250, maxWidth: 250 }}>

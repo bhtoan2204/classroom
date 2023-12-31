@@ -9,6 +9,7 @@ import { CircularProgress, Menu, MenuItem } from '@mui/material';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 
 
@@ -37,6 +38,7 @@ function ClassCard({ ClassInfo }: any) {
   const [menuOpen, setMenuOpen] = useState<any>(false)
   const [anchorEl, setAnchorEl] = useState<any>(null)
   const [imageSrc, setImageSrc] = useState<any>("")
+  const router = useRouter();
 
   useEffect(() => {
     setImageSrc(getRandomImage())
@@ -60,10 +62,25 @@ function ClassCard({ ClassInfo }: any) {
     setMenuOpen(false)
   }
 
+  function handleMenuItemClick(event: React.MouseEvent<HTMLLIElement, MouseEvent>, callback: any)
+  {
+    event.preventDefault()
+    callback()
+  }
+
+
+  //Callbacks
+
+  const menuItemClick_goToGradeManagement: any = () =>
+  {
+    router.push(`/student/grade/${ClassInfo.class_id}`)
+  }
+
+
   return (
     <Link key={ClassInfo._id}
       prefetch={false}
-      href={`/student/class/${ClassInfo._id}`}
+      href={`/student/class/${ClassInfo.class_id}`}
       passHref={true}>
       <Card sx={{ maxWidth: 345 }}>
         <CardMedia
@@ -75,10 +92,10 @@ function ClassCard({ ClassInfo }: any) {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {ClassInfo === undefined ? <CircularProgress /> : ClassInfo.className}
+            {ClassInfo === undefined ? <CircularProgress /> : ClassInfo.class_name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {ClassInfo === undefined ? <CircularProgress /> : ClassInfo.description}
+            {ClassInfo === undefined ? <CircularProgress /> : ClassInfo.class_description}
           </Typography>
         </CardContent>
         <CardActions sx={{ maxWidth: 340 }} style={{ display: 'flex', justifyContent: 'right' }} >
@@ -88,7 +105,8 @@ function ClassCard({ ClassInfo }: any) {
             anchorEl={anchorEl}
             onClose={handleMoreVertButtonClose}
           >
-            <MenuItem>Leave</MenuItem>
+            <MenuItem onClick={(e) => {handleMenuItemClick(e, menuItemClick_goToGradeManagement)}}>Grade management</MenuItem>
+            <MenuItem >My review</MenuItem>
           </Menu>
         </CardActions>
       </Card>
