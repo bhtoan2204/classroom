@@ -251,7 +251,7 @@ const RegisterPage = () => {
             label={
               <Fragment>
                 <span>I agree to </span>
-                <Link href='/' passHref>
+                <Link href='/dashboard' passHref>
                   <LinkStyled onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}>
                     privacy policy & terms
                   </LinkStyled>
