@@ -1,7 +1,7 @@
 // ** MUI Imports
+import * as React from 'react';
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import Chip from '@mui/material/Chip'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
 import TableHead from '@mui/material/TableHead'
@@ -9,154 +9,115 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import Typography from '@mui/material/Typography'
 import TableContainer from '@mui/material/TableContainer'
+import TablePagination from '@mui/material/TablePagination'
 
-// ** Types Imports
-import { ThemeColor } from 'src/@core/layouts/types'
 
 interface RowType {
-  age: number
-  name: string
-  date: string
-  email: string
-  salary: string
-  status: string
+  subject: string
+  dateStart: string
+  dateEnd: string
   designation: string
 }
 
-interface StatusObj {
-  [key: string]: {
-    color: ThemeColor
-  }
-}
 
 const rows: RowType[] = [
   {
-    age: 27,
-    status: 'current',
-    date: '09/27/2018',
-    name: 'Sally Quinn',
-    salary: '$19586.23',
-    email: 'eebsworth2m@sbwire.com',
-    designation: 'Human Resources Assistant'
+    dateStart: '09/27/2023',
+    subject: 'Data Structure and Algorithms',
+    dateEnd: '12/27/2023',
+    designation: '20CLC01'
   },
   {
-    age: 61,
-    date: '09/23/2016',
-    salary: '$23896.35',
-    status: 'professional',
-    name: 'Margaret Bowers',
-    email: 'kocrevy0@thetimes.co.uk',
-    designation: 'Nuclear Power Engineer'
+    dateStart: '09/27/2023',
+    dateEnd: '11/27/2023',
+    subject: 'OOP',
+    designation: '20CLC10'
   },
   {
-    age: 59,
-    date: '10/15/2017',
-    name: 'Minnie Roy',
-    status: 'rejected',
-    salary: '$18991.67',
-    email: 'ediehn6@163.com',
-    designation: 'Environmental Specialist'
+    dateStart: '09/27/2023',
+    subject: 'Advanced Database',
+    dateEnd: '10/31/2023',
+    designation: '20HTTT1'
   },
   {
-    age: 30,
-    date: '06/12/2018',
-    status: 'resigned',
-    salary: '$19252.12',
-    name: 'Ralph Leonard',
-    email: 'dfalloona@ifeng.com',
-    designation: 'Sales Representative'
+    dateStart: '09/20/2023',
+    dateEnd: '12/20/2023',
+    subject: 'Data Science',
+    designation: '20KHDL2'
   },
   {
-    age: 66,
-    status: 'applied',
-    date: '03/24/2018',
-    salary: '$13076.28',
-    name: 'Annie Martin',
-    designation: 'Operator',
-    email: 'sganderton2@tuttocitta.it'
+    dateStart: '09/13/2023',
+    dateEnd: '01/01/2024',
+    subject: 'Software Architect',
+    designation: '20KTPM1',
   },
   {
-    age: 33,
-    date: '08/25/2017',
-    salary: '$10909.52',
-    name: 'Adeline Day',
-    status: 'professional',
-    email: 'hnisius4@gnu.org',
-    designation: 'Senior Cost Accountant'
+    dateStart: '09/25/2023',
+    dateEnd: '12/28/2023',
+    subject: 'Software Testing',
+    designation: '20KTPM2'
   },
   {
-    age: 61,
-    status: 'current',
-    date: '06/01/2017',
-    salary: '$17803.80',
-    name: 'Lora Jackson',
-    designation: 'Geologist',
-    email: 'ghoneywood5@narod.ru'
+    dateStart: '09/11/2023',
+    dateEnd: '04/01/2023',
+    subject: 'Advanced Web Programming',
+    designation: '20KTPM2'
   },
   {
-    age: 22,
-    date: '12/03/2017',
-    salary: '$12336.17',
-    name: 'Rodney Sharp',
-    status: 'professional',
-    designation: 'Cost Accountant',
-    email: 'dcrossman3@google.co.jp'
+    dateStart: '09/10/2023',
+    dateEnd: '10/1/2023',
+    subject: 'Web Programming',
+    designation: '20KTPM1',
   }
 ]
 
-const statusObj: StatusObj = {
-  applied: { color: 'info' },
-  rejected: { color: 'error' },
-  current: { color: 'primary' },
-  resigned: { color: 'warning' },
-  professional: { color: 'success' }
-}
+
+const rowsPerPage = 5;
+const rowsPerPageOptions = [5];
 
 const DashboardTable = () => {
+
+  const [page, setPage] = React.useState(0);
+
+  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
+  };
+
   return (
     <Card>
       <TableContainer>
         <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Salary</TableCell>
-              <TableCell>Age</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Subject</TableCell>
+              <TableCell >Date Start</TableCell>
+              <TableCell>Date End</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row: RowType) => (
-              <TableRow hover key={row.name} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
+            {rows.slice(page * rowsPerPage, (page + 1) * rowsPerPage).map((row: RowType)  => (
+              <TableRow hover key={row.subject} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
                 <TableCell sx={{ py: theme => `${theme.spacing(0.5)} !important` }}>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{row.name}</Typography>
+                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{row.subject}</Typography>
                     <Typography variant='caption'>{row.designation}</Typography>
                   </Box>
                 </TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell>{row.date}</TableCell>
-                <TableCell>{row.salary}</TableCell>
-                <TableCell>{row.age}</TableCell>
-                <TableCell>
-                  <Chip
-                    label={row.status}
-                    color={statusObj[row.status].color}
-                    sx={{
-                      height: 24,
-                      fontSize: '0.75rem',
-                      textTransform: 'capitalize',
-                      '& .MuiChip-label': { fontWeight: 500 }
-                    }}
-                  />
-                </TableCell>
+                <TableCell>{row.dateStart}</TableCell>
+                <TableCell>{row.dateEnd}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPageOptions={rowsPerPageOptions}
+      />
     </Card>
   )
 }

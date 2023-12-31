@@ -1,4 +1,5 @@
 // ** React Imports
+import * as React from 'react';
 import { ChangeEvent, MouseEvent, ReactNode, useState } from 'react'
 
 // ** Next Imports
@@ -9,6 +10,8 @@ import { useRouter } from 'next/router'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
+import Modal from '@mui/material/Modal';
+import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
@@ -21,6 +24,8 @@ import { styled } from '@mui/material/styles'
 import MuiCard, { CardProps } from '@mui/material/Card'
 import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
+import Snackbar from '@mui/material/Snackbar'
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
 
 import EyeOutline from 'mdi-material-ui/EyeOutline'
@@ -38,6 +43,8 @@ import { fetchLogin } from 'src/api/auth/login'
 import { getCookieCustom, setCookieCustom } from '../../../utils/cookies'
 import { Facebook, Google } from 'mdi-material-ui'
 import { fetchProfile } from 'src/api/user/getProfile'
+import { sendOtpReset } from 'src/api/auth/sendOtpReset'
+import { fetchResetpassword } from 'src/api/auth/forgotPassword'
 
 
 interface State {
@@ -63,6 +70,13 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
     color: theme.palette.text.secondary
   }
 }))
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 interface Role {
   role: string
@@ -109,8 +123,129 @@ const LoginPage = () => {
     }
   }
 
+  const [isSendOTPModalOpen, setIsSendOTPModalOpen] = useState(false);
+  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
+  const [modalValues, setModalValues] = useState({
+    email: '',
+    otp: 0,
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+
+  const openSendOTPModal = () => {
+    setIsSendOTPModalOpen(true);
+    setIsResetPasswordModalOpen(false);
+  };
+
+  const closeSendOTPModal = () => {
+    setIsSendOTPModalOpen(false);
+    setModalValues({
+      ...modalValues, email:''
+    })
+  }
+
+  const openResetPasswordModal = () => {
+    setIsResetPasswordModalOpen(true);
+    setIsSendOTPModalOpen(false);
+  };
+
+  const closeResetPasswordModal = () => {
+    setIsResetPasswordModalOpen(false);
+    setModalValues({
+      ...modalValues, otp: 0, newPassword:'', confirmPassword:''
+    })
+  }
+
+  const handleModalChange = (prop: keyof typeof modalValues) => (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setModalValues({ ...modalValues, [prop]: event.target.value });
+  };
+
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleSendOTP = async () => {
+    try {
+
+      const { data, status, errorData } = await sendOtpReset(modalValues.email);
+
+      if (status === 201) {
+        setSuccessMessage(data.message);
+        setErrorMessage(null);
+        setIsResetPasswordModalOpen(true);
+        setIsSendOTPModalOpen(false);
+        setOpen(true)
+
+      } else {
+        setErrorMessage(errorData?.message || "Unknown error occurred");
+        setSuccessMessage(null);
+        setIsResetPasswordModalOpen(false);
+        setIsSendOTPModalOpen(true);
+        setOpen(true)
+      }
+    } catch (error) {
+
+      setErrorMessage("Error occurs while sending OTP: " + error);
+      setSuccessMessage(null);
+      setOpen(true)
+    }
+  };
+
+  const handleResetpassword = async () => {
+    try{
+      const {data, error, status} = await fetchResetpassword(modalValues.email, modalValues.otp, modalValues.newPassword, modalValues.confirmPassword)
+      if (error) {
+        setErrorMessage(`Error: ${error}`);
+        setOpen(true)
+      }
+      else {
+        if (status === 201) {
+          setSuccessMessage(data.message);
+          setErrorMessage(null);
+          setOpen(true)
+        } else {
+          setErrorMessage(`Server error: ${status}`);
+          setSuccessMessage(null);
+          setOpen(true)
+        }
+      }
+    } catch (error) {
+      setErrorMessage(`Error occurs while resetting password: ${error}`);
+      setSuccessMessage(null);
+      setOpen(true)
+    }
+  }
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSuccessMessage(null);
+    setErrorMessage(null);
+    setOpen(false);
+  };
+
   return (
     <Box className='content-center'>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={successMessage ? 'success': 'error'} sx={{ width: '100%' }}>
+        {successMessage && (
+          <div className="success-message">
+            {successMessage}
+          </div>
+        )}
+
+        {errorMessage && (
+          <div className="error-message">
+            {errorMessage}
+          </div>
+        )}
+        </Alert>
+      </Snackbar>
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -135,9 +270,9 @@ const LoginPage = () => {
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              Welcome to {themeConfig.templateName}! 👋🏻
+              Welcome to {themeConfig.templateName}!
             </Typography>
-            <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
+            <Typography variant='body2'>Please sign-in to your account</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
             <TextField autoFocus fullWidth id='email' label='Email' sx={{ marginBottom: 4 }} value={values.email} onChange={handleChange("email")} />
@@ -168,8 +303,126 @@ const LoginPage = () => {
             >
               <FormControlLabel control={<Checkbox />} label='Remember Me' />
               <Link passHref href='/'>
-                <LinkStyled onClick={e => e.preventDefault()}>Forgot Password?</LinkStyled>
+                <LinkStyled onClick={openSendOTPModal}>Forgot Password?</LinkStyled>
               </Link>
+              <Modal open={isSendOTPModalOpen} onClose={closeSendOTPModal}>
+                <Paper sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, p: 4 }}>
+                  <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+                    width="35px" height="29px" viewBox="0 0 36 36" aria-hidden="true" role="img" className="iconify iconify--twemoji"
+                    preserveAspectRatio="xMidYMid meet">
+                    <path fill="#3B88C3" d="M36 32a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28z" />
+                    <path fill="#FFF" d="M12.219 9.621c0-1.55.775-2.697 2.418-2.697h7.689c1.488 0 2.202 1.054 2.202 2.14c0 1.054-.744 2.139-2.202 2.139H16.87v4.527h5.085c1.52 0 2.264 1.054 2.264 2.14c0 1.054-.775 2.139-2.264 2.139H16.87v4.713h5.736c1.488 0 2.201 1.055 2.201 2.14c0 1.055-.744 2.14-2.201 2.14h-7.999c-1.364 0-2.387-.93-2.387-2.325V9.621z" />
+                  </svg>
+                    <Typography
+                      variant='h6'
+                      sx={{
+                        ml: 3,
+                        lineHeight: 1,
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        fontSize: '1.5rem !important'
+                      }}
+                    >
+                      {themeConfig.templateName}
+                    </Typography>
+                  </Box>
+                  <Typography variant="h5" gutterBottom>
+                    Forgot Password
+                  </Typography>
+                  <TextField
+                    label="Email"
+                    placeholder="Enter your email"
+                    fullWidth
+                    margin="normal"
+                    value={modalValues.email}
+                    onChange={handleModalChange('email')
+
+                  }
+                  />
+                  <Button variant="contained" color="primary" onClick={handleSendOTP}>
+                    Send Code
+                  </Button>
+                </Paper>
+
+              </Modal>
+              <Modal open={isResetPasswordModalOpen} onClose={closeResetPasswordModal}>
+                <Paper sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, p: 4 }}>
+                <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+                    width="35px" height="29px" viewBox="0 0 36 36" aria-hidden="true" role="img" className="iconify iconify--twemoji"
+                    preserveAspectRatio="xMidYMid meet">
+                    <path fill="#3B88C3" d="M36 32a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28z" />
+                    <path fill="#FFF" d="M12.219 9.621c0-1.55.775-2.697 2.418-2.697h7.689c1.488 0 2.202 1.054 2.202 2.14c0 1.054-.744 2.139-2.202 2.139H16.87v4.527h5.085c1.52 0 2.264 1.054 2.264 2.14c0 1.054-.775 2.139-2.264 2.139H16.87v4.713h5.736c1.488 0 2.201 1.055 2.201 2.14c0 1.055-.744 2.14-2.201 2.14h-7.999c-1.364 0-2.387-.93-2.387-2.325V9.621z" />
+                  </svg>
+                    <Typography
+                      variant='h6'
+                      sx={{
+                        ml: 3,
+                        lineHeight: 1,
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        fontSize: '1.5rem !important'
+                      }}
+                    >
+                      {themeConfig.templateName}
+                    </Typography>
+                  </Box>
+                  <Typography variant="h5" gutterBottom>
+                    Reset Password
+                  </Typography>
+                <TextField
+                    type="text"
+                    label="OTP"
+                    placeholder="Your OTP"
+                    autoComplete='off'
+                    fullWidth
+                    margin="normal"
+                    value={modalValues.otp == 0 ? '' : modalValues.otp}
+                    onChange={handleModalChange('otp')}
+                  />
+                <InputLabel htmlFor='newPassword'>New Password</InputLabel>
+                  <OutlinedInput
+                  fullWidth
+                  onChange={handleModalChange('newPassword')}
+                  type={values.showPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position='end'>
+                      <IconButton
+                        edge='end'
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        aria-label='toggle password visibility'
+                      >
+                        {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  />
+                <InputLabel htmlFor='confirmPassword'>Confirm Password</InputLabel>
+                  <OutlinedInput
+                  fullWidth
+                  onChange={handleModalChange('confirmPassword')}
+                  type={values.showPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position='end'>
+                      <IconButton
+                        edge='end'
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        aria-label='toggle password visibility'
+                      >
+                        {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  />
+
+                  <Button sx={{marginTop: 4}} variant="contained" color="primary" onClick={handleResetpassword}>
+                    Confirm
+                  </Button>
+                </Paper>
+              </Modal>
             </Box>
             <Button
               fullWidth
@@ -182,7 +435,7 @@ const LoginPage = () => {
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <Typography variant='body2' sx={{ marginRight: 2 }}>
-                New on our platform?
+                New member?
               </Typography>
               <Typography variant='body2'>
                 <Link passHref href='/pages/register'>
