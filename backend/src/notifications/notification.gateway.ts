@@ -108,7 +108,7 @@ export class NotificationGateway implements OnModuleInit {
                 const receiverSocketIds = this.socketMap.get(user_id);
                 if (receiverSocketIds) {
                     for (const socketId of receiverSocketIds) {
-                        client.to(socketId).emit('onMultipleNotifications', notifications);
+                        client.to(socketId).emit('onNotification', notifications);
                     }
                 }
             });

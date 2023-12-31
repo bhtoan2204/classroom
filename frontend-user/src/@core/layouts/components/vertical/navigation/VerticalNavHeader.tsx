@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 
 import Box, { BoxProps } from '@mui/material/Box'
-import { styled, useTheme } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 
 
@@ -50,9 +50,6 @@ const StyledLink = styled('a')({
 const VerticalNavHeader = (props: Props) => {
 
   const { verticalNavMenuBranding: userVerticalNavMenuBranding } = props
-
-
-  const theme = useTheme()
 
   return (
     <MenuHeaderWrapper className='nav-header' sx={{ pl: 6 }}>

@@ -113,9 +113,11 @@ const NotificationDropdown = () => {
     }
   }
 
-  const handleNavigate = async (type: string, url_id: string, _id: string) => {
+  const handleNavigate = async (type: string, url_id: string, _id: string, is_read: boolean) => {
     const accessToken = getCookieCustom('accessToken') as string;
-    await fetchMarkRead(_id.toString(), accessToken);
+    if (!is_read) {
+      await fetchMarkRead(_id.toString(), accessToken);
+    }
     if (type === 'grade_review') {
       console.log('grade_review' + url_id);
     }
@@ -196,7 +198,7 @@ const NotificationDropdown = () => {
           {notifications.map((notification) => (
             <MenuItem
               key={notification._id}
-              onClick={() => handleNavigate(notification.type, notification.url_id, notification._id)}
+              onClick={() => handleNavigate(notification.type, notification.url_id, notification._id, notification.is_read)}
               sx={{
                 backgroundColor: notification.is_read ? 'f0f0f0' : 'inherit',
                 color: notification.is_read ? 'gray' : 'inherit',
