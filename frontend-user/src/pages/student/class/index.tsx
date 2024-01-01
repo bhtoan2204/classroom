@@ -7,15 +7,6 @@ import JoinClassModal from "src/views/student/class/JoinClassModal";
 
 const StudentRoute = () => {
 
-    //  "classes": [
-    // {
-    //     "_id": "658bf5a063abdfb1dc18cc14",
-    //     "className": "Physics II",
-    //     "description": "This is a Physics II class",
-    //     "id": "658bf5a063abdfb1dc18cc14"
-    //   }
-    // ],
-
     const [classes, setClasses] = useState<any>([])
     const [joinClassModalOpen, setJoinClassModalOpen] = useState<any>(false)
 
@@ -32,23 +23,23 @@ const StudentRoute = () => {
 
         }
 
-        fetchStudentJoinedClasses()  
+        fetchStudentJoinedClasses()
 
     }, [])
 
     const displayedClasses: any = (classes.length > 0) ?
-    classes.map((value: any) => {
-        return(
-            <Grid item key={value.class_id} lg={2} md={3} sm={6} xs={12}>
-                <ClassCard ClassInfo={value} />
-            </Grid>
-        )
-    }) :
-    <>
-        <div>
-            No class has been joined yet
-        </div>
-    </>
+        classes.map((value: any) => {
+            return (
+                <Grid item key={value.class_id} lg={2} md={3} sm={6} xs={12}>
+                    <ClassCard ClassInfo={value} />
+                </Grid>
+            )
+        }) :
+        <>
+            <div>
+                No class has been joined yet
+            </div>
+        </>
 
     // interface ClassInfo { _id: string, className: string, description: string, id: string }
 
@@ -61,13 +52,11 @@ const StudentRoute = () => {
     // }
 
 
-    function handleJoinClassOpenModalClick()
-    {
-        setJoinClassModalOpen(true)    
+    function handleJoinClassOpenModalClick() {
+        setJoinClassModalOpen(true)
     }
 
-    function handleJoinClassOpenModalCallback(value: any)
-    {
+    function handleJoinClassOpenModalCallback(value: any) {
         setJoinClassModalOpen(value)
     }
 
@@ -76,7 +65,7 @@ const StudentRoute = () => {
             <div>
                 <Box>
                     <Stack direction={"row"}>
-                        <Button size="medium" style={{borderRadius: "50px"}} onClick={handleJoinClassOpenModalClick}>
+                        <Button size="medium" style={{ borderRadius: "50px" }} onClick={handleJoinClassOpenModalClick}>
                             <IconButton>
                                 <AddIcon />
                             </IconButton>
@@ -90,7 +79,7 @@ const StudentRoute = () => {
                 </Grid>
             </div>
 
-            <JoinClassModal OpenModal={joinClassModalOpen} handleOpenModalCallback={handleJoinClassOpenModalCallback}/>
+            <JoinClassModal OpenModal={joinClassModalOpen} handleOpenModalCallback={handleJoinClassOpenModalCallback} />
         </>
 
     )

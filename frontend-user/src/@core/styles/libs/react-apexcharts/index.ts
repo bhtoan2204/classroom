@@ -1,4 +1,4 @@
-// ** MUI imports
+
 import { styled } from '@mui/material/styles'
 
 const ApexChartWrapper = styled('div')(({ theme }) => ({

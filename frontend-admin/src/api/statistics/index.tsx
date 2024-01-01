@@ -15,9 +15,9 @@ export const fetchStatistics = async (accessToken: string) => {
             return { data, status: apiResponse.status };
         }
         else {
-            const data = await apiResponse.json();
+            const error = await apiResponse.json();
 
-            return { data, status: apiResponse.status };
+            return { error, status: apiResponse.status };
         }
     }
     catch (error) {

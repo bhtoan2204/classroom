@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 import { IsValidObjectId } from "src/utils/customValidator/isValidObjectId.validator";
 
 export class MapStudentIdDto {

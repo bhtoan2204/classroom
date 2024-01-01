@@ -43,10 +43,10 @@ export class GradeManagementService {
     }
 
     private async checkInClass(user: User, classId: Types.ObjectId): Promise<any> {
-        // const classUser = await this.classUserRepository.findOne({ user_id: user._id, class_id: classId }).exec();
-        // if (classUser == null) {
-        //     return new HttpException('You are not in this class', HttpStatus.FORBIDDEN);
-        // }
+        const classUser = await this.classUserRepository.findOne({ user_id: user._id, class_id: classId }).exec();
+        if (classUser == null) {
+            return new HttpException('You are not in this class', HttpStatus.FORBIDDEN);
+        }
     }
 
     private async getStudentOfClass(classId: Types.ObjectId): Promise<User[]> {
@@ -132,7 +132,6 @@ export class GradeManagementService {
             const classUser = await this.classUserRepository.findOne({ class_id: classId });
             const students = classUser.students;
 
-            // Use Promise.all to parallelize fetching student information and grades
             const rows = await Promise.all(students.map(async (student) => {
                 const [userInfo, userGrade] = await Promise.all([
                     this.userRepository.findOne({ _id: student.user_id }).exec(),
@@ -240,7 +239,6 @@ export class GradeManagementService {
             { new: true }
         ).exec();
 
-        // If the gradeCompoName doesn't exist, add a new entry
         if (!updatedClass) {
             await this.classRepository.findByIdAndUpdate(
                 classId,

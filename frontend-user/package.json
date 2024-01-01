@@ -60,6 +60,7 @@
     "@mui/x-date-pickers": "^6.18.6",
     "@popperjs/core": "^2.11.8",
     "@types/js-cookie": "^3.0.6",
+    "@types/react-slick": "^0.23.13",
     "antd": "^5.12.5",
     "apexcharts-clevision": "3.28.5",
     "clsx": "^1.1.1",
@@ -79,6 +80,9 @@
     "react-dom": "17.0.2",
     "react-perfect-scrollbar": "^1.5.8",
     "react-popper": "^2.2.5",
+    "react-scroll": "^1.9.0",
+    "react-slick": "^0.29.0",
+    "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
@@ -88,6 +92,7 @@
     "@types/react": "17.0.37",
     "@types/react-csv": "^1.1.10",
     "@types/react-datepicker": "^4.3.2",
+    "@types/react-scroll": "^1.8.10",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.11.0",
     "eslint": "^7.32.0",

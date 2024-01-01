@@ -48,7 +48,7 @@ const CustomInput = forwardRef((props, ref) => {
 })
 
 const TabAccount = () => {
-  // ** State
+
   const [openAlert, setOpenAlert] = useState<boolean>(false)
   const [content, setContent] = useState<string>('')
   const [severity, setSeverity] = useState<'success' | 'info' | 'warning' | 'error'>('success')
@@ -85,48 +85,56 @@ const TabAccount = () => {
     const formData = new FormData();
     if (image !== null) {
       formData.append('avatar', image);
-      const accessToken = getCookieCustom('accessToken');
-      const response = await fetch(process.env.NEXT_PUBLIC_API_HOST + '/user/upload_avatar', {
-        method: 'PATCH',
-        headers: {
-          'Authorization': 'Bearer ' + accessToken,
-        },
-        body: formData
-      })
-      if (response.status !== 201) {
-        const data = await response.json();
+    }
+
+    if (image !== null || profile.fullname !== originalFullname || profile.birthday !== originalBirthday) {
+      try {
+        const accessToken = getCookieCustom('accessToken');
+        const response = await fetch(process.env.NEXT_PUBLIC_API_HOST + '/user/upload_avatar', {
+          method: 'PATCH',
+          headers: {
+            'Authorization': 'Bearer ' + accessToken,
+          },
+          body: formData
+        });
+
+        if (response.status !== 201) {
+          const data = await response.json();
+          setSeverity('error');
+          setContent(data.error);
+          setOpenAlert(true);
+
+          return;
+        }
+
+        const updateData = await fetchUpdateProfile(profile.fullname, profile.birthday, accessToken as string);
+
+        if (updateData.status === 201) {
+          setCookieCustom('fullName', profile.fullname, 1);
+          setSeverity('success');
+          setContent(updateData.data.message);
+          setOpenAlert(true);
+        } else {
+          setSeverity('error');
+          setContent(updateData.message);
+          setOpenAlert(true);
+        }
+      } catch (error) {
         setSeverity('error');
-        setContent(data.error);
+        setContent('Failed to update profile');
         setOpenAlert(true);
-
-        return;
       }
-    }
-
-    const updateData = await fetchUpdateProfile(profile.fullname, profile.birthday, getCookieCustom('accessToken') as string);
-
-    if (updateData.status === 201) {
-      setCookieCustom('fullName', profile.fullname, 1);
-      setSeverity('success');
-      setContent(updateData.data.message);
+    } else {
+      setSeverity('info');
+      setContent('No changes detected');
       setOpenAlert(true);
     }
-    else {
-      setSeverity('error');
-      setContent(updateData.message);
-      setOpenAlert(true);
-    }
-  }
+  };
 
-  const getProfile = async () => {
-    const response = await fetchProfile(getCookieCustom('accessToken') as string);
-    if (response.status === 200) {
-      return response.data;
-    }
-    else {
-      return null;
-    }
-  }
+
+  const [originalFullname, setOriginalFullname] = useState<string>('');
+  const [originalBirthday, setOriginalBirthday] = useState<Date>(new Date());
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -135,20 +143,9 @@ const TabAccount = () => {
         if (data) {
           data.birthday = new Date(data.birthday);
           setProfile(data);
-          if (data.avatar !== null) {
-            setImgSrc(data.avatar);
-            setCookieCustom('avatar', data.avatar, 1);
-
-          }
-          else {
-            setImgSrc('/images/avatars/1.png');
-            setCookieCustom('avatar', data.avatar, 1);
-          }
-          setLoading(false);
-        } else {
-          setSeverity('error');
-          setContent('Failed to fetch profile data');
-          setOpenAlert(true);
+          setImgSrc(data.avatar);
+          setOriginalFullname(data.fullname);
+          setOriginalBirthday(data.birthday);
         }
       } catch (error) {
         setSeverity('error');
@@ -162,6 +159,16 @@ const TabAccount = () => {
       fetchProfile();
     }
   }, [loading]);
+
+  const getProfile = async () => {
+    const response = await fetchProfile(getCookieCustom('accessToken') as string);
+    if (response.status === 200) {
+      return response.data;
+    }
+    else {
+      return null;
+    }
+  }
 
   return (
     <CardContent>
@@ -196,7 +203,7 @@ const TabAccount = () => {
               fullWidth
               label="Fullname"
               value={profile.fullname}
-              onChange={(text) => setProfile({ ...profile, fullname: text.target.value as any })}
+              onChange={(text) => setProfile({ ...profile, fullname: text.target.value })}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -207,7 +214,7 @@ const TabAccount = () => {
                 showMonthDropdown
                 id="account-settings-date"
                 customInput={<CustomInput />}
-                onChange={(date) => setProfile({ ...profile, birthday: date as any })}
+                onChange={(date) => setProfile({ ...profile, birthday: date as Date })}
               />
             </DatePickerWrapper>
           </Grid>

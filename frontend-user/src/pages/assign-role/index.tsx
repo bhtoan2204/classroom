@@ -21,7 +21,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ src, alt }) => {
         if (response.status === 200) {
             setCookieCustom('role', role.toLowerCase(), 100);
 
-            router.push('/');
+            router.push('/dashboard');
         }
         else {
         }

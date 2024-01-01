@@ -1,15 +1,12 @@
-import { ConflictException, HttpException, HttpStatus, Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { CreateClassDto } from "../dto/createClass.dto";
-import { Types } from 'mongoose';
-import { UserService } from "src/user/user.service";
 import { Class, ClassDocument } from "src/utils/schema/class.schema";
 import { ClassUser, ClassUserDocument } from "src/utils/schema/classUser.schema";
 import { User, UserDocument } from "src/utils/schema/user.schema";
 import { UserGrade, UserGradeDocument } from "src/utils/schema/userGrade.schema";
 import { PaginateDto } from "../dto/paginate.dto";
-import { GetUserDto } from "../dto/listPaginate.dto";
 
 @Injectable()
 export class ClassService {

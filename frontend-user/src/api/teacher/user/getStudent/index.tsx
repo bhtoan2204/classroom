@@ -18,6 +18,7 @@ export const fetchListStudent = async (class_id: string, page: number, itemPerPa
 
             return { status: 200, data: data };
         }
+
         else {
             const error = await response.json();
 

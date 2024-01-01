@@ -13,7 +13,6 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle'
 
-// ** Icons Imports
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Close from 'mdi-material-ui/Close'
@@ -30,7 +29,6 @@ interface State {
 }
 
 const TabSecurity = () => {
-  // ** States
   const [values, setValues] = useState<State>({
     newPassword: '',
     currentPassword: '',
@@ -44,7 +42,7 @@ const TabSecurity = () => {
   const [content, setContent] = useState<string>('')
   const [severity, setSeverity] = useState<'success' | 'info' | 'warning' | 'error'>('success')
 
-  // Handle Current Password
+
   const handleCurrentPasswordChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value })
   }
@@ -55,7 +53,7 @@ const TabSecurity = () => {
     event.preventDefault()
   }
 
-  // Handle New Password
+
   const handleNewPasswordChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value })
   }
@@ -66,7 +64,7 @@ const TabSecurity = () => {
     event.preventDefault()
   }
 
-  // Handle Confirm New Password
+
   const handleConfirmNewPasswordChange = (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value })
   }

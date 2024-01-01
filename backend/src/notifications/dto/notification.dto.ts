@@ -1,7 +1,5 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Types } from "mongoose";
-import { AbstractDocument } from "../../utils/database/abstract.schema";
-import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
+import { IsValidObjectId } from "src/utils/customValidator/isValidObjectId.validator";
 
 export class NotificationDto {
     @IsNotEmpty()
@@ -15,7 +13,7 @@ export class NotificationDto {
     @IsString()
     content: string;
 
-    @IsNotEmpty()
-    @IsBoolean()
-    is_read: boolean;
+    @IsString()
+    @IsValidObjectId()
+    id: string;
 }

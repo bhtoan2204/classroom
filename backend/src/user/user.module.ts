@@ -8,8 +8,6 @@ import { UserSchema } from 'src/utils/schema/user.schema';
 import { RegisterOtpSchema } from 'src/utils/schema/registerOtp.schema';
 import { ResetOtpSchema } from 'src/utils/schema/resetOtp.schema';
 import { SearchService } from 'src/elastic/search.service';
-import { ElasticsearchModule } from '@nestjs/elasticsearch';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SearchModule } from 'src/elastic/search.module';
 
 @Module({

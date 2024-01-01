@@ -12,16 +12,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 
-
-//  "classes": [
-// {
-//     "_id": "658bf5a063abdfb1dc18cc14",
-//     "className": "Physics II",
-//     "description": "This is a Physics II class",
-//     "id": "658bf5a063abdfb1dc18cc14"
-//   }
-// ],
-
 const classroomImages: any =
   [
     "https://img.freepik.com/free-photo/copy-space-surrounded-by-office-supplies_23-2148475345.jpg?w=1060&t=st=1703740272~exp=1703740872~hmac=648b46c0f7db09ab7d86a1495450db9abbad537f5a2c8612870b81bd36de0781",

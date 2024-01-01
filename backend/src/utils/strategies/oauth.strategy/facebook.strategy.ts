@@ -14,7 +14,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, "facebook") {
             clientID: configService.get<string>("FACEBOOK_CLIENT_ID"),
             clientSecret: configService.get<string>("FACEBOOK_CLIENT_SECRET"),
             callbackURL: configService.get<string>("FACEBOOK_CALLBACK_URL"),
-            // fbGraphVersion: 'v3.0',
+
             scope: ["email", "public_profile"],
             profileFields: ["id", "emails", "name", "picture.type(large)", "birthday"],
         });
@@ -26,7 +26,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, "facebook") {
         profile: Profile,
     ): Promise<any> {
         try {
-            return this.userService.validateFacebookUser(profile);
+            return await this.userService.validateFacebookUser(profile);
         }
         catch (error) {
             throw new UnauthorizedException('Credentials are not valid');

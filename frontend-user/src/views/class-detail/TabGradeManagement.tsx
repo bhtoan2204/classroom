@@ -69,6 +69,10 @@ const GradeManagement: React.FC<ClassDetailProps> = ({ class_id }) => {
         }
     };
 
+    const UploadStudentList = async () => {
+        console.log('goes here')
+    }
+
     const handleSelectChange = (event: SelectChangeEvent) => {
         setSelectedItem(event.target.value as string);
     };
@@ -178,7 +182,7 @@ const GradeManagement: React.FC<ClassDetailProps> = ({ class_id }) => {
                         <Button variant="contained" style={{ marginBottom: '10px' }} onClick={DownloadStudentList}>
                             Download Student List
                         </Button>
-                        <Button variant="contained" style={{ marginBottom: '10px' }}>
+                        <Button variant="contained" style={{ marginBottom: '10px' }} onClick={UploadStudentList}>
                             Upload Student List
                         </Button>
                         <Button variant="contained" style={{ marginBottom: '10px' }} onClick={() => setOpen(true)}>
@@ -203,7 +207,7 @@ const GradeManagement: React.FC<ClassDetailProps> = ({ class_id }) => {
                     <Paper style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px' }}>
                         <FormControl fullWidth>
                             <Typography variant="h6" gutterBottom>
-                                Select an Item
+                                Select a grade composition
                             </Typography>
                             <Select value={selectedItem} label="Assignment" onChange={(event: SelectChangeEvent) => handleSelectChange(event)} style={{ marginBottom: '20px' }}>
                                 {gradeData.length > 0 && gradeData[0].grades && Object.keys(gradeData[0].grades).map((item, index) => (

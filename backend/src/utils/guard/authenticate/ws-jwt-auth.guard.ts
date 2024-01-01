@@ -13,7 +13,7 @@ export class WsJwtAuthGuard extends AuthGuard('ws-jwt') {
 
     canActivate(
         context: ExecutionContext,
-    ): boolean | any | Promise<boolean | any> | Observable<boolean | any> {
+    ): boolean | Promise<boolean> | Observable<boolean> {
         const client = context.switchToWs().getClient();
         try {
             const token = client.handshake.headers.authorization.split(' ')[1];

@@ -1,9 +1,9 @@
-// ** Type Imports
+
 import { PaletteMode } from '@mui/material'
 import { ThemeColor } from 'src/@core/layouts/types'
 
 const DefaultPalette = (mode: PaletteMode, themeColor: ThemeColor) => {
-  // ** Vars
+
   const lightColor = '58, 53, 65'
   const darkColor = '231, 227, 252'
   const mainColor = mode === 'light' ? lightColor : darkColor
@@ -36,14 +36,14 @@ const DefaultPalette = (mode: PaletteMode, themeColor: ThemeColor) => {
     },
     mode: mode,
     primary: {
-      light: '#9E69FD',
-      main: '#9155FD',
-      dark: '#804BDF',
+      light: '#a0d0d0',
+      main: '#1a98a9',
+      dark: '#5dc5e3',
       contrastText: '#FFF'
     },
     secondary: {
-      light: '#9C9FA4',
-      main: '#8A8D93',
+      light: '#a0d0d0',
+      main: '#1a98a9',
       dark: '#777B82',
       contrastText: '#FFF'
     },

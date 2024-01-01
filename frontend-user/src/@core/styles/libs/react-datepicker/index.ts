@@ -1,8 +1,6 @@
-// ** MUI imports
 import { styled } from '@mui/material/styles'
 import Box, { BoxProps } from '@mui/material/Box'
 
-// ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
 const DatePickerWrapper = styled(Box)<BoxProps>(({ theme }) => {
@@ -193,7 +191,6 @@ const DatePickerWrapper = styled(Box)<BoxProps>(({ theme }) => {
           }
         },
         '& .react-datepicker__year-option': {
-          // TODO: Remove some of the following styles for arrow in Year dropdown when react-datepicker give arrows in Year dropdown
           '& .react-datepicker__navigation--years-upcoming': {
             width: 9,
             height: 9,
@@ -273,7 +270,6 @@ const DatePickerWrapper = styled(Box)<BoxProps>(({ theme }) => {
         backgroundColor: theme.palette.primary.main
       },
 
-      // ** Time Picker
       '& .react-datepicker__time-container': {
         borderLeftColor: theme.palette.divider
       },
@@ -320,18 +316,15 @@ const DatePickerWrapper = styled(Box)<BoxProps>(({ theme }) => {
             width: 8
           },
 
-          /* Track */
           '&::-webkit-scrollbar-track': {
             background: theme.palette.background.paper
           },
 
-          /* Handle */
           '&::-webkit-scrollbar-thumb': {
             background: '#aaa',
             borderRadius: '10px'
           },
 
-          /* Handle on hover */
           '&::-webkit-scrollbar-thumb:hover': {
             background: '#999'
           }

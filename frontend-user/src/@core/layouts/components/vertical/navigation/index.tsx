@@ -1,24 +1,24 @@
-// ** React Import
+
 import { ReactNode, useRef, useState } from 'react'
 
-// ** MUI Import
+
 import List from '@mui/material/List'
 import Box, { BoxProps } from '@mui/material/Box'
 import { styled, useTheme } from '@mui/material/styles'
 
-// ** Third Party Components
+
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
-// ** Type Import
+
 import { Settings } from 'src/@core/context/settingsContext'
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
 
-// ** Component Imports
+
 import Drawer from './Drawer'
 import VerticalNavItems from './VerticalNavItems'
 import VerticalNavHeader from './VerticalNavHeader'
 
-// ** Util Import
+
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
 interface Props {
@@ -51,7 +51,7 @@ const StyledBoxForShadow = styled(Box)<BoxProps>({
 })
 
 const Navigation = (props: Props) => {
-  // ** Props
+
   const {
     hidden,
     afterVerticalNavMenuContent,
@@ -59,23 +59,19 @@ const Navigation = (props: Props) => {
     verticalNavMenuContent: userVerticalNavMenuContent
   } = props
 
-  // ** States
   const [groupActive, setGroupActive] = useState<string[]>([])
   const [currentActiveGroup, setCurrentActiveGroup] = useState<string[]>([])
 
-  // ** Ref
   const shadowRef = useRef(null)
-
-  // ** Hooks
   const theme = useTheme()
 
-  // ** Fixes Navigation InfiniteScroll
   const handleInfiniteScroll = (ref: HTMLElement) => {
     if (ref) {
       // @ts-ignore
       ref._getBoundingClientRect = ref.getBoundingClientRect
 
       ref.getBoundingClientRect = () => {
+
         // @ts-ignore
         const original = ref._getBoundingClientRect()
 
@@ -84,7 +80,7 @@ const Navigation = (props: Props) => {
     }
   }
 
-  // ** Scroll Menu
+
   const scrollMenu = (container: any) => {
     container = hidden ? container.target : container
     if (shadowRef && container.scrollTop > 0) {

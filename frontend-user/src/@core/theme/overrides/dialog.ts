@@ -1,7 +1,7 @@
-// ** MUI Imports
+
 import { Theme } from '@mui/material/styles'
 
-// ** Util Import
+
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
 const Dialog = (theme: Theme) => {
@@ -42,7 +42,7 @@ const Dialog = (theme: Theme) => {
             paddingTop: 0
           },
 
-          // Styling for Mobile Date Picker starts
+
           '& .PrivatePickersToolbar-root': {
             padding: theme.spacing(4, 5),
             color: theme.palette.primary.contrastText,
@@ -86,7 +86,7 @@ const Dialog = (theme: Theme) => {
             }
           }
 
-          // Styling for Mobile Date Picker ends
+
         }
       }
     },

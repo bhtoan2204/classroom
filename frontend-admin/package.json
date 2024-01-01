@@ -37,8 +37,8 @@
   ],
   "scripts": {
     "dev": "NODE_ENV=development next dev",
-    "build": "NODE_ENV=development next build",
-    "start": "NODE_ENV=development next start",
+    "build": "NODE_ENV=production next build",
+    "start": "NODE_ENV=production next start",
     "export": "next export",
     "lint": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""

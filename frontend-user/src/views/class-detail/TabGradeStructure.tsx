@@ -2,6 +2,7 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { OutlinedFlagOutlined } from "@mui/icons-material";
 import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { MultipleNotifications, multipleNotifications } from "src/api/socket";
 import { fetchCreateGradeComposition } from "src/api/teacher/grade/addGradeComposition";
 import { fetchDeleteGradeComposition } from "src/api/teacher/grade/deleteGradeComposition";
 import { fetchGradeStructure } from "src/api/teacher/grade/getGradeComposition";
@@ -91,6 +92,14 @@ const GradeStructure: React.FC<ClassDetailProps> = ({ class_id }) => {
         const updateData = await fetchGradeStructure(class_id, getCookieCustom('accessToken') as string);
         if (updateData.status === 200) {
             setRows(updateData.data);
+            const notificationData: MultipleNotifications = {
+                class_id: class_id,
+                title: 'Grade Composition is finalized',
+                content: `Grade Composition ${gradeCompo_name} is finalized`,
+                id: class_id,
+            }
+            multipleNotifications(notificationData);
+            console.log('notification sent');
         }
     }
     const handleDeleteGradeCompo = (gradeCompo_name: string) => {

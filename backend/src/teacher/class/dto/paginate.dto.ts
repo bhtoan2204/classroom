@@ -1,4 +1,4 @@
-import { IsOptional, IsBoolean, IsInt, Min, Max } from 'class-validator';
+import { IsOptional, IsInt, Min, Max } from 'class-validator';
 
 export class PaginateDto {
     @IsOptional()
