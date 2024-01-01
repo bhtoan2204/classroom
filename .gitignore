@@ -104,3 +104,8 @@ frontend-admin/.pnp.js
 
 # typescript
 /frontend-user/*.tsbuildinfo
+
+/frontend-user/package-lock.json
+/frontend-user/yarn.lock
+/frontend-admin/package-lock.json
+/frontend-admin/yarn.lock
