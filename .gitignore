@@ -1,4 +1,4 @@
-# compiled output
+# Compiled output
 /backend/dist
 /backend/node_modules
 
@@ -39,70 +39,74 @@
 /backend/esData01
 /backend/redis
 
-
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# Dependencies - frontend-admin
 /frontend-admin/node_modules
 /frontend-admin/.pnp
-frontend-admin/.pnp.js
+/frontend-admin/.pnp.js
 
-# testing
+# Testing - frontend-admin
 /frontend-admin/coverage
 
-# next.js
+# Next.js - frontend-admin
 /frontend-admin/.next/
 /frontend-admin/out/
 
-# production
+# Production - frontend-admin
 /frontend-admin/build
 
-# misc
+# Misc - frontend-admin
 /frontend-admin/.DS_Store
 /frontend-admin/*.pem
 
-# debug
+# Debug - frontend-admin
 /frontend-admin/npm-debug.log*
 /frontend-admin/yarn-debug.log*
 /frontend-admin/yarn-error.log*
 
-
-# vercel
+# Vercel - frontend-admin
 /frontend-admin/.vercel
 
-# typescript
+# TypeScript - frontend-admin
 /frontend-admin/*.tsbuildinfo
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# Dependencies - frontend-user
 /frontend-user/node_modules
 /frontend-user/.pnp
 /frontend-user/.pnp.js
 
-# testing
+# Testing - frontend-user
 /frontend-user/coverage
 
-# next.js
+# Next.js - frontend-user
 /frontend-user/.next/
 /frontend-user/out/
 
-# production
+# Production - frontend-user
 /frontend-user/build
 
-# misc
+# Misc - frontend-user
 /frontend-user/.DS_Store
 /frontend-user/*.pem
 
-# debug
+# Debug - frontend-user
 /frontend-user/npm-debug.log*
 /frontend-user/yarn-debug.log*
 /frontend-user/yarn-error.log*
 /frontend-user/package-lock.json
 /frontend-user/yarn.lock
 
-# vercel
+/frontend-admin/npm-debug.log*
+/frontend-admin/yarn-debug.log*
+/frontend-admin/yarn-error.log*
+/frontend-admin/package-lock.json
+/frontend-admin/yarn.lock
+
+# Vercel - frontend-user
 /frontend-user/.vercel
 
-# typescript
+# TypeScript - frontend-user
 /frontend-user/*.tsbuildinfo
