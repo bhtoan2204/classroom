@@ -289,9 +289,7 @@ const LoginPage = () => {
               sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
             >
               <FormControlLabel control={<Checkbox />} label='Remember Me' />
-              <Link passHref href='/'>
-                <LinkStyled onClick={openSendOTPModal}>Forgot Password?</LinkStyled>
-              </Link>
+              <LinkStyled onClick={openSendOTPModal} sx={{ cursor: 'pointer' }}>Forgot Password?</LinkStyled>
               <Modal open={isSendOTPModalOpen} onClose={closeSendOTPModal}>
                 <Paper sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, p: 4 }}>
                   <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
