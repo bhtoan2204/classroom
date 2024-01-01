@@ -14,7 +14,7 @@ import { GET_getGradeStructure } from 'src/api/student/grade/grade_structure/api
 
 function GradeStructure({ ClassId }: any) {
     const [dataSource, setDataSource] = useState<any>([])
-    const [needToRefetchData, setNeedToRefetchData] = useState<any>(false)
+    const [needToRefetchData] = useState<any>(false)
 
     useEffect(() => {
         async function fetchGradeStructure() {
@@ -95,6 +95,7 @@ function GradeStructure({ ClassId }: any) {
             //       </>
             //     )
             //   }
+
         ]
 
 
@@ -103,6 +104,7 @@ function GradeStructure({ ClassId }: any) {
             setDataSource((previous: any) => {
                 const activeIndex = previous.findIndex((i: any) => i.key === active.id);
                 const overIndex = previous.findIndex((i: any) => i.key === over?.id);
+
                 return arrayMove(previous, activeIndex, overIndex);
             });
         }
@@ -114,7 +116,9 @@ function GradeStructure({ ClassId }: any) {
                 <div key={"grade-struture-table"} className='w-full h-full mt-4'>
                     <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
                         <SortableContext
+
                             // rowKey array
+
                             items={dataSource.map((value: any) => value.key)}
                             strategy={verticalListSortingStrategy}
                         >

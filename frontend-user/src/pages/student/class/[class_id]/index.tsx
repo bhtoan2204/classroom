@@ -1,4 +1,4 @@
-import { Alert, Backdrop, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Menu, MenuItem, Stack, Typography } from "@mui/material";
+import { Backdrop, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { MouseEvent, useEffect, useState } from "react";
 import ClassSupportedFeature from "src/views/student/class/ClassSupportedFeature";
@@ -32,7 +32,7 @@ const StudentRoute = () => {
   const [anchorEl, setAnchorEl] = useState<any>(null)
   const [backdropOpen, setBackdropOpen] = useState<any>(false)
   const [backdropContent, setBackdropContent] = useState<any>(<></>)
- 
+
   useEffect(() => {
     setImageSrc(getRandomImage())
   }, [])
@@ -43,78 +43,71 @@ const StudentRoute = () => {
     return classroomImages[randomNum % classroomImages.length]
   }
 
-  function handleMoreVertButtonClose(event: any)
-  {
+  function handleMoreVertButtonClose(event: any) {
     event.preventDefault()
     setAnchorEl(null)
     setMoreMenuOpen(false)
   }
 
-  function handleMoreVertButtonClick(event: any)
-  {
+  function handleMoreVertButtonClick(event: any) {
     event.preventDefault()
     setAnchorEl(event.currentTarget)
     setMoreMenuOpen(true)
   }
 
 
-  function handleMenuItemClick(event: MouseEvent, callback: any)
-  {
+  function handleMenuItemClick(event: MouseEvent, callback: any) {
     event.preventDefault()
     callback()
   }
 
-  function handleBackDropClose()
-  {
+  function handleBackDropClose() {
     setBackdropOpen(false)
   }
 
-  async function handleLeaveTheClass(event: MouseEvent) 
-  {
+  async function handleLeaveTheClass(event: MouseEvent) {
     event.preventDefault()
-    const waitingDisplay = 
-    <>
-      <CardContent>
-        <CircularProgress />
-      </CardContent>
-    </>
+    const waitingDisplay =
+      <>
+        <CardContent>
+          <CircularProgress />
+        </CardContent>
+      </>
 
     setBackdropContent(waitingDisplay)
 
     const response = await DELETE_leaveClass(class_id);
-    if(response.status == 200)
-    {
-      const successDisplay = 
-      <>
-        <CardContent>
-          <Typography color={"green"}>
-            <CheckCircleOutlineIcon/> Leaved the class successfully!
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button href="/student/class">
-            Ok
-          </Button>
-        </CardActions>
-      </>
+    if (response.status == 200) {
+      const successDisplay =
+        <>
+          <CardContent>
+            <Typography color={"green"}>
+              <CheckCircleOutlineIcon /> Leaved the class successfully!
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button href="/student/class">
+              Ok
+            </Button>
+          </CardActions>
+        </>
 
       setBackdropContent(successDisplay)
     }
-    else
-    {
-      const failedDisplay = 
-      <>
-        <CardContent>
-          <Typography color={"red"}>
-            <HighlightOffIcon/> Leaved the class failed!
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button onClick={handleBackDropClose}>
-            Ok
-          </Button>
-        </CardActions>
-      </>
+    else {
+      const failedDisplay =
+        <>
+          <CardContent>
+            <Typography color={"red"}>
+              <HighlightOffIcon /> Leaved the class failed!
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button onClick={handleBackDropClose}>
+              Ok
+            </Button>
+          </CardActions>
+        </>
 
       setBackdropContent(failedDisplay)
     }
@@ -124,87 +117,86 @@ const StudentRoute = () => {
 
   //Callbacks
 
-  const menuItemClick_leaveTheClass: any = () =>
-  {
+  const menuItemClick_leaveTheClass: any = () => {
 
     setBackdropOpen(true)
     setAnchorEl(null)
     setMoreMenuOpen(false)
 
-    const warningDisplay = 
+    const warningDisplay =
       <>
-      <CardContent>
-        <Typography color={"orange"}>
-            <WarningAmberIcon/> Warning! This action can't be undone. Do you want to leave the class?
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button onClick={handleBackDropClose}>
+        <CardContent>
+          <Typography color={"orange"}>
+            <WarningAmberIcon /> Warning! This action can't be undone. Do you want to leave the class?
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button onClick={handleBackDropClose}>
             <Typography>
               No
             </Typography>
-        </Button>
-        <Button onClick={handleLeaveTheClass}>
+          </Button>
+          <Button onClick={handleLeaveTheClass}>
             <Typography>
               Yes
             </Typography>
-        </Button>
-      </CardActions>
+          </Button>
+        </CardActions>
       </>
 
     setBackdropContent(warningDisplay)
   }
 
   return (
-      <>
-        <div>
-          <Card>
-            <CardMedia
-              component="img"
-              alt="class card"
-              height={"230"}
-              width={"100%"}
-              image={imageSrc}
-            />
-            <CardContent >
-              <Stack direction={"row"} sx={{width: "100%"}}>
-                <Stack sx={{width: "100%"}}>
-                  <Typography component={"div"} variant="h5" paddingLeft={2} paddingY={4}>
-                    Class name
-                  </Typography>
-                  <Typography component={"div"} paddingLeft={2}>
-                    {class_id}
-                  </Typography>
-                </Stack>
-                <Button onClick={handleMoreVertButtonClick}>
-                  <IconButton>
-                    <MoreVertIcon />
-                  </IconButton>
-                </Button>
-                <Menu
-                  open={moreMenuOpen}
-                  anchorEl={anchorEl}
-                  onClose={handleMoreVertButtonClose}
-                >
-                  <MenuItem onClick={(e) => {handleMenuItemClick(e, menuItemClick_leaveTheClass)}}><Stack direction={"row"}><LogoutIcon/><Typography color={"red"} marginLeft={3}>Leave the class</Typography></Stack></MenuItem>
-                </Menu>
+    <>
+      <div>
+        <Card>
+          <CardMedia
+            component="img"
+            alt="class card"
+            height={"230"}
+            width={"100%"}
+            image={imageSrc}
+          />
+          <CardContent >
+            <Stack direction={"row"} sx={{ width: "100%" }}>
+              <Stack sx={{ width: "100%" }}>
+                <Typography component={"div"} variant="h5" paddingLeft={2} paddingY={4}>
+                  Class name
+                </Typography>
+                <Typography component={"div"} paddingLeft={2}>
+                  {class_id}
+                </Typography>
               </Stack>
-            </CardContent>
-          </Card>
-          <Stack direction={"row"} spacing={20} width={"100%"} marginTop={25}>
-            <ClassSupportedFeature ClassId={class_id} />
-            <ClassTasks />
-          </Stack>
-        </div>
-        <Backdrop
-          open={backdropOpen}
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        >
-          <Card>
-            {backdropContent}
-          </Card>
-        </Backdrop>
-      </>
+              <Button onClick={handleMoreVertButtonClick}>
+                <IconButton>
+                  <MoreVertIcon />
+                </IconButton>
+              </Button>
+              <Menu
+                open={moreMenuOpen}
+                anchorEl={anchorEl}
+                onClose={handleMoreVertButtonClose}
+              >
+                <MenuItem onClick={(e) => { handleMenuItemClick(e, menuItemClick_leaveTheClass) }}><Stack direction={"row"}><LogoutIcon /><Typography color={"red"} marginLeft={3}>Leave the class</Typography></Stack></MenuItem>
+              </Menu>
+            </Stack>
+          </CardContent>
+        </Card>
+        <Stack direction={"row"} spacing={20} width={"100%"} marginTop={25}>
+          <ClassSupportedFeature ClassId={class_id} />
+          <ClassTasks />
+        </Stack>
+      </div>
+      <Backdrop
+        open={backdropOpen}
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <Card>
+          {backdropContent}
+        </Card>
+      </Backdrop>
+    </>
   )
 }
 

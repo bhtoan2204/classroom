@@ -1,34 +1,32 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab"
-import { Dialog, DialogContent, DialogTitle, Tab} from "@mui/material"
+import { Dialog, DialogContent, DialogTitle, Tab } from "@mui/material"
 import { SyntheticEvent, useEffect, useState } from "react"
 import JoinClassByCodeTab from "./childs/JoinClassByCodeTab"
 import JoinClassByLinkTab from "./childs/JoinClassByLinkTab"
 
 
 
-function JoinClassModal({OpenModal, handleOpenModalCallback}: any)
-{
+function JoinClassModal({ OpenModal, handleOpenModalCallback }: any) {
     const [openModal, setOpenModal] = useState(false)
     const [tabValue, setTabValue] = useState("1")
 
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         setOpenModal(OpenModal)
 
     }, [OpenModal])
 
 
-    function handleTabChange(event: SyntheticEvent, newValue: string)
-    {
-        setTabValue(newValue)
+    function handleTabChange(event: SyntheticEvent, newValue: string) {
+        event.preventDefault();
+        setTabValue(newValue);
     }
 
-    return(
+    return (
         <Dialog
             open={openModal}
             fullWidth={true}
-            onClose={(e) => handleOpenModalCallback(false)}
+            onClose={() => handleOpenModalCallback(false)}
         >
             <DialogTitle>
                 Join class
@@ -40,12 +38,12 @@ function JoinClassModal({OpenModal, handleOpenModalCallback}: any)
                     <TabList
                         onChange={handleTabChange}
                     >
-                        <Tab label="Join by Code" value={"1"}/>
-                        <Tab label="Join by Link" value={"2"}/>
+                        <Tab label="Join by Code" value={"1"} />
+                        <Tab label="Join by Link" value={"2"} />
                     </TabList>
                     <TabPanel value="1">
-                        <JoinClassByCodeTab/>
-                    </TabPanel> 
+                        <JoinClassByCodeTab />
+                    </TabPanel>
                     <TabPanel value="2">
                         <JoinClassByLinkTab />
                     </TabPanel>
