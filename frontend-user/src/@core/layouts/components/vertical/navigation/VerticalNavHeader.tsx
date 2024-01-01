@@ -67,7 +67,7 @@ const VerticalNavHeader = (props: Props) => {
             <HeaderTitle variant='h6' sx={{ ml: 3 }}>
               {themeConfig.templateName}
             </HeaderTitle>
-          </StyledLink>
+          </StyledLink >
         </Link >
       )}
     </MenuHeaderWrapper >

@@ -195,85 +195,87 @@ const NotificationDropdown = () => {
           </Box>
         </MenuItem>
         <ScrollWrapper>
-          {notifications.map((notification) => (
-            <MenuItem
-              key={notification._id}
-              onClick={() => handleNavigate(notification.type, notification.url_id, notification._id, notification.is_read)}
-              sx={{
-                backgroundColor: notification.is_read ? 'f0f0f0' : 'inherit',
-                color: notification.is_read ? 'gray' : 'inherit',
-                position: 'relative',
-              }}
-            >
-              <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-                <Badge
-                  overlap="circular"
-                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                  badgeContent={
+          {
+            notifications.map((notification) => (
+              <MenuItem
+                key={notification._id}
+                onClick={() => handleNavigate(notification.type, notification.url_id, notification._id, notification.is_read)}
+                sx={{
+                  backgroundColor: notification.is_read ? 'f0f0f0' : 'inherit',
+                  color: notification.is_read ? 'gray' : 'inherit',
+                  position: 'relative',
+                }}
+              >
+                <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+                  <Badge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    badgeContent={
+                      <div
+                        style={{
+                          width: '15px',
+                          height: '15px',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        {notification.type === 'grade_review' ? (
+                          <Avatar sx={{ width: '18px', height: '18px', backgroundColor: '#abf4ef' }}>
+                            <GradingOutlined sx={{ width: '12px', height: '12px' }} />
+                          </Avatar>
+                        ) : (
+                          <Avatar sx={{ width: '18px', height: '18px', backgroundColor: '#abf4ef' }}>
+                            <BookMarkerOutline sx={{ width: '12px', height: '12px' }} />
+                          </Avatar>
+                        )}
+                      </div>
+                    }
+                  >
+                    <Avatar
+                      alt='Flora'
+                      src={notification.sender_avatar}
+                      style={{ opacity: notification.is_read ? 0.5 : 1 }}
+                    />
+                  </Badge>
+
+                  <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
+                    <MenuItemTitle style={{ fontSize: '1.0rem', color: notification.is_read ? 'gray' : 'inherit' }}>
+                      {notification.title}
+                    </MenuItemTitle>
+                    <MenuItemSubtitle variant='body2' style={{ fontSize: '0.8rem', color: notification.is_read ? 'gray' : 'inherit' }}>
+                      {notification.content}
+                    </MenuItemSubtitle>
+                  </Box>
+                  {!notification.is_read && (
                     <div
                       style={{
-                        width: '15px',
-                        height: '15px',
+                        position: 'absolute',
+                        top: '50%',
+                        right: 0,
+                        transform: 'translateY(-50%)',
+                        width: '12px',
+                        height: '12px',
                         borderRadius: '50%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
+                        backgroundColor: '#abf4ef',
+                        marginRight: '10px',
                       }}
-                    >
-                      {notification.type === 'grade_review' ? (
-                        <Avatar sx={{ width: '18px', height: '18px', backgroundColor: '#abf4ef' }}>
-                          <GradingOutlined sx={{ width: '12px', height: '12px' }} />
-                        </Avatar>
-                      ) : (
-                        <Avatar sx={{ width: '18px', height: '18px', backgroundColor: '#abf4ef' }}>
-                          <BookMarkerOutline sx={{ width: '12px', height: '12px' }} />
-                        </Avatar>
-                      )}
-                    </div>
-                  }
-                >
-                  <Avatar
-                    alt='Flora'
-                    src={notification.sender_avatar}
-                    style={{ opacity: notification.is_read ? 0.5 : 1 }}
-                  />
-                </Badge>
-
-                <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
-                  <MenuItemTitle style={{ fontSize: '1.0rem', color: notification.is_read ? 'gray' : 'inherit' }}>
-                    {notification.title}
-                  </MenuItemTitle>
-                  <MenuItemSubtitle variant='body2' style={{ fontSize: '0.8rem', color: notification.is_read ? 'gray' : 'inherit' }}>
-                    {notification.content}
-                  </MenuItemSubtitle>
+                    />
+                  )}
                 </Box>
-                {!notification.is_read && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '50%',
-                      right: 0,
-                      transform: 'translateY(-50%)',
-                      width: '12px',
-                      height: '12px',
-                      borderRadius: '50%',
-                      backgroundColor: '#abf4ef',
-                      marginRight: '10px',
-                    }}
-                  />
-                )}
-              </Box>
-            </MenuItem>
-          ))}
-        </ScrollWrapper>
+              </MenuItem>
+            ))
+          }
+        </ScrollWrapper >
 
         <MenuItem
           disableRipple
           sx={{ py: 3.5, borderBottom: 0, borderTop: theme => `1px solid ${theme.palette.divider}` }}
         >
         </MenuItem>
-      </Menu>
-    </Fragment>
+      </Menu >
+    </Fragment >
   )
 }
 
