@@ -154,10 +154,17 @@ const StudentOfClass: React.FC<ClassDetailProps> = ({ class_id }) => {
                                 <TableCell align='right' style={{ width: '10.6%' }}>{row.user.is_ban ? 'True' : 'False'}</TableCell>
                             </TableRow>
                         ))}
-
                     </TableBody>
                 </Table>
-
+                {rows.length === 0 && (
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{ textAlign: "center", padding: "16px" }}
+                    >
+                        No Student joined this class yet
+                    </Typography>
+                )}
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 20]}
                     component='div'

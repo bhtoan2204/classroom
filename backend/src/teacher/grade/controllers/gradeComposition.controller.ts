@@ -53,4 +53,11 @@ export class GradeCompositionController {
     async swapGradeCompositions(@CurrentUser() user, @Body() dto: SwapGradeCompositionDto) {
         return this.gradeService.swapGradeCompositions(user, dto);
     }
+
+    @HttpCode(HttpStatus.OK)
+    @Get('/getURL/:classId')
+    @ApiOperation({ summary: 'Get grade composition URL' })
+    async getGradeCompositionsURL(@CurrentUser() user, @Param() params: any) {
+        return this.gradeService.getGradeCompositionsURL(user, params.classId);
+    }
 }

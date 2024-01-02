@@ -16,12 +16,12 @@ export const sendOtpReset = async (email: string) => {
 
 
       return { data, status: response.status };
-      }
-      else {
-          const errorData = await response.json();
+    }
+    else {
+      const errorData = await response.json();
 
-          return { errorData, status: response.status };
-      }
+      return { errorData, status: response.status };
+    }
   }
   catch (error) {
     return { error, status: 500 };

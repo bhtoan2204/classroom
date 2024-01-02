@@ -71,7 +71,7 @@ export class ClassService {
 
     async deleteClass(host: User, classid: string): Promise<any> {
         const classId = new Types.ObjectId(classid);
-        this.checkIsHost(host, classId);
+        await this.checkIsHost(host, classId);
 
         const clazz = await this.classRepository.findOne({ _id: classId, host: host._id }).exec();
         if (!clazz) return new NotFoundException("Class not found");
