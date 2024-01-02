@@ -18,6 +18,7 @@ export async function DELETE_leaveClass(class_id)
 
         const status = response.status;
         const data = await response.json();
+        
         return {status, data}
     }
     catch(err)

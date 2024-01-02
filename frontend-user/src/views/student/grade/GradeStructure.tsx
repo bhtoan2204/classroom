@@ -1,12 +1,12 @@
-import {Table} from 'antd';
+import { Table } from 'antd';
 
-import {DndContext} from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import {
     arrayMove,
     SortableContext,
     verticalListSortingStrategy,
-  } from '@dnd-kit/sortable';
+} from '@dnd-kit/sortable';
 import { useEffect, useState } from 'react';
 import DndGradeStructureRow from './components/DndGradeStructureRow';
 import { GET_getGradeStructure } from 'src/api/student/grade/grade_structure/api';
@@ -51,26 +51,20 @@ import { GET_getGradeStructure } from 'src/api/student/grade/grade_structure/api
 //     },
 // ]
 
-function GradeStructure({ClassId}: any)
-{
+function GradeStructure({ ClassId }: any) {
     const [dataSource, setDataSource] = useState<any>([])
-    const [needToRefetchData, setNeedToRefetchData] = useState<any>(false)
+    const [needToRefetchData] = useState<any>(false)
 
-    useEffect(() =>
-    {
-        async function fetchGradeStructure()
-        {
-            if(ClassId === undefined)
-            {
+    useEffect(() => {
+        async function fetchGradeStructure() {
+            if (ClassId === undefined) {
 
                 return;
             }
-            
-            const {status, data} = await GET_getGradeStructure(ClassId)
-            if(status == 200)
-            {
-                const controlledData = data.map((value:any) =>
-                {
+
+            const { status, data } = await GET_getGradeStructure(ClassId)
+            if (status == 200) {
+                const controlledData = data.map((value: any) => {
                     const item: any =
                     {
                         key: value._id,
@@ -83,8 +77,7 @@ function GradeStructure({ClassId}: any)
                 })
                 setDataSource(controlledData)
             }
-            else
-            {
+            else {
                 setDataSource([])
             }
         }
@@ -93,76 +86,75 @@ function GradeStructure({ClassId}: any)
 
     }, [needToRefetchData, ClassId])
 
-    const columns: any = 
-    [
-        {
-          title: "",
-          dataIndex: "key",
-          key: "sort",
-          width: 80,
-        },
-        {
-          title: "Grade composition",
-          dataIndex: "nameOfGrade",
-          key: "nameOfGrade",
-          width: 550,
-        },
-        {
-          title: "Grade scale",
-          dataIndex: "gradeScale",
-          key: "scale",
-          width: 120,
+    const columns: any =
+        [
+            {
+                title: "",
+                dataIndex: "key",
+                key: "sort",
+                width: 80,
+            },
+            {
+                title: "Grade composition",
+                dataIndex: "nameOfGrade",
+                key: "nameOfGrade",
+                width: 550,
+            },
+            {
+                title: "Grade scale",
+                dataIndex: "gradeScale",
+                key: "scale",
+                width: 120,
 
-        },
+            },
 
-        //   render: (_, record) =>
-        //   {
-        //     //record schema
-        //     //     {
-        //     //       "gradeCompo_name": "Quiz 1",
-        //     //       "gradeCompo_scale": 10,
-        //     //       "is_finalized": false,
-        //     //       "_id": "6582c26a7b9c22f52ff54750",
-        //     //       "id": "6582c26a7b9c22f52ff54750"
-        //     //     }
-        //     return(
-        //       <>
-        //         <Popconfirm
-        //           open={record.isDeleting}
-        //           title={"Warning"}
-        //           description={"Do you want to delete this composition? This action can be undo!"}
-        //           onCancel={(e) => {handleRemoveGradeCompositionCancel(record)}}
-        //           onConfirm={(e) => {handleRemoveGradeCompositionConfirm(record)}}
-        //           >
-        //             <button className="hover:bg-blue-600 hover:text-white"><DeleteOutlined style={{fontSize: 'larger'}}
-        //             onClick={(e) => {handleRemoveGradeCompositionClick(record)}}
-        //             /></button>
-        //         </Popconfirm>
-        //       </>
-        //     )
-        //   }
-    ]
+            //   render: (_, record) =>
+            //   {
+            //     //record schema
+            //     //     {
+            //     //       "gradeCompo_name": "Quiz 1",
+            //     //       "gradeCompo_scale": 10,
+            //     //       "is_finalized": false,
+            //     //       "_id": "6582c26a7b9c22f52ff54750",
+            //     //       "id": "6582c26a7b9c22f52ff54750"
+            //     //     }
+            //     return(
+            //       <>
+            //         <Popconfirm
+            //           open={record.isDeleting}
+            //           title={"Warning"}
+            //           description={"Do you want to delete this composition? This action can be undo!"}
+            //           onCancel={(e) => {handleRemoveGradeCompositionCancel(record)}}
+            //           onConfirm={(e) => {handleRemoveGradeCompositionConfirm(record)}}
+            //           >
+            //             <button className="hover:bg-blue-600 hover:text-white"><DeleteOutlined style={{fontSize: 'larger'}}
+            //             onClick={(e) => {handleRemoveGradeCompositionClick(record)}}
+            //             /></button>
+            //         </Popconfirm>
+            //       </>
+            //     )
+            //   }
+        ]
 
 
-    function onDragEnd({ active, over }: any) 
-    {
-      if (active.id !== over?.id) 
-      {
-        setDataSource((previous: any) => 
-        {
-          const activeIndex = previous.findIndex((i:any) => i.key === active.id);
-          const overIndex = previous.findIndex((i:any) => i.key === over?.id);
-          return arrayMove(previous, activeIndex, overIndex);
-        });
-      }
+    function onDragEnd({ active, over }: any) {
+        if (active.id !== over?.id) {
+            setDataSource((previous: any) => {
+                const activeIndex = previous.findIndex((i: any) => i.key === active.id);
+                const overIndex = previous.findIndex((i: any) => i.key === over?.id);
+
+                return arrayMove(previous, activeIndex, overIndex);
+            });
+        }
     };
 
-    return(
+    return (
         <>
             <div className="w-full h-full px-40">
                 <div key={"grade-struture-table"} className='w-full h-full mt-4'>
                     <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
                         <SortableContext
+
                             // rowKey array
                             items={dataSource.map((value: any) => value.key)}
                             strategy={verticalListSortingStrategy}
@@ -170,13 +162,13 @@ function GradeStructure({ClassId}: any)
                             <Table
                                 components={{
                                     body: {
-                                    row: DndGradeStructureRow,
+                                        row: DndGradeStructureRow,
                                     },
                                 }}
                                 rowKey="key"
                                 columns={columns}
                                 dataSource={dataSource}
-                                scroll={{y:400}}
+                                scroll={{ y: 400 }}
                             />
                         </SortableContext>
                     </DndContext>
