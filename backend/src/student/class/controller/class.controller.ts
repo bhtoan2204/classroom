@@ -8,6 +8,7 @@ import { CurrentUser } from "src/utils/decorator/current-user.decorator";
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { MapStudentIdDto } from "src/student/dto/mapStudentId.dto";
 import { User } from "src/utils/schema/user.schema";
+import { userInfo } from "os";
 
 @ApiTags('Class for student')
 @Controller('class')
@@ -82,4 +83,12 @@ export class ClassController {
         return this.classService.leaveClass(user, params.classId);
     }
 
+    @HttpCode(HttpStatus.OK)
+    @Get("/getClassDetail/:classId")
+    @ApiParam({name: "classId", type: String})
+    @ApiOperation({summary: "Get class detail"})
+    async getClassDetail(@CurrentUser() user, @Param() params: any)
+    {
+        return this.classService.getClassDetail(user, params.classId)
+    }
 }

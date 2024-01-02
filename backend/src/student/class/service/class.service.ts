@@ -215,4 +215,23 @@ export class ClassService {
         const student = classUser.students.map(student => student.user_id === user._id);
         if (!student) return new NotFoundException("You are not in this class");
     }
+
+    async getClassDetail(user: User, classId: string)
+    {
+        const class_id = new Types.ObjectId(classId)
+        const dbUserClassesProp = (await this.userRepository.findOne({_id: user._id}).exec()).classes;
+
+        const isJoinedClass = dbUserClassesProp.findIndex((value: any) => value.class_id == classId)
+        if(isJoinedClass == -1)
+        {
+            return new HttpException("Class not found", HttpStatus.NOT_FOUND)
+        }
+        const dbClass = await this.classRepository.findOne({_id: class_id}).exec();
+        
+        if(!dbClass)
+        {
+            return new HttpException("Class not found", HttpStatus.NOT_FOUND)
+        }
+        return dbClass;
+    }
 }

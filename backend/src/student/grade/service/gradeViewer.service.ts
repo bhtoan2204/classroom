@@ -140,4 +140,23 @@ export class GradeViewerService {
         });
         return await review.save();
     }
+
+    async getGradeReviews(user: User)
+    {
+        // const dbReviews = await this.gradeReviewRepository.find({student_id: user._id}).exec()
+        const data = await this.gradeReviewRepository.aggregate([
+            {
+                $match: {class_id: user._id}
+            },
+            {
+                $lookup: {
+                    from: "classes",
+                    localField: "class_id",
+                    foreignField: "_id",
+                    as: "generalGradeReviews"
+                }
+            }
+        ])
+        return data;
+    }
 }

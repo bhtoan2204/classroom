@@ -15,6 +15,7 @@ function StudentGrade() {
 
 
     function handleTabOnChange(event: SyntheticEvent, newValue: string) {
+        event.currentTarget;
         setTabValue(newValue)
     }
 

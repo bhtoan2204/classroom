@@ -1,4 +1,4 @@
-import { Avatar, Grid, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Paper } from "@mui/material";
+import { Avatar, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { GET_getStudentJoinedClasses } from "src/api/student/class/get_classes/api";
 
