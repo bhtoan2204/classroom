@@ -1,7 +1,7 @@
 
-import { Box, Button, Card, CardContent, CardMedia, Divider, Grid, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, Divider, Grid, Modal, Paper, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchCreateClass } from "src/api/teacher/class/createClass";
 import { fetchMyClass } from "src/api/teacher/class/getAllClass";
 import { getCookieCustom } from "src/utils/cookies";

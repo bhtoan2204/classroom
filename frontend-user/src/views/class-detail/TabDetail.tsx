@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
-import { Box, Button, Card, CardContent, CardMedia, Collapse, Divider, IconButton, InputAdornment, List, ListItem, ListItemButton, Typography, styled } from "@mui/material";
+import { Box, Button, Card, Collapse, Divider, InputAdornment, List, ListItem, Typography, styled } from "@mui/material";
 import AccountOutline from "mdi-material-ui/AccountOutline";
-import { AddBoxOutlined, KeyboardArrowRight, PeopleAltOutlined } from "@mui/icons-material";
+import { AddBoxOutlined, PeopleAltOutlined } from "@mui/icons-material";
 import format from 'date-fns/format';
 import { getCookieCustom } from "../../utils/cookies";
 import { TimerOutline } from "mdi-material-ui";
@@ -74,7 +74,7 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
         try {
             const data = await fetchClassDetailTeacher(class_id as string, getCookieCustom('accessToken') as string);
             const code = await fetchInvitationCode(class_id as string, getCookieCustom('accessToken') as string);
-            console.log(data)
+
             if (data) {
                 setClassDetail(data);
             }
@@ -247,14 +247,15 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
                 ) : (
                     <List>
                         {classDetail?.list_assignment_url.map((item, index) => (
-                            <ListItem sx={{
-                                transition: 'transform 0.3s ease-in-out',
-                                ":hover": {
-                                    transform: 'scale(1.05)',
-                                    cursor: 'pointer',
-                                    backgroundColor: 'rgba(0, 0, 0, 0.08)'
-                                }
-                            }}>
+                            <ListItem key={item.gradeCompo_name}
+                                sx={{
+                                    transition: 'transform 0.3s ease-in-out',
+                                    ":hover": {
+                                        transform: 'scale(1.05)',
+                                        cursor: 'pointer',
+                                        backgroundColor: 'rgba(0, 0, 0, 0.08)'
+                                    }
+                                }}>
                                 <Box sx={{
                                     display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%'
                                 }} >

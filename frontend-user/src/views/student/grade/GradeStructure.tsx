@@ -23,8 +23,9 @@ function GradeStructure({ ClassId }: any) {
                 return;
             }
 
-            const { status, data } = await GET_getGradeStructure(ClassId)
-            if (status == 200) {
+            const { status, data } = await GET_getGradeStructure(ClassId);
+            console.log(data);
+            if (status == 200 && data) {
                 const controlledData = data.map((value: any) => {
                     const item: any =
                     {

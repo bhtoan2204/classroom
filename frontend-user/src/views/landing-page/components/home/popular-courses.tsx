@@ -110,7 +110,7 @@ const HomePopularCourse: FC = () => {
 
           <Grid item xs={12} md={9}>
             <Slider {...sliderConfig}>
-              {data.map((item) => (
+              {data && data.map((item) => (
                 <CourseCardItem key={String(item.id)} item={item} />
               ))}
             </Slider>
