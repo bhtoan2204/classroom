@@ -2,9 +2,14 @@ pipeline {
     agent any 
 
     stages {
-        stage('Hello') {
+        stage('Get Code') {
             steps {
-                echo 'Hello World'
+                git 'https://github.com/bhtoan2204/classroom'
+            }
+        }
+        stage('SonarQube analysis') {
+            steps {
+                echo 'Building...'
             }
         }
     }
