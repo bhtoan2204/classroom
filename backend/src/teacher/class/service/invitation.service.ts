@@ -51,7 +51,7 @@ export class InvitationService {
     async getCodeInvitation(user: User, classid: string): Promise<any> {
         const classId = new Types.ObjectId(classid);
 
-        this.checkIsHost(user, classId);
+        await this.checkIsHost(user, classId);
 
         const existingInvitation = await this.invitationRepository.findOne({ class_id: classId });
 
@@ -65,7 +65,7 @@ export class InvitationService {
     async getInvitations(user: User, classid: string): Promise<any> {
         const classId = new Types.ObjectId(classid);
 
-        this.checkIsHost(user, classId);
+        await this.checkIsHost(user, classId);
 
         const existingInvitation = await this.invitationRepository.findOne({ class_id: classId });
 

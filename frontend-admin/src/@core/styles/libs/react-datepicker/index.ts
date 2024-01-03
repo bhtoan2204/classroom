@@ -1,4 +1,3 @@
-
 import { styled } from '@mui/material/styles'
 import Box, { BoxProps } from '@mui/material/Box'
 
@@ -320,7 +319,7 @@ const DatePickerWrapper = styled(Box)<BoxProps>(({ theme }) => {
           '&::-webkit-scrollbar-track': {
             background: theme.palette.background.paper
           },
-          /* Handle */
+
           '&::-webkit-scrollbar-thumb': {
             background: '#aaa',
             borderRadius: '10px'

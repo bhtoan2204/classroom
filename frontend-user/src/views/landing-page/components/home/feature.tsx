@@ -64,7 +64,7 @@ const HomeFeature: FC = () => {
             </Typography>
 
             <Grid container spacing={2} sx={{ ml: { xs: 0, md: 2 } }}>
-              {data.map(({ title, description, icon }, index) => (
+              {data && data.map(({ title, description, icon }, index) => (
                 <Grid key={String(index)} item xs={12} md={6}>
                   <Box sx={{ px: 2, py: 1.5, boxShadow: 1, borderRadius: 4, display: 'flex', alignItems: 'center' }}>
                     <Box

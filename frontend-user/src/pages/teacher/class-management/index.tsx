@@ -1,9 +1,25 @@
-import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from "@mui/material";
+
+import { Box, Button, Card, CardContent, CardMedia, Divider, Grid, Modal, Paper, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchCreateClass } from "src/api/teacher/class/createClass";
 import { fetchMyClass } from "src/api/teacher/class/getAllClass";
 import { getCookieCustom } from "src/utils/cookies";
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import CardImgTop from "src/views/card/CardTop";
+
+const listImage = [
+    'a9e7b27a0c5e986a22416d79e2e9dba9.jpg',
+    'alvaro-reyes-qWwpHwip31M-unsplash.jpg',
+    'annie-spratt-QckxruozjRg-unsplash.jpg',
+    'christopher-gower-m_HRfLhgABo-unsplash.jpg',
+    'grovemade-RvPDe41lYBA-unsplash.jpg',
+    'sai-kiran-anagani-5Ntkpxqt54Y-unsplash.jpg',
+    'stillness-inmotion-Jh6aQX-25Uo-unsplash.jpg',
+    'stillness-inmotion-YSCCnRGrD-4-unsplash.jpg',
+    'true-agency-o4UhdLv5jbQ-unsplash.jpg'
+]
 
 const style = {
     position: 'absolute',
@@ -25,90 +41,117 @@ type ClassData = {
 
 const MyClass = () => {
     const [rows, setRows] = useState<ClassData[]>([]);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [totalItem, setTotalItem] = useState(0);
     const [open, setOpen] = useState(false);
     const [name, setName] = useState<string>('');
+    const [page, setPage] = useState<number>(0);
+    const [totalPage, setTotalPage] = useState<number>(0);
     const [description, setDescription] = useState<string>('');
+    const [hoveredIndex, setHoveredIndex] = useState(-1);
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
     const router = useRouter();
 
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-    const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
     const handleCreateClass = async () => {
         await fetchCreateClass(name, description, getCookieCustom('accessToken') as string);
         const accessToken = getCookieCustom('accessToken') as string;
-        const response = await fetchMyClass(page + 1, rowsPerPage, accessToken);
+        const response = await fetchMyClass(page + 1, 6, accessToken);
 
         if (response.status === 200) {
             setRows(response.data.classes);
-            setTotalItem(response.data.totalCount);
+            setTotalPage(Math.ceil(totalPage + 1 / 6));
             handleClose();
+        }
+    }
+
+    const nextPage = () => {
+        if (page < totalPage - 1) {
+            setPage(page + 1);
+        }
+    }
+
+    const previousPage = () => {
+        if (page > 0) {
+            setPage(page - 1);
         }
     }
 
     useEffect(() => {
         const fetchData = async () => {
             const accessToken = getCookieCustom('accessToken') as string;
-            const response = await fetchMyClass(page + 1, rowsPerPage, accessToken);
+            const response = await fetchMyClass(page + 1, 6, accessToken);
 
             if (response.status === 200) {
+                const totalItem = response.data.totalCount
                 setRows(response.data.classes);
-                setTotalItem(response.data.totalCount);
+                setTotalPage(Math.ceil(totalItem / 6));
             }
             else {
+                setRows([]);
             }
         }
         fetchData();
-    }, [page, rowsPerPage]);
+    }, [page]);
 
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell sx={{ width: '40%' }}>Class Name</TableCell>
-                            <TableCell align='left' sx={{ width: '60%' }}>Class Description</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows && rows.map(row => (
-                            <TableRow
-                                key={row._id}
+        <Paper sx={{ width: '100%', overflow: 'hidden', padding: '2' }}>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={12}>
+                    <CardImgTop />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2, padding: 2 }}>
+                        <Button variant='contained' color='primary' onClick={handleOpen}>
+                            Add new Class
+                        </Button>
+                        <Box>
+                            <Button variant='contained' color='primary' onClick={previousPage}>
+                                <ArrowCircleLeftIcon />
+                            </Button>
+                            <Button variant='contained' color='primary' onClick={nextPage} sx={{ marginLeft: 2 }}>
+                                <ArrowCircleRightIcon />
+                            </Button>
+                        </Box>
+                    </Box>
+                </Grid>
+                {rows && rows?.map((row, index) => (
+                    <Grid item xs={12} sm={6} key={index}>
+                        <Card sx={{
+                            display: 'flex', marginBottom: 2, height: 190,
+                            transform: hoveredIndex === index ? 'scale(1.05)' : 'scale(1)',
+                            transition: 'transform 0.3s ease',
+                        }}
+                            onMouseEnter={() => setHoveredIndex(index)}
+                            onMouseLeave={() => setHoveredIndex(-1)}>
+                            <CardMedia
+                                component="img"
                                 sx={{
-                                    '&:last-of-type td, &:last-of-type th': { border: 0 },
-                                    '&:hover': { backgroundColor: '#f5f5f5', cursor: 'pointer' },
-                                }} onClick={() => { router.push('/teacher/class-detail/' + row._id) }}>
-                                <TableCell component='th' scope='row' sx={{ width: '40%' }}>
-                                    {row.className}
-                                </TableCell>
-                                <TableCell align='left' sx={{ width: '60%' }}>
-                                    {row.description}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-                <TablePagination
-                    rowsPerPageOptions={[10, 20, 50]}
-                    component='div'
-                    count={totalItem}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </TableContainer>
-            <Button variant='contained' color='primary' sx={{ margin: 2 }} onClick={handleOpen}>Add new Class</Button>
+                                    width: 151,
+                                    padding: 1,
+                                }}
+                                image={`/images/courses/${listImage[(index * (page + 1)) % 9]}`}
+                                alt="Live from space album cover"
+                            />
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                <CardContent sx={{ flex: '1 0 auto' }}>
+                                    <Typography component="div" variant="h5">
+                                        {row.className}
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="text.secondary" component="div">
+                                        {row.description}
+                                    </Typography>
+                                </CardContent>
+                                <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+                                    <Button onClick={() => router.push('/teacher/class-detail/' + row._id)}>Visit class</Button>
+                                </Box>
+                            </Box>
+                        </Card>
+                    </Grid>
+                ))}
+                <Grid item xs={12} sm={12}>
+                    <Divider />
+                </Grid>
+            </Grid>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -121,7 +164,7 @@ const MyClass = () => {
                     </Typography>
                     <TextField
                         fullWidth
-                        label="Grade Composition Name"
+                        label="Class Name"
                         value={name}
                         sx={{ marginBottom: 4 }}
                         onChange={(e) => setName(e.target.value)}
@@ -138,7 +181,7 @@ const MyClass = () => {
                         onClick={handleCreateClass}>Add</Button>
                 </Box>
             </Modal>
-        </Paper>
+        </Paper >
     );
 };
 

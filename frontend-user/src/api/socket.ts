@@ -3,6 +3,20 @@ import { getCookieCustom } from "src/utils/cookies";
 
 let socket: Socket | null = null;
 
+export interface SendNotification {
+    receiver: string;
+    title: string;
+    content: string;
+    id: string;
+}
+
+export interface MultipleNotifications {
+    class_id: string;
+    title: string;
+    content: string;
+    id: string;
+}
+
 export const createConnection = () => {
     const accessToken = getCookieCustom('accessToken');
     if (accessToken === undefined) {
@@ -20,11 +34,17 @@ export const createConnection = () => {
 
 }
 
-export const sendNotification = (data: any) => {
+export const sendNotification = (data: SendNotification) => {
     if (socket !== null) {
         socket.emit('newNotification', data);
     }
 };
+
+export const multipleNotifications = (data: MultipleNotifications) => {
+    if (socket !== null) {
+        socket.emit('multipleNotifications', data);
+    }
+}
 
 export const closeConnection = () => {
     if (socket !== null) {

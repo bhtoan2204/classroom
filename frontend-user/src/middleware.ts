@@ -17,7 +17,8 @@ export async function middleware(request: NextRequest) {
         const accessToken = searchParams.get('accessToken');
         const refreshToken = searchParams.get('refreshToken');
         const response = await fetchProfile(accessToken as string);
-        const { role }: { role: string } = response.data;
+        const { role }: { role: string } = response.data ? response.data : { role: 'null' };
+
         setCookieCustom('role', role, 100);
         const headers = [
             `accessToken=${accessToken}; Max-Age=${1 * 24 * 60 * 60}; Path=/;`,
@@ -97,7 +98,7 @@ export async function middleware(request: NextRequest) {
         if (accessToken !== undefined && refreshToken !== undefined) {
             if (role === undefined) {
                 const response = await fetchProfile(accessToken as string);
-                const { role }: { role: string } = response.data;
+                const { role }: { role: string } = response.data ? response.data : { role: 'null' };
                 const headers = [
                     `role=${role}; Max-Age=${100}; Path=/;`,
                 ];

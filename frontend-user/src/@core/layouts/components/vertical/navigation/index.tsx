@@ -67,11 +67,12 @@ const Navigation = (props: Props) => {
 
   const handleInfiniteScroll = (ref: HTMLElement) => {
     if (ref) {
-
+      // @ts-ignore
       ref._getBoundingClientRect = ref.getBoundingClientRect
 
       ref.getBoundingClientRect = () => {
 
+        // @ts-ignore
         const original = ref._getBoundingClientRect()
 
         return { ...original, height: Math.floor(original.height) }
@@ -83,13 +84,13 @@ const Navigation = (props: Props) => {
   const scrollMenu = (container: any) => {
     container = hidden ? container.target : container
     if (shadowRef && container.scrollTop > 0) {
-
+      // @ts-ignore
       if (!shadowRef.current.classList.contains('d-block')) {
-
+        // @ts-ignore
         shadowRef.current.classList.add('d-block')
       }
     } else {
-
+      // @ts-ignore
       shadowRef.current.classList.remove('d-block')
     }
   }

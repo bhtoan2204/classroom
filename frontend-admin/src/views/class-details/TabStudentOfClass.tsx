@@ -123,8 +123,6 @@ const StudentOfClass: React.FC<ClassDetailProps> = ({ class_id }) => {
         setOpen(true);
     }
 
-    const handleClose = () => setOpen(false);
-
     useEffect(() => {
         if (class_id) {
             const fetchStudentData = async () => {
@@ -241,7 +239,7 @@ const StudentOfClass: React.FC<ClassDetailProps> = ({ class_id }) => {
             </TableContainer>
             <Modal
                 open={open}
-                onClose={handleClose}
+                onClose={() => setOpen(false)}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >

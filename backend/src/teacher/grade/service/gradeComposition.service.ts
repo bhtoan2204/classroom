@@ -35,7 +35,7 @@ export class GradeCompositionService {
 
     async createGradeComposition(user: User, dto: CreateGradeCompositionDto) {
         try {
-            this.checkIsHost(user, dto.class_id);
+            await this.checkIsHost(user, dto.class_id);
             if (!Types.ObjectId.isValid(dto.class_id)) {
                 return new HttpException("Invalid class_id format", HttpStatus.BAD_REQUEST);
             }
@@ -97,7 +97,7 @@ export class GradeCompositionService {
     }
 
     async removeGradeCompositions(user: User, dto: RemoveGradeCompositionDto) {
-        this.checkIsHost(user, dto.class_id);
+        await this.checkIsHost(user, dto.class_id);
         try {
             const clazz = await this.classRepository.findOne({ _id: new Types.ObjectId(dto.class_id) }).exec();
             const index = clazz.grade_compositions.findIndex((item) => item.gradeCompo_name == dto.name);
@@ -120,7 +120,7 @@ export class GradeCompositionService {
 
     async updateGradeCompositions(user: User, dto: UpdateGradeCompositionDto) {
         try {
-            this.checkIsHost(user, dto.class_id);
+            await this.checkIsHost(user, dto.class_id);
             const classId = new Types.ObjectId(dto.class_id);
             const clazz = await this.classRepository.findOne({ _id: classId }).exec();
             if (!clazz) {
@@ -155,7 +155,7 @@ export class GradeCompositionService {
         try {
             const index1 = dto.source_index;
             const index2 = dto.destination_index;
-            this.checkIsHost(user, dto.class_id);
+            await this.checkIsHost(user, dto.class_id);
             const classId = new Types.ObjectId(dto.class_id);
             const clazz = await this.classRepository.findOne({ _id: classId }).exec();
             if (!clazz) {
@@ -170,6 +170,22 @@ export class GradeCompositionService {
 
         } catch (err) {
             return new HttpException("Error updating GradeComposition", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    async getGradeCompositionsURL(user: User, classId: string) {
+        try {
+            await this.checkIsHost(user, classId);
+            const clazz = await this.classRepository.findOne({ _id: new Types.ObjectId(classId) })
+                .select("list_student_url list_assignment_url").exec();
+            if (!clazz) {
+                return new HttpException("Class not found", HttpStatus.NOT_FOUND);
+            }
+
+            return clazz;
+        }
+        catch (err) {
+            return new HttpException("Class not found", HttpStatus.NOT_FOUND);
         }
     }
 }

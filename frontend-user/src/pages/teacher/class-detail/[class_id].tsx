@@ -99,10 +99,10 @@ const ClassDetail = () => {
                         }
                     />
                 </TabList>
-                <TabPanel sx={{ p: 0 }} value='class-detail'>
+                <TabPanel sx={{ p: 0, padding: 2 }} value='class-detail'>
                     <TabClassDetail class_id={class_id as string} />
                 </TabPanel>
-                <TabPanel sx={{ p: 0 }} value='grade-structure'>
+                <TabPanel sx={{ p: 0, padding: 2 }} value='grade-structure'>
                     <GradeStructure class_id={class_id as string} />
                 </TabPanel>
                 <TabPanel sx={{ p: 0 }} value='grade-management'>
@@ -111,7 +111,7 @@ const ClassDetail = () => {
                 <TabPanel sx={{ p: 0 }} value='list-student'>
                     <ListStudent class_id={class_id as string} />
                 </TabPanel>
-                <TabPanel sx={{ p: 0 }} value='list-teacher'>
+                <TabPanel sx={{ p: 0, padding: 2 }} value='list-teacher'>
                     <ListTeacher class_id={class_id as string} />
                 </TabPanel>
             </TabContext>

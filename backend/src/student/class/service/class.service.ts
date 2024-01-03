@@ -168,8 +168,8 @@ export class ClassService {
         const clazzz = await this.classRepository.findOne({ _id: classId }).exec();
         if (!clazzz) return new NotFoundException("Class not found");
         const check = await this.checkInClassForView(user, classId);
-        if (!check) {
-            return new ForbiddenException('You are already in this class')
+        if (check) {
+            return new ForbiddenException('You are not in this class')
         }
         const clazz = await this.classRepository.findOne({ _id: classId });
         return clazz.grade_compositions;

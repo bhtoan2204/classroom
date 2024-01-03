@@ -30,7 +30,7 @@ const FooterContent = () => {
               227 Đ. Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Email: banhhaotoan2002@gmail.com
+              Email: Educa@gmail.com
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Phone: +84 0971308623
@@ -55,18 +55,8 @@ const FooterContent = () => {
             </Link>
           </Grid>
         </Grid>
-        <Box mt={5}>
-          <Typography variant="body2" color="text.secondary" align="center">
-            {"Copyright © "}
-            <Link color="inherit" href="/">
-              Your Website
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-          </Typography>
-        </Box>
-      </Container>
-    </Box>
+      </Container >
+    </Box >
   )
 }
 

@@ -98,7 +98,7 @@ const HomeOurMentors: FC = () => {
         </Typography>
 
         <Slider {...sliderConfig}>
-          {data.map((item) => (
+          {data && data.map((item) => (
             <MentorCardItem key={String(item.id)} item={item} />
           ))}
         </Slider>

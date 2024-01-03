@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
-import { Button, Card, Divider, InputAdornment, styled } from "@mui/material";
+import { Box, Button, Card, Collapse, Divider, InputAdornment, List, ListItem, Typography, styled } from "@mui/material";
 import AccountOutline from "mdi-material-ui/AccountOutline";
 import { AddBoxOutlined, PeopleAltOutlined } from "@mui/icons-material";
 import format from 'date-fns/format';
@@ -10,6 +10,24 @@ import { TimerOutline } from "mdi-material-ui";
 import fetchClassDetailTeacher from "src/api/teacher/class/getClassDetail";
 import { fetchInvitationCode } from "src/api/teacher/invitation/getInvitationCode";
 import { fetchGenerateCode } from "src/api/teacher/invitation/generateCode";
+import CardImgTop from "../card/CardTop";
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
+interface AssignmentUrlData {
+    gradeCompo_name: string,
+    url: string,
+    is_finalized: boolean
+}
+
+const colors = [
+    '#acb1d6',
+    '#dfd14e',
+    '#98473e',
+    '#2990a6',
+    'error',
+    'neural'
+];
 
 const ImgStyled = styled('img')(({ theme }) => ({
     width: 250,
@@ -29,6 +47,8 @@ interface ClassDetailData {
     };
     createdAt: Date;
     is_active: string;
+    list_student_url: string;
+    list_assignment_url: AssignmentUrlData[];
 }
 
 interface ClassDetailProps {
@@ -39,6 +59,7 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
     const [classDetail, setClassDetail] = useState<ClassDetailData | null>(null);
     const [invitationCode, setInvitationCode] = useState<string>('');
     const [invitationLink, setInvitationLink] = useState<string>('');
+    const [isCollapsed, setIsCollapsed] = useState(true);
 
     const generateCode = () => {
         const accessToken = getCookieCustom('accessToken') as string;
@@ -49,32 +70,35 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
         }
         fetchGenerate();
     }
+    const fetchUserData = async () => {
+        try {
+            const data = await fetchClassDetailTeacher(class_id as string, getCookieCustom('accessToken') as string);
+            const code = await fetchInvitationCode(class_id as string, getCookieCustom('accessToken') as string);
+
+            if (data) {
+                setClassDetail(data);
+            }
+            if (code.status !== 400) {
+                setInvitationCode(code.class_token);
+                setInvitationLink(`${process.env.NEXT_PUBLIC_BASE_URL}/join-class?code=${code.class_token}&class_id=${class_id}`)
+            }
+        }
+        catch (error) {
+            setClassDetail(null);
+        }
+    };
     useEffect(() => {
         if (class_id != undefined) {
-            const fetchUserData = async () => {
-                try {
-                    const data = await fetchClassDetailTeacher(class_id as string, getCookieCustom('accessToken') as string);
-                    const code = await fetchInvitationCode(class_id as string, getCookieCustom('accessToken') as string);
-                    console.log(data)
-                    if (data) {
-                        setClassDetail(data);
-                    }
-                    if (code.status !== 400) {
-                        setInvitationCode(code.class_token);
-                        setInvitationLink(`${process.env.NEXT_PUBLIC_BASE_URL}/join-class?code=${code.class_token}&class_id=${class_id}`)
-                    }
-                }
-                catch (error) {
-                    setClassDetail(null);
-                }
-            };
-            fetchUserData()
+            fetchUserData();
         }
     }, [class_id]);
 
     return (
-        <Card sx={{ padding: 8 }}>
+        <Card sx={{ padding: 8, marginBottom: 5 }}>
             <Grid container spacing={5}>
+                <Grid item xs={12} sm={12}>
+                    <CardImgTop />
+                </Grid>
                 <Grid item xs={12} sm={3} sx={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center', order: { xs: 2, sm: 1 } }}>
                     <ImgStyled
                         src={classDetail?.host.avatar === null ? '/images/avatars/1.png' : classDetail?.host.avatar}
@@ -199,7 +223,54 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
                     </Grid>
                 </Grid>
             </Grid>
-        </Card>
+            <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+            <Typography
+                component="div"
+                variant="h5"
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    marginBottom: 2
+                }}
+                onClick={() => setIsCollapsed(!isCollapsed)}
+            >
+                List Uploaded Assignment
+                {isCollapsed ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+            </Typography>
+            <Collapse in={!isCollapsed} sx={{ transitionDuration: '0.3s' }}>
+                {classDetail?.list_assignment_url.length === 0 ? (
+                    <Typography variant="h6" component="div" sx={{ textAlign: "center", padding: "16px" }}>
+                        No Grade Composition have been uploaded yet
+                    </Typography>
+                ) : (
+                    <List>
+                        {classDetail?.list_assignment_url.map((item, index) => (
+                            <ListItem key={item.gradeCompo_name}
+                                sx={{
+                                    transition: 'transform 0.3s ease-in-out',
+                                    ":hover": {
+                                        transform: 'scale(1.05)',
+                                        cursor: 'pointer',
+                                        backgroundColor: 'rgba(0, 0, 0, 0.08)'
+                                    }
+                                }}>
+                                <Box sx={{
+                                    display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%'
+                                }} >
+                                    <Typography variant="h6" component="div" sx={{ textAlign: "center", padding: "16px" }}>
+                                        {item.gradeCompo_name}
+                                    </Typography>
+                                    <Button variant='contained' color='primary' href={item.url} target='_blank'
+                                        sx={{ backgroundColor: `${colors[index % 6]}`, margin: 1, borderRadius: 2, }}>Download</Button>
+                                </Box>
+                            </ListItem>
+                        ))}
+                    </List>
+                )}
+            </Collapse>
+        </Card >
     );
 }
 

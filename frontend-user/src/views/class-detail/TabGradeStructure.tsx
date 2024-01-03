@@ -2,6 +2,7 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { OutlinedFlagOutlined } from "@mui/icons-material";
 import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { MultipleNotifications, multipleNotifications } from "src/api/socket";
 import { fetchCreateGradeComposition } from "src/api/teacher/grade/addGradeComposition";
 import { fetchDeleteGradeComposition } from "src/api/teacher/grade/deleteGradeComposition";
 import { fetchGradeStructure } from "src/api/teacher/grade/getGradeComposition";
@@ -91,6 +92,14 @@ const GradeStructure: React.FC<ClassDetailProps> = ({ class_id }) => {
         const updateData = await fetchGradeStructure(class_id, getCookieCustom('accessToken') as string);
         if (updateData.status === 200) {
             setRows(updateData.data);
+            const notificationData: MultipleNotifications = {
+                class_id: class_id,
+                title: 'Grade Composition is finalized',
+                content: `Grade Composition ${gradeCompo_name} is finalized`,
+                id: class_id,
+            }
+            multipleNotifications(notificationData);
+            console.log('notification sent');
         }
     }
     const handleDeleteGradeCompo = (gradeCompo_name: string) => {
@@ -203,42 +212,51 @@ const GradeStructure: React.FC<ClassDetailProps> = ({ class_id }) => {
                                 </TableBody>)}
                         </Droppable>
                     </Table>
-                    <Button variant='contained' color='primary' sx={{ margin: '10px' }}
-                        onClick={handleOpen}>Add Grade Composition</Button>
-                    <Modal
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box sx={style}>
-                            <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: 5 }}>
-                                Add new Grade Composition
-                            </Typography>
-                            <TextField
-                                fullWidth
-                                label="Grade Composition Name"
-                                value={name}
-                                sx={{ marginBottom: 4 }}
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                            <TextField
-                                fullWidth
-                                label="Scale"
-                                value={scale}
-                                sx={{ marginBottom: 4 }}
-                                onChange={(e) => setScale(parseInt(e.target.value))}
-                                inputProps={{
-                                    type: 'number',
-                                    pattern: '[0-9]*',
-                                }}
-                            />
-                            <Button variant='contained' color='primary' sx={{ marginRight: 2 }}
-                                onClick={handleAddGradeCompo(name, scale)}>Add</Button>
-                        </Box>
-                    </Modal>
                 </DragDropContext>
+                {rows.length === 0 && (
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{ textAlign: "center", padding: "16px" }}
+                    >
+                        No Grade Composition have been created yet
+                    </Typography>
+                )}
             </TableContainer>
+            <Button variant='contained' color='primary' sx={{ margin: '10px' }}
+                onClick={handleOpen}>Add Grade Composition</Button>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: 5 }}>
+                        Add new Grade Composition
+                    </Typography>
+                    <TextField
+                        fullWidth
+                        label="Grade Composition Name"
+                        value={name}
+                        sx={{ marginBottom: 4 }}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <TextField
+                        fullWidth
+                        label="Scale"
+                        value={scale}
+                        sx={{ marginBottom: 4 }}
+                        onChange={(e) => setScale(parseInt(e.target.value))}
+                        inputProps={{
+                            type: 'number',
+                            pattern: '[0-9]*',
+                        }}
+                    />
+                    <Button variant='contained' color='primary' sx={{ marginRight: 2 }}
+                        onClick={handleAddGradeCompo(name, scale)}>Add</Button>
+                </Box>
+            </Modal>
         </Paper>
     )
 }

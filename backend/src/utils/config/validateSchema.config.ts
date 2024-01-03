@@ -26,5 +26,5 @@ export const validateSchemaConfig = Joi.object({
     ELASTICSEARCH_NODE: Joi.string().required(),
     ELASTICSEARCH_USERNAME: Joi.string().required(),
     ELASTICSEARCH_PASSWORD: Joi.string().required(),
-    FRONTEND_URL: Joi.string().required(),
+    FRONTEND_URL_CLIENT: Joi.string().required(),
 });

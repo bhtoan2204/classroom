@@ -58,7 +58,7 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   async googleAuthRedirect(@CurrentUser() currentUser: User, @Res() res): Promise<any> {
     const { accessToken, refreshToken } = await this.authService.login(currentUser);
-    return res.redirect(`${this.configService.get<string>('FRONTEND_URL_ADMIN')}/auth/google/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`);
+    return res.redirect(`${this.configService.get<string>('FRONTEND_URL_CLIENT')}/auth/google/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -72,6 +72,6 @@ export class AuthController {
   @UseGuards(FacebookAuthGuard)
   async facebookLoginRedirect(@CurrentUser() currentUser: User, @Res() res): Promise<any> {
     const { accessToken, refreshToken } = await this.authService.login(currentUser);
-    return res.redirect(`${this.configService.get<string>('FRONTEND_URL_ADMIN')}/auth/google/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`);
+    return res.redirect(`${this.configService.get<string>('FRONTEND_URL_CLIENT')}/auth/google/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`);
   }
 }

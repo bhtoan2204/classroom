@@ -233,7 +233,7 @@ export class GradeManagementService {
             { _id: classId, 'list_assignment_url.gradeCompo_name': dto.gradeCompo_name },
             {
                 $set: {
-                    'list_assignment_url.$.url': fileName,
+                    'list_assignment_url.$.url': `https://storageclassroom.blob.core.windows.net/upload-file/${fileName}`,
                 },
             },
             { new: true }
@@ -246,7 +246,7 @@ export class GradeManagementService {
                     $push: {
                         list_assignment_url: {
                             gradeCompo_name: dto.gradeCompo_name,
-                            url: fileName,
+                            url: `https://storageclassroom.blob.core.windows.net/upload-file/${fileName}`,
                             is_finalized: false,
                         },
                     },
