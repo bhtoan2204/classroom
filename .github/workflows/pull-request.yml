@@ -97,11 +97,12 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Automerge
-      uses: pascalgn/automerge-action@v1
+      uses: pascalgn/automerge-action@main
       env:
         GITHUB_TOKEN: "${{ secrets.ACCESS_TOKEN_GITHUB }}"
         MERGE_LABELS: 'automerge,!work in progress'
         MERGE_METHOD: 'squash'
         MERGE_COMMIT_MESSAGE: 'Automated merge from CI'
         MERGE_FORKS: 'false'
+        MERGE_TARGET: 'dev'
         UPDATE_LABELS: 'automerge'
