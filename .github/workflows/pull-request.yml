@@ -55,6 +55,7 @@ jobs:
       
         - name: Frontend Admin Build
           run: |
+              ls
               cd frontend-admin
               npm ci
               npm run build
@@ -69,6 +70,7 @@ jobs:
       
         - name: Frontend User Build
           run: |
+              ls
               cd frontend-user
               npm ci
               npm run build
