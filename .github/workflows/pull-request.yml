@@ -1,31 +1,64 @@
 name: CI
-
 on:
   push:
     branches-ignore:
       - 'main'
       - 'dev'
-
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+        - uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+        - name: Set up Node.js
+          uses: actions/setup-node@v2
+          with:
+                node-version: '18'
 
-    - name: Install dependencies
-      run: npm ci
+        - name: Cache global npm packages
+          uses: actions/cache@v2
+          with:
+            path: ~/.npm
+            key: ${{ runner.os }}-global-npm-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: |
+             ${{ runner.os }}-global-npm-
 
-    - name: Run build
-      run: npm run build
+        - name: Install NestJS CLI
+          run: npm install -g @nestjs/cli
+        
+        - name: Install NextJS CLI
+          run: npm install -g next
 
-    - name: Run tests
-      run: npm test
+        - name: Cache backend dependencies
+          uses: actions/cache@v2
+          with:
+            path: backend/node_modules
+            key: ${{ runner.os }}-backend-node-${{ hashFiles('backend/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.os }}-backend-node-
+
+        - name: Backend Build and Test
+          run: |
+            cd backend
+            npm ci
+            npm run build --if-present
+            npm test --if-present
+
+        - name: Cache frontend dependencies
+          uses: actions/cache@v2
+          with:
+            path: frontend/node_modules
+            key: ${{ runner.os }}-frontend-node-${{ hashFiles('frontend/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.os }}-frontend-node-
+
+        - name: Frontend Admin Build
+          run: |
+            cd frontend
+            npm ci
+            npm run build --if-present
+            npm test --if-present
 
   create_pull_request:
     needs: build
