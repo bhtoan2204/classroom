@@ -25,7 +25,7 @@ function JoinClassByLinkTab() {
         const extractedClassToken = null;
 
         //Do something
-        console.log(providedLink);
+        console.log(providedLink)
 
         return { class_code: extractedClassCode, class_token: extractedClassToken }
     }

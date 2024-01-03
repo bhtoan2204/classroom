@@ -19,7 +19,7 @@ function JoinClassModal({ OpenModal, handleOpenModalCallback }: any) {
 
     function handleTabChange(event: SyntheticEvent, newValue: string) {
         event.preventDefault();
-        setTabValue(newValue);
+        setTabValue(newValue)
     }
 
     return (

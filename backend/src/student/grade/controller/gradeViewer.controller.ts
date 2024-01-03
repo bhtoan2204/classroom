@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/utils/guard/authenticate/jwt-auth.guard";
 import { RolesGuard } from "src/utils/guard/authorize/role.guard";
@@ -43,5 +43,13 @@ export class GradeViewerController {
     @ApiOperation({ summary: 'Let a comment' })
     async postAComment(@CurrentUser() user, @Body() dto: PostCommentDto) {
         return this.gradeViewerService.postAComment(user, dto);
+    }
+
+    @Get("getGradeReviews")
+    @ApiOperation({summary: "get all grade reviews of the user"})
+    @HttpCode(HttpStatus.OK)
+    async getReviews(@CurrentUser() user)
+    {
+        return this.gradeViewerService.getGradeReviews(user);
     }
 }
