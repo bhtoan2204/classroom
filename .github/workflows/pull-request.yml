@@ -55,9 +55,9 @@ jobs:
       
         - name: Frontend Admin Build
           run: |
-              cd ../frontend-admin
+              cd frontend-admin
               npm ci
-              npm run build --if-present
+              npm run build
       
         - name: Cache frontend user dependencies
           uses: actions/cache@v2
@@ -69,9 +69,9 @@ jobs:
       
         - name: Frontend User Build
           run: |
-              cd ../frontend-user
+              cd frontend-user
               npm ci
-              npm run build --if-present
+              npm run build
 
   create_pull_request:
     needs: build
