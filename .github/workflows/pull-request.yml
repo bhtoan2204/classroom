@@ -45,20 +45,33 @@ jobs:
             npm run build --if-present
             npm test --if-present
 
-        - name: Cache frontend dependencies
-          uses: actions/cache@v2
-          with:
-            path: frontend/node_modules
-            key: ${{ runner.os }}-frontend-node-${{ hashFiles('frontend/package-lock.json') }}
-            restore-keys: |
-              ${{ runner.os }}-frontend-node-
-
+            - name: Cache frontend admin dependencies
+            uses: actions/cache@v2
+            with:
+              path: frontend-admin/node_modules
+              key: ${{ runner.os }}-frontend-admin-node-${{ hashFiles('frontend-admin/package-lock.json') }}
+              restore-keys: |
+                ${{ runner.os }}-frontend-admin-node-
+      
         - name: Frontend Admin Build
           run: |
-            cd frontend
-            npm ci
-            npm run build --if-present
-            npm test --if-present
+              cd ../frontend-admin
+              npm ci
+              npm run build --if-present
+      
+        - name: Cache frontend user dependencies
+          uses: actions/cache@v2
+          with:
+              path: frontend-user/node_modules
+              key: ${{ runner.os }}-frontend-user-node-${{ hashFiles('frontend-user/package-lock.json') }}
+              restore-keys: |
+                ${{ runner.os }}-frontend-user-node-
+      
+        - name: Frontend User Build
+          run: |
+              cd ../frontend-user
+              npm ci
+              npm run build --if-present
 
   create_pull_request:
     needs: build
