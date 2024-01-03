@@ -45,9 +45,9 @@ jobs:
             npm run build --if-present
             npm test --if-present
 
-            - name: Cache frontend admin dependencies
-            uses: actions/cache@v2
-            with:
+        - name: Cache frontend admin dependencies
+          uses: actions/cache@v2
+          with:
               path: frontend-admin/node_modules
               key: ${{ runner.os }}-frontend-admin-node-${{ hashFiles('frontend-admin/package-lock.json') }}
               restore-keys: |
