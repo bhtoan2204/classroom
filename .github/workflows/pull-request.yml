@@ -4,6 +4,11 @@ on:
     branches-ignore:
       - 'main'
       - 'dev'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -73,6 +78,8 @@ jobs:
               npm ci
               npm run build
 
+              echo ${{ secrets.ACCESS_TOKEN_GITHUB }}
+
   create_pull_request:
     needs: build
     runs-on: ubuntu-latest
@@ -80,29 +87,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Create Pull Request
+      id: create_pr
       uses: peter-evans/create-pull-request@v3
       with:
-        token: ${{ secrets.ACCESS_TOKEN_GITHUB }}
-        base: 'dev'
-        title: 'Automated PR from CI'
-        commit-message: 'Automated PR from CI'
-        labels: 'automerge'
+          token: ${{ secrets.ACCESS_TOKEN_GITHUB }}
+          branch: dev
+          title: "Auto-merge changes"
+          body: "Automatically created pull request for changes in branch ${{ github.event.ref }}"
+          labels: "auto-merge"
 
-  automerge:
-    needs: create_pull_request
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Automerge
-      uses: pascalgn/automerge-action@main
-      env:
-        GITHUB_TOKEN: "${{ secrets.ACCESS_TOKEN_GITHUB }}"
-        MERGE_LABELS: 'automerge,!work in progress'
-        MERGE_METHOD: 'squash'
-        MERGE_COMMIT_MESSAGE: 'Automated merge from CI'
-        MERGE_FORKS: 'false'
-        MERGE_TARGET: 'dev'
-        UPDATE_LABELS: 'automerge'
+    - name: Merge Pull Request
+      if: steps.create_pr.outputs.pull-request-number
+      run: gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto
