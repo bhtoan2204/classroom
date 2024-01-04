@@ -21,28 +21,68 @@ function JoinClassByLinkTab() {
     }
 
     function extractClassCodeAndClassToken(providedLink: any) {
-        const extractedClassCode = null;
-        const extractedClassToken = null;
+        let result: any = 
+            {
+                class_id: undefined, 
+                class_token: undefined,
+            }
+        const classIdParamName = "class_id="
+        const classTokenParamName = "code="
+        const separator = "&"
 
-        //Do something
-        console.log(providedLink)
+        if(inviteLink === undefined)
+        {
+            return result
+        }
+        else if(inviteLink.length < 1)
+        {
+            return result
+        }
 
-        return { class_code: extractedClassCode, class_token: extractedClassToken }
+        const indexOfClassIdParamName = inviteLink.indexOf(classIdParamName)
+        if(indexOfClassIdParamName < 0)
+        {
+            return result
+        }
+        const endIndexOfClassId = inviteLink.indexOf(separator, indexOfClassIdParamName)
+
+        const indexOfClassTokenParamName = inviteLink.indexOf(classTokenParamName)
+        if(indexOfClassTokenParamName < 0)
+        {
+            return result
+        }
+        const endIndexOfClassToken = inviteLink.indexOf(separator, endIndexOfClassId + 1)
+
+        const class_id = inviteLink.substring((indexOfClassIdParamName + classIdParamName.length), endIndexOfClassId)
+        const class_token = inviteLink.substring((indexOfClassTokenParamName + classTokenParamName.length), endIndexOfClassToken)
+        console.log(`classId: ${class_id}`)
+        console.log(`classToken: ${class_token}`)
+
+        if(class_id !== undefined && class_token !== undefined)
+        {
+            result = 
+            {
+                class_id: class_id,
+                class_token: class_token,
+            }
+        }
+
+        return result;
     }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        const { class_code, class_token } = extractClassCodeAndClassToken(inviteLink)
-        setClassCode(class_code)
+        const { class_id, class_token } = extractClassCodeAndClassToken(inviteLink)
+        setClassCode(class_id)
 
-        const response = await POST_joinClassByLink(class_code, class_token)
+        const response = await POST_joinClassByLink(class_id, class_token)
 
         if (response.status == 201) {
             const display =
                 <>
                     <CardContent>
-                        <Typography component={"div"} security="success">
-                            Joined class { } successfully!
+                        <Typography component={"div"} security="success" color={"green"}>
+                            Joined class {classCode} successfully!
                         </Typography>
                         <Typography component={"div"} >
                             Do you want to visit the new class?
@@ -63,7 +103,7 @@ function JoinClassByLinkTab() {
         else {
             const display =
                 <CardContent>
-                    <Typography component={"div"} security="error">
+                    <Typography component={"div"} security="error" color={"red"}>
                         Joined class {classCode} failed!
                     </Typography>
                     <Typography component={"div"} >

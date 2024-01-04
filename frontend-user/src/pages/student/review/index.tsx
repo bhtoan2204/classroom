@@ -42,7 +42,7 @@ const MockData =
             expected_grade: 10,
             student_explain: "missing grade at the third question, sir",
             comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
-            finalDecision: { status: "Unknown", updatedGrade: null }
+            finalDecision: { status: "final", updatedGrade: null }
         }
     ]
 
@@ -104,9 +104,13 @@ const StudentRoute = () => {
                                     </IconButton>
                                 </ListItemButton>
                             </Stack>
-                            <Collapse in={collapseOpenProps[index]} timeout={"auto"} unmountOnExit sx={{ paddingX: 4 }}>
-                                <Divider />
-                                <Stack>
+                            <Divider />
+                            <Collapse 
+                            in={collapseOpenProps[index]} timeout={"auto"} unmountOnExit sx={{ paddingX: 4 }}>
+                                <Stack 
+                                paddingY={3}
+                                paddingX={5}
+                                sx={{borderColor: "#094885", borderWidth: 2, borderStyle:"solid", borderRadius:"10px"}}>
                                     <Stack direction={"row"}>
                                         <Typography component={"div"} fontSize={"large"}>
                                             Grade review -
@@ -122,7 +126,7 @@ const StudentRoute = () => {
                                             </Typography>
                                             <Typography color={value.finalDecision.status == "final" ? "green" : "gray"}>
                                                 <IconButton>
-                                                    {value.finalDecision.status == "final" ? <CheckCircleOutlineIcon /> : <HourglassTopIcon />}
+                                                    {value.finalDecision.status == "final" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon/>}
                                                 </IconButton>
                                                 {value.finalDecision.status}
                                             </Typography>

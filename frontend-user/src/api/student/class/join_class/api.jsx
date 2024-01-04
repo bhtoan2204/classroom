@@ -5,7 +5,7 @@ export async function POST_joinClassByCode(class_id)
 {
     const path = `/student/class/joinClassByCode/${class_id}`
     const accessToken = getCookieCustom("accessToken")
-
+    console.log(accessToken)
     try
     {
         const url = process.env.NEXT_PUBLIC_API_HOST + path
