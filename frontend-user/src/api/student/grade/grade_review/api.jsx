@@ -3,10 +3,12 @@ import { getCookieCustom } from "src/utils/cookies"
 
 export async function POST_requestGradeReview(mapRequest)
 {
-    const requestBody = JSON.stringify(Object.fromEntries(mapRequest))
+    const JsObject = Object.fromEntries(mapRequest)
+    JsObject.expected_grade = new String(Number.parseInt(JsObject.expected_grade))
+    const requestBody = JSON.stringify(JsObject)
     const path = "/student/gradeViewer/requestReview"
     const accessToken = getCookieCustom("accessToken")
-
+    console.log(requestBody)
     try
     {
         const url = process.env.NEXT_PUBLIC_API_HOST + path

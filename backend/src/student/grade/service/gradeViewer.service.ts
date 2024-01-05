@@ -142,19 +142,56 @@ export class GradeViewerService {
     async getGradeReviews(user: User)
     {
         // const dbReviews = await this.gradeReviewRepository.find({student_id: user._id}).exec()
-        const data = await this.gradeReviewRepository.aggregate([
+
+        const dbGradeReviews = await this.gradeReviewRepository.find({class_id: user._id})
+
+        if(dbGradeReviews.length < 1)
+        {
+            return [];
+        }
+
+        const classDetails = new Map()
+
+        dbGradeReviews.forEach((review: GradeReview) =>
+        {
+            classDetails.set(review.class_id, {});
+        })
+
+        const classIds = Array.from(classDetails.keys());
+        console.log(classIds)
+
+        const dbClasses = await this.classRepository.find({_id: classIds}).select("_id className description host is_active").exec();
+        console.log(dbClasses)
+
+        dbClasses.forEach((record: any) =>
+        {
+            classDetails.set(record._id, record)
+        })
+
+        const results = dbGradeReviews.map((review: GradeReview) =>
+        {
+            const classDetail = classDetails.get(review.class_id);
+            
+            const result = 
             {
-                $match: {class_id: user._id}
-            },
-            {
-                $lookup: {
-                    from: "classes",
-                    localField: "class_id",
-                    foreignField: "_id",
-                    as: "generalGradeReviews"
-                }
+                _id: review._id,
+                class_id: review.class_id,
+                class_name: classDetail.className,
+                description: classDetail.description,
+                is_active: classDetail.is_active,
+                host: classDetail.host,
+                gradeCompo_name: review.gradeCompo_name,
+                current_grade: review.current_grade,
+                expected_grade: review.expected_grade,
+                student_explain: review.student_explain,
+                comments: review.comments,
+                finalDecision: review.finalDecision
             }
-        ])
-        return data;
+
+            return result;
+        })
+
+
+        return results;
     }
 }

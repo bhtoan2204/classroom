@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import { FormatTextRotationDownVertical } from 'mdi-material-ui';
 import { POST_requestGradeReview } from 'src/api/student/grade/grade_review/api';
+import { SendNotification, sendNotification } from 'src/api/socket';
 
 function GradeManagement({ ClassId }: any) {
 
@@ -41,6 +42,7 @@ function GradeManagement({ ClassId }: any) {
             const total_scale: any = data.total_scale;
             const user_total: any = data.user_total
             if (status == 200) {
+
                 const controlledData = compositions.map((value: any) => {
                     const item: any =
                     {
@@ -137,6 +139,15 @@ function GradeManagement({ ClassId }: any) {
         {
             const copiedDialogMessageProp = {display: 'block', color:"green", text:"Send request successfully!"}
             setDialogMessageProp(copiedDialogMessageProp)
+
+            // const notification: SendNotification = 
+            // {
+            //     receiver: "",
+            //     title: "",
+            //     content: "",
+            //     id: ""
+            // }
+            // sendNotification(notification)
         }
         else
         {
