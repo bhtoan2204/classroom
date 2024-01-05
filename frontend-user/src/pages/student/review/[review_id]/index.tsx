@@ -138,37 +138,6 @@ function ReviewDetailPage()
                             </CardContent>
                         </Card>
                     </Stack>
-                    {/* <Stack width={"50%"} maxHeight={"400px"}>
-                        <Card sx={{width:"100%", height:"400px"}}>
-                            <CardContent>
-                                <Typography component={"div"}>
-                                    Comments
-                                </Typography>
-                                <Divider />
-                                <Box overflow={"auto"} maxHeight={"250px"} height={"250px"}>
-                                    <List>
-                                        {commentDisplay}
-                                    </List>
-                                </Box>
-                            </CardContent>
-                            <CardActions sx={{maxHeight:"70px", height:"100%"}}>
-                                <Box position={"relative"} width={"100%"} height={"100%"}>
-                                    <form style={{width: "100%" ,position:"absolute", bottom: 0}}>
-                                        <FormControl fullWidth={true}>
-                                            <Stack direction={"row"}>
-                                                <TextField size="medium" sx={{width: "100%"}} multiline={true}/>
-                                                <Button>
-                                                    <IconButton size="large" color={"primary"}>
-                                                        <SendIcon/>
-                                                    </IconButton>
-                                                </Button>
-                                            </Stack>
-                                        </FormControl>
-                                    </form>
-                                </Box>
-                            </CardActions>
-                        </Card>
-                    </Stack> */}
                     <CommentsBlock ListOfComments={reviewDetail.comments} width={"50%"} maxHeight={"400px"} heightOfCommentView={"250px"}/>
                 </Stack>
             </Stack>

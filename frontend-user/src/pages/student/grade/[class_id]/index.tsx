@@ -3,6 +3,7 @@ import { Box, Button, Card, CardContent, Stack, Tab } from "@mui/material";
 import { useRouter } from "next/router";
 import { SyntheticEvent, useState } from "react";
 import GradeManagement from "src/views/student/grade/GradeManagement";
+import GradeReview from "src/views/student/grade/GradeReview";
 import GradeStructure from "src/views/student/grade/GradeStructure";
 
 
@@ -45,7 +46,7 @@ function StudentGrade() {
                             <GradeStructure ClassId={class_id} />
                         </TabPanel>
                         <TabPanel value="3">
-                            Grade review
+                            <GradeReview />
                         </TabPanel>
                     </TabContext>
                 </CardContent>
