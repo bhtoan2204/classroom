@@ -7,46 +7,52 @@ import {
     SortableContext,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DndGradeStructureRow from './components/DndGradeStructureRow';
-import { GET_getGradeStructure } from 'src/api/student/grade/grade_structure/api';
 
 
-function GradeStructure({ ClassId }: any) {
-    const [dataSource, setDataSource] = useState<any>([])
-    const [needToRefetchData] = useState<any>(false)
+// const MockData: any = 
+// [
+//     {
+//         key: '1',
+//         nameOfGrade: "Quiz 1",
+//         gradeScale: "1",
+//         isFinalized: false,
+//     },
+//     {
+//         key: '2',
+//         nameOfGrade: "Quiz 2",
+//         gradeScale: "1",
+//         isFinalized: false,
+//     },
+//     {
+//         key: '3',
+//         nameOfGrade: "Project 1",
+//         gradeScale: "1.5",
+//         isFinalized: false,
+//     },
+//     {
+//         key: '4',
+//         nameOfGrade: "Project 2",
+//         gradeScale: "1.5",
+//         isFinalized: false,
+//     },
+//     {
+//         key: '5',
+//         nameOfGrade: "Midterm",
+//         gradeScale: "2",
+//         isFinalized: false,
+//     },
+//     {
+//         key: '6',
+//         nameOfGrade: "Final",
+//         gradeScale: "3",
+//         isFinalized: false,
+//     },
+// ]
 
-    useEffect(() => {
-        async function fetchGradeStructure() {
-            if (ClassId === undefined) {
-
-                return;
-            }
-
-            const { status, data } = await GET_getGradeStructure(ClassId);
-            console.log(data);
-            if (status == 200 && data) {
-                const controlledData = data.map((value: any) => {
-                    const item: any =
-                    {
-                        key: value._id,
-                        nameOfGrade: value.gradeCompo_name,
-                        gradeScale: value.gradeCompo_scale,
-                        isFinalized: value.is_finalized,
-                    }
-
-                    return item;
-                })
-                setDataSource(controlledData)
-            }
-            else {
-                setDataSource([])
-            }
-        }
-
-        fetchGradeStructure()
-
-    }, [needToRefetchData, ClassId])
+function GradeStructure({ DataSource }: any) {
+    const [dataSource, setDataSource] = useState<any>(DataSource)
 
     const columns: any =
         [
@@ -96,7 +102,6 @@ function GradeStructure({ ClassId }: any) {
             //       </>
             //     )
             //   }
-
         ]
 
 

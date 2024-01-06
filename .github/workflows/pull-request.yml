@@ -46,7 +46,7 @@ jobs:
         - name: Backend Build and Test
           run: |
             cd backend
-            npm ci
+            npm i
             npm run build --if-present
             npm test --if-present
 
@@ -61,7 +61,7 @@ jobs:
         - name: Frontend Admin Build
           run: |
               cd frontend-admin
-              npm ci
+              npm i
               npm run build
       
         - name: Cache frontend user dependencies
@@ -75,7 +75,7 @@ jobs:
         - name: Frontend User Build
           run: |
               cd frontend-user
-              npm ci
+              npm i
               npm run build
 
               echo ${{ secrets.ACCESS_TOKEN_GITHUB }}
