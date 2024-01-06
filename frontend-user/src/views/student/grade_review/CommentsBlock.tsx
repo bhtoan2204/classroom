@@ -1,7 +1,7 @@
 import { Box, Button, Card, CardActions, CardContent, Divider, FormControl, IconButton, List, ListItem, Stack, TextField, Typography } from "@mui/material"
 import SendIcon from '@mui/icons-material/Send';
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { GET_getGradeReviewComment, POST_sendComment } from "src/api/student/grade/grade_review/api";
+import { POST_sendComment } from "src/api/student/grade/grade_review/api";
 
 function CommentsBlock({ListOfComments, width, maxHeight, heightOfCommentView, ReviewId}: any)
 {

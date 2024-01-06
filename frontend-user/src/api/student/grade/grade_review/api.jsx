@@ -9,7 +9,6 @@ export async function POST_requestGradeReview(mapRequest)
     const path = "/student/gradeViewer/requestReview"
     const accessToken = getCookieCustom("accessToken")
 
-    console.log(requestBody)
     try
     {
         const url = process.env.NEXT_PUBLIC_API_HOST + path
@@ -83,8 +82,6 @@ export async function GET_getGradeReviewDetail(reviewId)
         const status = response.status;
         const data = await response.json();
 
-        console.log(status)
-        console.log(data)
         return {status, data}
     }
     catch(err)
@@ -151,8 +148,6 @@ export async function GET_getGradeReviewComment(reviewId)
         const status = response.status;
         const data = await response.json();
 
-        console.log(status)
-        console.log(data)
         return {status, data}
     }
     catch(err)

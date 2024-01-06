@@ -20,35 +20,31 @@ function JoinClassByLinkTab() {
         setBackDropOpen(false)
     }
 
-    function extractClassCodeAndClassToken(providedLink: any) {
-        let result: any = 
-            {
-                class_id: undefined, 
-                class_token: undefined,
-            }
+    function extractClassCodeAndClassToken(inviteLink: any) {
+        let result: any =
+        {
+            class_id: undefined,
+            class_token: undefined,
+        }
         const classIdParamName = "class_id="
         const classTokenParamName = "code="
         const separator = "&"
 
-        if(inviteLink === undefined)
-        {
+        if (inviteLink === undefined) {
             return result
         }
-        else if(inviteLink.length < 1)
-        {
+        else if (inviteLink.length < 1) {
             return result
         }
 
         const indexOfClassIdParamName = inviteLink.indexOf(classIdParamName)
-        if(indexOfClassIdParamName < 0)
-        {
+        if (indexOfClassIdParamName < 0) {
             return result
         }
         const endIndexOfClassId = inviteLink.indexOf(separator, indexOfClassIdParamName)
 
         const indexOfClassTokenParamName = inviteLink.indexOf(classTokenParamName)
-        if(indexOfClassTokenParamName < 0)
-        {
+        if (indexOfClassTokenParamName < 0) {
             return result
         }
         const endIndexOfClassToken = inviteLink.indexOf(separator, endIndexOfClassId + 1)
@@ -58,9 +54,8 @@ function JoinClassByLinkTab() {
         console.log(`classId: ${class_id}`)
         console.log(`classToken: ${class_token}`)
 
-        if(class_id !== undefined && class_token !== undefined)
-        {
-            result = 
+        if (class_id !== undefined && class_token !== undefined) {
+            result =
             {
                 class_id: class_id,
                 class_token: class_token,

@@ -14,8 +14,7 @@ import { POST_requestGradeReview } from 'src/api/student/grade/grade_review/api'
 
 // import { SendNotification, sendNotification } from 'src/api/socket';
 
-function GradeManagement({ ClassId, GradeCompositions }: any) 
-{
+function GradeManagement({ ClassId, GradeCompositions }: any) {
 
     const [AskToReviewDialogOpen, setAskToReviewDialogOpen] = useState<any>(false)
 
@@ -23,7 +22,7 @@ function GradeManagement({ ClassId, GradeCompositions }: any)
     const [askToReview_gradeCompositionName, setAskToReview_gradeCompositionName] = useState<any>("")
     const [askToReview_expectedGrade, setAskToReview_expectedGrade] = useState<any>("")
     const [askToReview_explaination, setAskToReview_explaination] = useState<any>("")
-    const [dialogMessageProp, setDialogMessageProp] = useState<any>({display:'none', color: "green", text:"nothing"})
+    const [dialogMessageProp, setDialogMessageProp] = useState<any>({ display: 'none', color: "green", text: "nothing" })
 
     const formInputName_classId = "class_id"
     const formInputName_gradeCompositionName = "gradeCompo_name"
@@ -31,47 +30,40 @@ function GradeManagement({ ClassId, GradeCompositions }: any)
     const formInputName_explaination = "explaination"
 
 
-    function handleAskToReviewGradeClick(event: MouseEvent, gradeComposition: any)
-    {
+    function handleAskToReviewGradeClick(event: MouseEvent, gradeComposition: any) {
         event.target
         setAskToReview_gradeCompositionName(gradeComposition.name)
         setAskToReviewDialogOpen(true)
     }
 
-    function handleAskToReviewDialogClose()
-    {
+    function handleAskToReviewDialogClose() {
         setAskToReview_expectedGrade("")
         setAskToReview_explaination("")
         setAskToReviewDialogOpen(false)
     }
 
-    async function handleRequestReviewSubmit(event: FormEvent<HTMLFormElement>)
-    {
+    async function handleRequestReviewSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        if(ClassId === undefined)
-        {
+        if (ClassId === undefined) {
             return;
         }
 
-        if(askToReview_gradeCompositionName == "")
-        {
-            const copiedDialogMessageProp = {display: 'block', color:"red", text:"Please provide the composition's name"}
+        if (askToReview_gradeCompositionName == "") {
+            const copiedDialogMessageProp = { display: 'block', color: "red", text: "Please provide the composition's name" }
             setDialogMessageProp(copiedDialogMessageProp)
-            
+
             return;
         }
-        else if(askToReview_expectedGrade == "")
-        {
-            const copiedDialogMessageProp = {display: 'block', color:"red", text:"Please provide the expected grade"}
+        else if (askToReview_expectedGrade == "") {
+            const copiedDialogMessageProp = { display: 'block', color: "red", text: "Please provide the expected grade" }
             setDialogMessageProp(copiedDialogMessageProp)
-            
+
             return;
         }
-        else if(askToReview_explaination == "")
-        {
-            const copiedDialogMessageProp = {display: 'block', color:"red", text:"Please provide the explaination"}
+        else if (askToReview_explaination == "") {
+            const copiedDialogMessageProp = { display: 'block', color: "red", text: "Please provide the explaination" }
             setDialogMessageProp(copiedDialogMessageProp)
-            
+
             return;
         }
 
@@ -81,11 +73,11 @@ function GradeManagement({ ClassId, GradeCompositions }: any)
         request.set(formInputName_expectedGrade, askToReview_expectedGrade)
         request.set(formInputName_explaination, askToReview_explaination)
 
-        const {status, data} = await POST_requestGradeReview(request)
-        if(status == 201)
-        {
-            const copiedDialogMessageProp = {display: 'block', color:"green", text:"Send request successfully!"}
+        const { status, data } = await POST_requestGradeReview(request)
+        if (status == 201) {
+            const copiedDialogMessageProp = { display: 'block', color: "green", text: "Send request successfully!" }
             setDialogMessageProp(copiedDialogMessageProp)
+            console.log(data);
 
             // const notification: SendNotification = 
             // {
@@ -96,16 +88,14 @@ function GradeManagement({ ClassId, GradeCompositions }: any)
             // }
             // sendNotification(notification)
         }
-        else
-        {
-            const copiedDialogMessageProp = {display: 'block', color:"red", text:"Send request failed. Please try again"}
+        else {
+            const copiedDialogMessageProp = { display: 'block', color: "red", text: "Send request failed. Please try again" }
             setDialogMessageProp(copiedDialogMessageProp)
-            
+
         }
 
-        setTimeout(() =>
-        {
-            const copiedDialogMessageProp = {display: 'none', color:"green", text:"nothing"}
+        setTimeout(() => {
+            const copiedDialogMessageProp = { display: 'none', color: "green", text: "nothing" }
             setDialogMessageProp(copiedDialogMessageProp)
         }, 3000)
 
@@ -139,7 +129,7 @@ function GradeManagement({ ClassId, GradeCompositions }: any)
                                         (row.key == "separator-row" || row.key == "summary-row") ?
                                             null :
                                             <Tooltip title={`Ask to review ${row.name}`}>
-                                                <Button size='small' style={{ borderRadius: '50%' }} onClick={(event) => {handleAskToReviewGradeClick(event, row)}}>
+                                                <Button size='small' style={{ borderRadius: '50%' }} onClick={(event) => { handleAskToReviewGradeClick(event, row) }}>
                                                     <IconButton>
                                                         <ContactSupportIcon />
                                                     </IconButton>
@@ -166,31 +156,31 @@ function GradeManagement({ ClassId, GradeCompositions }: any)
                         <Box paddingY={6} paddingX={5}>
                             <form onSubmit={handleRequestReviewSubmit}>
                                 <FormControl fullWidth>
-                                    <FormLabel 
-                                    sx={{marginY:1}}
-                                    htmlFor='request-review-grade-composition-name'>Grade composition</FormLabel>
+                                    <FormLabel
+                                        sx={{ marginY: 1 }}
+                                        htmlFor='request-review-grade-composition-name'>Grade composition</FormLabel>
                                     <TextField placeholder='provide the name of grade composition'
-                                    sx={{marginY:2}}
-                                    key={"request-review-grade-composition-name"} value={askToReview_gradeCompositionName} onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {setAskToReview_gradeCompositionName(e.target.value)}}/>
-                                    <FormLabel 
-                                    sx={{marginY:1}}
-                                    htmlFor="request-review-expected-grade">Expected Grade</FormLabel>
+                                        sx={{ marginY: 2 }}
+                                        key={"request-review-grade-composition-name"} value={askToReview_gradeCompositionName} onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => { setAskToReview_gradeCompositionName(e.target.value) }} />
+                                    <FormLabel
+                                        sx={{ marginY: 1 }}
+                                        htmlFor="request-review-expected-grade">Expected Grade</FormLabel>
                                     <TextField placeholder='your expected grade'
-                                    sx={{marginY:2}}
-                                    key={"request-review-expected-grade"} value={askToReview_expectedGrade} onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {setAskToReview_expectedGrade(e.target.value)}}/>
-                                    <FormLabel 
-                                    sx={{marginY:1}}
-                                    htmlFor='request-review-explaination'>Explaination</FormLabel>
-                                    <TextField placeholder='your explaination' 
-                                    sx={{marginY:2}}
-                                    key={"request-review-explaination"} multiline={true} value={askToReview_explaination} onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {setAskToReview_explaination(e.target.value)}}/>
+                                        sx={{ marginY: 2 }}
+                                        key={"request-review-expected-grade"} value={askToReview_expectedGrade} onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => { setAskToReview_expectedGrade(e.target.value) }} />
+                                    <FormLabel
+                                        sx={{ marginY: 1 }}
+                                        htmlFor='request-review-explaination'>Explaination</FormLabel>
+                                    <TextField placeholder='your explaination'
+                                        sx={{ marginY: 2 }}
+                                        key={"request-review-explaination"} multiline={true} value={askToReview_explaination} onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => { setAskToReview_explaination(e.target.value) }} />
 
                                     <Typography display={dialogMessageProp.display} component={"div"} color={dialogMessageProp.color}>
                                         {dialogMessageProp.text}
                                     </Typography>
                                     <Button
                                         type='submit'
-                                        sx={{marginTop:4}}
+                                        sx={{ marginTop: 4 }}
                                     >
                                         Send
                                     </Button>

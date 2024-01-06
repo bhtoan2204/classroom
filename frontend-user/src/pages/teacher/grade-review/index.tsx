@@ -52,7 +52,7 @@ const MockData =
 
 const StudentRoute = () => {
 
-    const [gradeReviews, setGradeReviews] = useState<any>(MockData);
+    const [gradeReviews] = useState<any>(MockData);
     const [collapseOpenProps, setCollapseOpenProps] = useState<any>(new Array(MockData.length).fill(false));
 
     //NOTE: load grade reviews here!
@@ -110,12 +110,12 @@ const StudentRoute = () => {
                                 </ListItemButton>
                             </Stack>
                             <Divider />
-                            <Collapse 
-                            in={collapseOpenProps[index]} timeout={"auto"} unmountOnExit sx={{ paddingX: 4 }}>
-                                <Stack 
-                                paddingY={3}
-                                paddingX={5}
-                                sx={{borderColor: "#094885", borderWidth: 2, borderStyle:"solid", borderRadius:"10px"}}>
+                            <Collapse
+                                in={collapseOpenProps[index]} timeout={"auto"} unmountOnExit sx={{ paddingX: 4 }}>
+                                <Stack
+                                    paddingY={3}
+                                    paddingX={5}
+                                    sx={{ borderColor: "#094885", borderWidth: 2, borderStyle: "solid", borderRadius: "10px" }}>
                                     <Stack direction={"row"}>
                                         <Typography component={"div"} fontSize={"large"}>
                                             Grade review -
@@ -131,7 +131,7 @@ const StudentRoute = () => {
                                             </Typography>
                                             <Typography color={value.finalDecision.status == "approved" ? "green" : "gray"}>
                                                 <IconButton>
-                                                    {value.finalDecision.status == "approved" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon/>}
+                                                    {value.finalDecision.status == "approved" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon />}
                                                 </IconButton>
                                                 {value.finalDecision.status}
                                             </Typography>

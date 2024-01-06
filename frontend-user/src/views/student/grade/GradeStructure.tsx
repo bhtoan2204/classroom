@@ -51,7 +51,7 @@ import DndGradeStructureRow from './components/DndGradeStructureRow';
 //     },
 // ]
 
-function GradeStructure({DataSource, setDataSourceCallback}: any) {
+function GradeStructure({ DataSource }: any) {
     const [dataSource, setDataSource] = useState<any>(DataSource)
 
     const columns: any =
