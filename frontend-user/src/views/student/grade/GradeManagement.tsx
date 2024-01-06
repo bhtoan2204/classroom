@@ -5,19 +5,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { ChangeEvent, FormEvent, MouseEvent, useEffect, useState } from 'react';
-import { GET_getStudentGrade } from 'src/api/student/grade/grade_management/api';
+import { ChangeEvent, FormEvent, MouseEvent, useState } from 'react';
 import { Box, Button, Card, CardContent, Dialog, FormControl, FormLabel, TextField, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
-import { FormatTextRotationDownVertical } from 'mdi-material-ui';
 import { POST_requestGradeReview } from 'src/api/student/grade/grade_review/api';
-import { SendNotification, sendNotification } from 'src/api/socket';
 
-function GradeManagement({ ClassId }: any) {
+// import { SendNotification, sendNotification } from 'src/api/socket';
 
-    const [gradeCompositions, setGradeCompositions] = useState([])
+function GradeManagement({ ClassId, GradeCompositions }: any) 
+{
+
     const [AskToReviewDialogOpen, setAskToReviewDialogOpen] = useState<any>(false)
 
     //ask-to-review dialog properties
@@ -31,58 +30,6 @@ function GradeManagement({ ClassId }: any) {
     const formInputName_expectedGrade = "expected_grade"
     const formInputName_explaination = "explaination"
 
-    useEffect(() => {
-        async function fetchGradeComposition() {
-            if (ClassId === undefined) {
-
-                return
-            }
-            const { status, data } = await GET_getStudentGrade(ClassId)
-            const compositions: any = data.rows;
-            const total_scale: any = data.total_scale;
-            const user_total: any = data.user_total
-            if (status == 200) {
-
-                const controlledData = compositions.map((value: any) => {
-                    const item: any =
-                    {
-                        key: value.gradeCompo_name,
-                        name: value.gradeCompo_name,
-                        scale: value.gradeCompo_scale,
-                        current_grade: value.current_grade,
-                    }
-
-                    return item;
-                })
-
-                const separatorRow: any =
-                {
-                    key: 'separator-row',
-                    name: " ",
-                    scale: null,
-                    current_grade: null,
-                }
-                const finalRow: any =
-                {
-                    key: "summary-row",
-                    name: "Summary",
-                    scale: total_scale,
-                    current_grade: user_total,
-                }
-
-                controlledData.push(separatorRow)
-                controlledData.push(finalRow)
-
-                setGradeCompositions(controlledData)
-            }
-            else {
-                setGradeCompositions([])
-            }
-        }
-
-        fetchGradeComposition()
-
-    }, [ClassId])
 
     function handleAskToReviewGradeClick(event: MouseEvent, gradeComposition: any)
     {
@@ -178,7 +125,7 @@ function GradeManagement({ ClassId }: any) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {gradeCompositions.map((row: any) => (
+                        {GradeCompositions.map((row: any) => (
                             <TableRow
                                 key={row.key}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>

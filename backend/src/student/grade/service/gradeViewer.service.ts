@@ -82,10 +82,12 @@ export class GradeViewerService {
             user_id: user._id,
             class_id: classId,
         });
+
         const grade = userGrade.grades.find((grade) => grade.gradeCompo_name === dto.gradeCompo_name);
         if (!grade) {
             return new HttpException("Grade composition not found", HttpStatus.NOT_FOUND);
         }
+
         const is_finalized = clazz.grade_compositions.find((grade) => grade.gradeCompo_name === dto.gradeCompo_name).is_finalized;
         if (!is_finalized) {
             return new HttpException("Grade composition is not finalized", HttpStatus.FORBIDDEN);
@@ -104,12 +106,14 @@ export class GradeViewerService {
             gradeCompo_name: dto.gradeCompo_name,
             expected_grade: dto.expected_grade,
             student_explain: dto.explaination,
+            current_grade: grade.current_grade,
             comments: [],
             finalDecision: {
                 status: 'PENDING',
                 updatedGrade: 0
             }
         });
+
         return await newGradeReview.save();
     }
 
@@ -141,9 +145,7 @@ export class GradeViewerService {
 
     async getGradeReviews(user: User)
     {
-        // const dbReviews = await this.gradeReviewRepository.find({student_id: user._id}).exec()
-
-        const dbGradeReviews = await this.gradeReviewRepository.find({class_id: user._id})
+        const dbGradeReviews = await this.gradeReviewRepository.find({student_id: user._id})
 
         if(dbGradeReviews.length < 1)
         {
@@ -158,20 +160,24 @@ export class GradeViewerService {
         })
 
         const classIds = Array.from(classDetails.keys());
-        console.log(classIds)
 
         const dbClasses = await this.classRepository.find({_id: classIds}).select("_id className description host is_active").exec();
-        console.log(dbClasses)
+
+        classDetails.clear();
+
+        //clear Map<ObjectId, Object> to use Map<String_ClassID, Object>
 
         dbClasses.forEach((record: any) =>
         {
-            classDetails.set(record._id, record)
+            const id = record._id.toString();
+            classDetails.set(id, record)
         })
 
         const results = dbGradeReviews.map((review: GradeReview) =>
         {
-            const classDetail = classDetails.get(review.class_id);
-            
+            const str_key = review.class_id.toString();
+            const classDetail = classDetails.get(str_key)
+
             const result = 
             {
                 _id: review._id,

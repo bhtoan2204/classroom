@@ -1,8 +1,9 @@
 import { Avatar, Collapse, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Paper, Stack, Typography } from "@mui/material";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
+import { GET_getGradeReviews } from "src/api/student/grade/grade_review/api";
 
 
 const classroomImages: any =
@@ -16,60 +17,61 @@ const classroomImages: any =
     ]
 
 
-const MockData =
-    [
-        {
-            _id: "mockdata-01",
-            class_id: "6592e0148058c601d6f46419",
-            class_name: "Advanced Web Programming",
-            description: "In this course, you will be able to study more detail about how to create a modern website",
-            host: "6592df7c8058c601d6f46414",
-            gradeCompo_name: "Midterm",
-            current_grade: 7,
-            expected_grade: 10,
-            student_explain: "missing grade at the third question, sir",
-            comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
-            finalDecision: { status: "Unknown", updatedGrade: null }
-        },
-        {
-            _id: "mockdata-02",
-            class_id: "6592e0148058c601d6f46419",
-            class_name: "Data structure and Algorithm",
-            description: "In this course, you will study how to solve regular and famous problem by great applying of data structure and algorithms",
-            host: "6592df7c8058c601d6f46414",
-            gradeCompo_name: "Midterm",
-            current_grade: 7,
-            expected_grade: 10,
-            student_explain: "missing grade at the third question, sir",
-            comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
-            finalDecision: { status: "final", updatedGrade: null }
-        }
-    ]
+// const MockData =
+//     [
+//         {
+//             _id: "mockdata-01",
+//             class_id: "6592e0148058c601d6f46419",
+//             class_name: "Advanced Web Programming",
+//             description: "In this course, you will be able to study more detail about how to create a modern website",
+//             host: "6592df7c8058c601d6f46414",
+//             gradeCompo_name: "Midterm",
+//             current_grade: 7,
+//             expected_grade: 10,
+//             student_explain: "missing grade at the third question, sir",
+//             comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
+//             finalDecision: { status: "Unknown", updatedGrade: null }
+//         },
+//         {
+//             _id: "mockdata-02",
+//             class_id: "6592e0148058c601d6f46419",
+//             class_name: "Data structure and Algorithm",
+//             description: "In this course, you will study how to solve regular and famous problem by great applying of data structure and algorithms",
+//             host: "6592df7c8058c601d6f46414",
+//             gradeCompo_name: "Midterm",
+//             current_grade: 7,
+//             expected_grade: 10,
+//             student_explain: "missing grade at the third question, sir",
+//             comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
+//             finalDecision: { status: "final", updatedGrade: null }
+//         }
+//     ]
 
 
 const StudentRoute = () => {
 
-    const [gradeReviews] = useState<any>(MockData);
-    const [collapseOpenProps, setCollapseOpenProps] = useState<any>(new Array(MockData.length).fill(false));
+    const [gradeReviews, setGradeReviews] = useState<any>([]);
+    const [collapseOpenProps, setCollapseOpenProps] = useState<any>([]);
 
     //NOTE: load grade reviews here!
-    // const [displayedClasses, setDisplayedClasses] = useState(<></>)
 
-    // useEffect(() => {
-    //     async function fetchStudentJoinedClasses() {
-    //         const { status, data } = await GET_getStudentJoinedClasses()
+    useEffect(() => {
+        async function fetchGradeReviews() {
+            const { status, data } = await GET_getGradeReviews()
 
-    //         if (status == 200) {
-    //             setGradeReviews(data.classes)
-    //         }
-    //         else {
-    //             setGradeReviews([])
-    //         }
-    //     }
+            if (status == 200) {
+                setGradeReviews(data)
+                setCollapseOpenProps(new Array(data.length).fill(false))
+            }
+            else {
+                setGradeReviews([])
+                setCollapseOpenProps([])
+            }
+        }
 
-    //     fetchStudentJoinedClasses()  
+        fetchGradeReviews()  
 
-    // }, [])
+    }, [])
 
     function getRandomImage() {
         const randomNum = Math.round(Math.random() * 100) + classroomImages.length;

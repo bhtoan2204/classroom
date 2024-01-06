@@ -7,9 +7,9 @@ import {
     SortableContext,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DndGradeStructureRow from './components/DndGradeStructureRow';
-import { GET_getGradeStructure } from 'src/api/student/grade/grade_structure/api';
+
 
 // const MockData: any = 
 // [
@@ -51,41 +51,8 @@ import { GET_getGradeStructure } from 'src/api/student/grade/grade_structure/api
 //     },
 // ]
 
-function GradeStructure({ ClassId }: any) {
-    const [dataSource, setDataSource] = useState<any>([])
-    const [needToRefetchData] = useState<any>(false)
-
-    useEffect(() => {
-        async function fetchGradeStructure() {
-            if (ClassId === undefined) {
-
-                return;
-            }
-
-            const { status, data } = await GET_getGradeStructure(ClassId);
-            console.log(data);
-            if (status == 200 && data) {
-                const controlledData = data.map((value: any) => {
-                    const item: any =
-                    {
-                        key: value._id,
-                        nameOfGrade: value.gradeCompo_name,
-                        gradeScale: value.gradeCompo_scale,
-                        isFinalized: value.is_finalized,
-                    }
-
-                    return item;
-                })
-                setDataSource(controlledData)
-            }
-            else {
-                setDataSource([])
-            }
-        }
-
-        fetchGradeStructure()
-
-    }, [needToRefetchData, ClassId])
+function GradeStructure({DataSource, setDataSourceCallback}: any) {
+    const [dataSource, setDataSource] = useState<any>(DataSource)
 
     const columns: any =
         [

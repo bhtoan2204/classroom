@@ -11,7 +11,7 @@ export class RequestReviewDto {
     @IsString()
     gradeCompo_name: string;
 
-    @IsString()
+    @IsNotEmpty()
     @IsNumber()
     expected_grade: string;
 
