@@ -26,7 +26,7 @@ function JoinClassByCodeTab() {
             const display =
                 <>
                     <CardContent>
-                        <Typography component={"div"} security="success">
+                        <Typography component={"div"} security="success" color={"green"}>
                             Joined class {classCode} successfully!
                         </Typography>
                         <Typography component={"div"} >
@@ -48,7 +48,7 @@ function JoinClassByCodeTab() {
         else {
             const display =
                 <CardContent>
-                    <Typography component={"div"} security="error">
+                    <Typography component={"div"} security="error" color={"red"}>
                         Joined class {classCode} failed!
                     </Typography>
                     <Typography component={"div"} >

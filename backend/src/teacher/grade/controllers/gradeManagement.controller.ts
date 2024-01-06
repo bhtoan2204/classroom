@@ -88,13 +88,6 @@ export class GradeManagementController {
     }
 
     @HttpCode(HttpStatus.OK)
-    @ApiOperation({ summary: 'Show overall grade of grade board' })
-    @Get('/showTotalGradeColumn/:classId')
-    async showTotalGradeColumn(@CurrentUser() user, @Param() params: any) {
-
-    }
-
-    @HttpCode(HttpStatus.OK)
     @UseGuards(JwtAuthGuard)
     @Patch('/markGradeAsFinal/:classId/:gradeCompositionName')
     @ApiParam({ name: 'gradeCompositionName', type: String })

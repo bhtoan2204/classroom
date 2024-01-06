@@ -1,4 +1,4 @@
-import { Backdrop, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Menu, MenuItem, Stack, Typography } from "@mui/material";
+import { Backdrop, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Menu, MenuItem, Stack, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { MouseEvent, useEffect, useState } from "react";
 import ClassSupportedFeature from "src/views/student/class/ClassSupportedFeature";
@@ -9,6 +9,7 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { DELETE_leaveClass } from "src/api/student/class/leave_class/api";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { GET_getClassDetail } from "src/api/student/class/get_class_detail/api";
 
 
 const classroomImages: any =
@@ -32,7 +33,32 @@ const StudentRoute = () => {
   const [anchorEl, setAnchorEl] = useState<any>(null)
   const [backdropOpen, setBackdropOpen] = useState<any>(false)
   const [backdropContent, setBackdropContent] = useState<any>(<></>)
+  const [classDetail, setClassDetail] = useState<any>({})
 
+  useEffect(() =>
+  {
+      async function fetchClassDetail() 
+      {
+        if(class_id === undefined)
+        {
+          return
+        }
+
+        const {status, data} = await GET_getClassDetail(class_id);
+        if(status == 200)
+        {
+          setClassDetail(data)
+        }
+        else
+        {
+          setClassDetail({})
+        }
+      }
+
+      fetchClassDetail()
+
+  }, [class_id])
+ 
   useEffect(() => {
     setImageSrc(getRandomImage())
   }, [])
@@ -147,56 +173,70 @@ const StudentRoute = () => {
     setBackdropContent(warningDisplay)
   }
 
+  const isActiveState = 
+  <>
+    <Tooltip
+      title={classDetail.is_active !== undefined ? (classDetail.is_active == true ? "Active" : "Unactive") : "Loading..."}>
+      {classDetail.is_active !== undefined ? (classDetail.is_active == true ? <CheckCircleOutlineIcon sx={{color:"green"}}/> : <HighlightOffIcon sx={{color:"red"}}/>): <CircularProgress size={"small"}/>}
+    </Tooltip>
+  </>
+  
+
   return (
-    <>
-      <div>
-        <Card>
-          <CardMedia
-            component="img"
-            alt="class card"
-            height={"230"}
-            width={"100%"}
-            image={imageSrc}
-          />
-          <CardContent >
-            <Stack direction={"row"} sx={{ width: "100%" }}>
-              <Stack sx={{ width: "100%" }}>
-                <Typography component={"div"} variant="h5" paddingLeft={2} paddingY={4}>
-                  Class name
-                </Typography>
-                <Typography component={"div"} paddingLeft={2}>
-                  {class_id}
-                </Typography>
+      <>
+        <div>
+          <Card>
+            <CardMedia
+              component="img"
+              alt="class card"
+              height={"230"}
+              width={"100%"}
+              image={imageSrc}
+            />
+            <CardContent >
+              <Stack direction={"row"} sx={{width: "100%"}}>
+                <Stack sx={{width: "100%"}}>
+                  <Stack direction={"row"}>
+                    <Typography component={"div"} variant="h5" paddingLeft={2} paddingY={4} marginRight={3}>
+                      {classDetail.className !== undefined ? classDetail.className : "Class name"}
+                    </Typography>
+                    <Typography component={"div"} paddingY={5}>
+                      {isActiveState}
+                    </Typography>
+                  </Stack>
+                  <Typography component={"div"} paddingLeft={2}>
+                    {class_id}
+                  </Typography>
+                </Stack>
+                <Button onClick={handleMoreVertButtonClick}>
+                  <IconButton>
+                    <MoreVertIcon />
+                  </IconButton>
+                </Button>
+                <Menu
+                  open={moreMenuOpen}
+                  anchorEl={anchorEl}
+                  onClose={handleMoreVertButtonClose}
+                >
+                  <MenuItem onClick={(e) => {handleMenuItemClick(e, menuItemClick_leaveTheClass)}}><Stack direction={"row"}><LogoutIcon/><Typography color={"red"} marginLeft={3}>Leave the class</Typography></Stack></MenuItem>
+                </Menu>
               </Stack>
-              <Button onClick={handleMoreVertButtonClick}>
-                <IconButton>
-                  <MoreVertIcon />
-                </IconButton>
-              </Button>
-              <Menu
-                open={moreMenuOpen}
-                anchorEl={anchorEl}
-                onClose={handleMoreVertButtonClose}
-              >
-                <MenuItem onClick={(e) => { handleMenuItemClick(e, menuItemClick_leaveTheClass) }}><Stack direction={"row"}><LogoutIcon /><Typography color={"red"} marginLeft={3}>Leave the class</Typography></Stack></MenuItem>
-              </Menu>
-            </Stack>
-          </CardContent>
-        </Card>
-        <Stack direction={"row"} spacing={20} width={"100%"} marginTop={25}>
-          <ClassSupportedFeature ClassId={class_id} />
-          <ClassTasks />
-        </Stack>
-      </div>
-      <Backdrop
-        open={backdropOpen}
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
-        <Card>
-          {backdropContent}
-        </Card>
-      </Backdrop>
-    </>
+            </CardContent>
+          </Card>
+          <Stack direction={"row"} spacing={20} width={"100%"} marginTop={25}>
+            <ClassSupportedFeature ClassId={class_id} />
+            <ClassTasks />
+          </Stack>
+        </div>
+        <Backdrop
+          open={backdropOpen}
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <Card>
+            {backdropContent}
+          </Card>
+        </Backdrop>
+      </>
   )
 }
 

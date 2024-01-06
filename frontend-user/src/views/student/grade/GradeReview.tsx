@@ -1,4 +1,4 @@
-import { Avatar, Collapse, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Paper, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Collapse, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
 import { MouseEvent, useState } from "react";
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -17,63 +17,59 @@ const classroomImages: any =
     ]
 
 
-const MockData =
-    [
-        {
-            _id: "mockdata-01",
-            class_id: "6592e0148058c601d6f46419",
-            class_name: "Advanced Web Programming",
-            description: "In this course, you will be able to study more detail about how to create a modern website",
-            host: "6592df7c8058c601d6f46414",
-            is_active: true,
-            gradeCompo_name: "Midterm",
-            current_grade: 7,
-            expected_grade: 10,
-            student_explain: "missing grade at the third question, sir",
-            comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
-            finalDecision: { status: "Unknown", updatedGrade: null }
-        },
-        {
-            _id: "mockdata-02",
-            class_id: "6592e0148058c601d6f46419",
-            class_name: "Data structure and Algorithm",
-            description: "In this course, you will study how to solve regular and famous problem by great applying of data structure and algorithms",
-            host: "6592df7c8058c601d6f46414",
-            is_active: false,
-            gradeCompo_name: "Midterm",
-            current_grade: 7,
-            expected_grade: 10,
-            student_explain: "missing grade at the third question, sir",
-            comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
-            finalDecision: { status: "final", updatedGrade: null }
-        }
-    ]
+// const MockData =
+//     [
+//         {
+//             _id: "mockdata-01",
+//             class_id: "6592e0148058c601d6f46419",
+//             class_name: "Advanced Web Programming",
+//             description: "In this course, you will be able to study more detail about how to create a modern website",
+//             host: "6592df7c8058c601d6f46414",
+//             gradeCompo_name: "Midterm",
+//             current_grade: 7,
+//             expected_grade: 10,
+//             student_explain: "missing grade at the third question, sir",
+//             comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
+//             finalDecision: { status: "Unknown", updatedGrade: null }
+//         },
+//         {
+//             _id: "mockdata-02",
+//             class_id: "6592e0148058c601d6f46419",
+//             class_name: "Data structure and Algorithm",
+//             description: "In this course, you will study how to solve regular and famous problem by great applying of data structure and algorithms",
+//             host: "6592df7c8058c601d6f46414",
+//             is_active: true,
+//             gradeCompo_name: "Midterm",
+//             current_grade: 7,
+//             expected_grade: 10,
+//             student_explain: "missing grade at the third question, sir",
+//             comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
+//             finalDecision: { status: "final", updatedGrade: null }
+//         },
+//         {
+//             _id: "mockdata-03",
+//             class_id: "6592e0148058c601d6f46419",
+//             class_name: "Data structure and Algorithm",
+//             description: "In this course, you will study how to solve regular and famous problem by great applying of data structure and algorithms",
+//             host: "6592df7c8058c601d6f46414",
+//             is_active: true,
+//             gradeCompo_name: "Midterm",
+//             current_grade: 7,
+//             expected_grade: 10,
+//             student_explain: "missing grade at the third question, sir",
+//             comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
+//             finalDecision: { status: "final", updatedGrade: null }
+//         }
+//     ]
 
 
-const StudentRoute = () => {
-
-    const [gradeReviews] = useState<any>(MockData);
-    const [collapseOpenProps, setCollapseOpenProps] = useState<any>(new Array(MockData.length).fill(false));
+function GradeReview({GradeReviews}: any)
+{
+    const [collapseOpenProps, setCollapseOpenProps] = useState<any>(new Array(GradeReviews.length).fill(false));
 
     //NOTE: load grade reviews here!
 
-    // useEffect(() => {
-    //     async function fetchGradeReviews() {
-    //         const { status, data } = await GET_getGradeReviews()
 
-    //         if (status == 200) {
-    //             setGradeReviews(data)
-    //             setCollapseOpenProps(new Array(data.length).fill(false))
-    //         }
-    //         else {
-    //             setGradeReviews([])
-    //             setCollapseOpenProps([])
-    //         }
-    //     }
-
-    //     fetchGradeReviews()  
-
-    // }, [])
 
     function getRandomImage() {
         const randomNum = Math.round(Math.random() * 100) + classroomImages.length;
@@ -82,16 +78,18 @@ const StudentRoute = () => {
     }
 
 
-    function handleListItemClick(event: MouseEvent, valueIndex: any) {
-        event.target
+    function handleListItemClick(event: MouseEvent, valueIndex: any) 
+    {
+        event.preventDefault();
+        
         const copiedCollapseOpenProps = collapseOpenProps.slice()
         const currentState = copiedCollapseOpenProps[valueIndex]
         copiedCollapseOpenProps[valueIndex] = !currentState;
         setCollapseOpenProps(copiedCollapseOpenProps)
     }
 
-    const displayedClasses: any = (gradeReviews.length > 0) ?
-        gradeReviews.map((value: any, index: any) => {
+    const displayedClasses: any = (GradeReviews.length > 0) ?
+        GradeReviews.map((value: any, index: any) => {
             return (
                 <>
                     <ListItem key={value.class_id}>
@@ -103,19 +101,19 @@ const StudentRoute = () => {
                                     </ListItemAvatar>
                                     <ListItemText primary={value.class_name + " - " + value.class_id} secondary={value.class_description} />
                                 </ListItemButton>
-                                <ListItemButton href={`/teacher/review/${value._id}`}>
+                                <ListItemButton href={`/student/review/${value._id}`}>
                                     <IconButton size="large">
                                         <ReadMoreIcon />
                                     </IconButton>
                                 </ListItemButton>
                             </Stack>
                             <Divider />
-                            <Collapse
-                                in={collapseOpenProps[index]} timeout={"auto"} unmountOnExit sx={{ paddingX: 4 }}>
-                                <Stack
-                                    paddingY={3}
-                                    paddingX={5}
-                                    sx={{ borderColor: "#094885", borderWidth: 2, borderStyle: "solid", borderRadius: "10px" }}>
+                            <Collapse 
+                            in={collapseOpenProps[index]} timeout={"auto"} unmountOnExit sx={{ paddingX: 4 }}>
+                                <Stack 
+                                paddingY={3}
+                                paddingX={5}
+                                sx={{borderColor: "#094885", borderWidth: 2, borderStyle:"solid", borderRadius:"10px"}}>
                                     <Stack direction={"row"}>
                                         <Typography component={"div"} fontSize={"large"}>
                                             Grade review -
@@ -131,7 +129,7 @@ const StudentRoute = () => {
                                             </Typography>
                                             <Typography color={value.finalDecision.status == "approved" ? "green" : "gray"}>
                                                 <IconButton>
-                                                    {value.finalDecision.status == "approved" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon />}
+                                                    {value.finalDecision.status == "approved" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon/>}
                                                 </IconButton>
                                                 {value.finalDecision.status}
                                             </Typography>
@@ -168,8 +166,7 @@ const StudentRoute = () => {
 
     return (
         <div>
-            <h1>Grade review</h1>
-            <Paper>
+            <Box width={"100%"} height={"100%"} maxHeight={"400px"} overflow={"auto"}>
                 <List sx={{
                     width: '100%',
                     bgcolor: 'background.paper',
@@ -180,10 +177,9 @@ const StudentRoute = () => {
                 }}>
                     {displayedClasses}
                 </List>
-            </Paper>
+            </Box>
         </div>
     )
-
 }
 
-export default StudentRoute;                
+export default GradeReview

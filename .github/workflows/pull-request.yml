@@ -1,0 +1,101 @@
+name: CI
+on:
+  push:
+    branches-ignore:
+      - 'main'
+      - 'dev'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+        - uses: actions/checkout@v2
+
+        - name: Set up Node.js
+          uses: actions/setup-node@v2
+          with:
+                node-version: '18'
+
+        - name: Cache global npm packages
+          uses: actions/cache@v2
+          with:
+            path: ~/.npm
+            key: ${{ runner.os }}-global-npm-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: |
+             ${{ runner.os }}-global-npm-
+
+        - name: Install NestJS CLI
+          run: npm install -g @nestjs/cli
+        
+        - name: Install NextJS CLI
+          run: npm install -g next
+
+        - name: Cache backend dependencies
+          uses: actions/cache@v2
+          with:
+            path: backend/node_modules
+            key: ${{ runner.os }}-backend-node-${{ hashFiles('backend/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.os }}-backend-node-
+
+        - name: Backend Build and Test
+          run: |
+            cd backend
+            npm i
+            npm run build --if-present
+            npm test --if-present
+
+        - name: Cache frontend admin dependencies
+          uses: actions/cache@v2
+          with:
+              path: frontend-admin/node_modules
+              key: ${{ runner.os }}-frontend-admin-node-${{ hashFiles('frontend-admin/package-lock.json') }}
+              restore-keys: |
+                ${{ runner.os }}-frontend-admin-node-
+      
+        - name: Frontend Admin Build
+          run: |
+              cd frontend-admin
+              npm i
+              npm run build
+      
+        - name: Cache frontend user dependencies
+          uses: actions/cache@v2
+          with:
+              path: frontend-user/node_modules
+              key: ${{ runner.os }}-frontend-user-node-${{ hashFiles('frontend-user/package-lock.json') }}
+              restore-keys: |
+                ${{ runner.os }}-frontend-user-node-
+      
+        - name: Frontend User Build
+          run: |
+              cd frontend-user
+              npm i
+              npm run build
+
+              echo ${{ secrets.ACCESS_TOKEN_GITHUB }}
+
+  create_pull_request:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create Pull Request
+      id: create_pr
+      uses: peter-evans/create-pull-request@v3
+      with:
+          token: ${{ secrets.ACCESS_TOKEN_GITHUB }}
+          branch: dev
+          title: "Auto-merge changes"
+          body: "Automatically created pull request for changes in branch ${{ github.event.ref }}"
+          labels: "auto-merge"
+
+    - name: Merge Pull Request
+      if: steps.create_pr.outputs.pull-request-number
+      run: gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto
