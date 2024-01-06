@@ -96,11 +96,13 @@
 /frontend-user/npm-debug.log*
 /frontend-user/yarn-debug.log*
 /frontend-user/yarn-error.log*
+/frontend-user/package-lock.json
 /frontend-user/yarn.lock
 
 /frontend-admin/npm-debug.log*
 /frontend-admin/yarn-debug.log*
 /frontend-admin/yarn-error.log*
+/frontend-admin/package-lock.json
 /frontend-admin/yarn.lock
 
 # Vercel - frontend-user
@@ -109,5 +111,7 @@
 # TypeScript - frontend-user
 /frontend-user/*.tsbuildinfo
 
+/frontend-user/package-lock.json
 /frontend-user/yarn.lock
+/frontend-admin/package-lock.json
 /frontend-admin/yarn.lock
