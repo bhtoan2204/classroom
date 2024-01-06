@@ -52,4 +52,13 @@ export class GradeViewerController {
     {
         return this.gradeViewerService.getGradeReviews(user);
     }
+
+    @Get("getGradeReviewComments/:review_id")
+    @ApiOperation({summary: "get comments of a specified grade review"})
+    @HttpCode(HttpStatus.OK)
+    @ApiParam({name: "review_id", type:String})
+    async getComments(@CurrentUser() user, @Param() params: any)
+    {
+        return this.gradeViewerService.getComments(user, params.review_id)
+    }
 }

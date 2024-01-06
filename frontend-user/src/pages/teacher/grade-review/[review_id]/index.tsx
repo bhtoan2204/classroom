@@ -5,21 +5,21 @@ import { GET_getGradeReviewDetail } from "src/api/student/grade/grade_review/api
 import CommentsBlock from "src/views/student/grade_review/CommentsBlock";
 
 
-// const MockData = 
-// {
-//     _id: "mockdata-01",
-//     class_id: "6592e0148058c601d6f46419",
-//     class_name: "Advanced Web Programming",
-//     description: "In this course, you will be able to study more detail about how to create a modern website",
-//     host: "6592df7c8058c601d6f46414",
-//     is_active: true,
-//     gradeCompo_name: "Midterm",
-//     current_grade: 7,
-//     expected_grade: 10,
-//     student_explain: "missing grade at the third question, sir",
-//     comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
-//     finalDecision: { status: "Unknown", updatedGrade: null }
-// };
+const MockData = 
+{
+    _id: "mockdata-01",
+    class_id: "6592e0148058c601d6f46419",
+    class_name: "Advanced Web Programming",
+    description: "In this course, you will be able to study more detail about how to create a modern website",
+    host: "6592df7c8058c601d6f46414",
+    is_active: true,
+    gradeCompo_name: "Midterm",
+    current_grade: 7,
+    expected_grade: 10,
+    student_explain: "missing grade at the third question, sir",
+    comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
+    finalDecision: { status: "Unknown", updatedGrade: null }
+};
 
 
 function ReviewDetailPage()
@@ -27,39 +27,39 @@ function ReviewDetailPage()
     const router = useRouter();
     const review_id = router.query.review_id;
 
-    const [reviewDetail, setReviewDetail] = useState<any>({})
+    const [reviewDetail, setReviewDetail] = useState<any>(MockData)
 
-    useEffect(() =>
-    {
-        async function fetchGradeReviewDetail()
-        {
-            if(review_id === undefined)
-            {
+    // useEffect(() =>
+    // {
+    //     async function fetchGradeReviewDetail()
+    //     {
+    //         if(review_id === undefined)
+    //         {
     
-                return;
-            }
+    //             return;
+    //         }
     
-            //load review detail herer
+    //         //load review detail herer
     
-            const {status, data} = await GET_getGradeReviewDetail(review_id);
+    //         const {status, data} = await GET_getGradeReviewDetail(review_id);
             
-            if(status == 200)
-            {
-                setReviewDetail(data)
-            }
-            else
-            {
-                setReviewDetail({})
-            }
+    //         if(status == 200)
+    //         {
+    //             setReviewDetail(data)
+    //         }
+    //         else
+    //         {
+    //             setReviewDetail({})
+    //         }
     
-            //mock data
+    //         //mock data
 
-            // setReviewDetail(MockData)
-        }
+    //         // setReviewDetail(MockData)
+    //     }
 
-        fetchGradeReviewDetail();
+    //     fetchGradeReviewDetail();
 
-    }, [review_id])
+    // }, [review_id])
 
 
 

@@ -101,7 +101,7 @@ function GradeReview({GradeReviews}: any)
                                     </ListItemAvatar>
                                     <ListItemText primary={value.class_name + " - " + value.class_id} secondary={value.class_description} />
                                 </ListItemButton>
-                                <ListItemButton href={`/student/review/${value.class_id}`}>
+                                <ListItemButton href={`/student/review/${value._id}`}>
                                     <IconButton size="large">
                                         <ReadMoreIcon />
                                     </IconButton>
@@ -127,9 +127,9 @@ function GradeReview({GradeReviews}: any)
                                             <Typography>
                                                 Final decision:
                                             </Typography>
-                                            <Typography color={value.finalDecision.status == "final" ? "green" : "gray"}>
+                                            <Typography color={value.finalDecision.status == "approved" ? "green" : "gray"}>
                                                 <IconButton>
-                                                    {value.finalDecision.status == "final" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon/>}
+                                                    {value.finalDecision.status == "approved" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon/>}
                                                 </IconButton>
                                                 {value.finalDecision.status}
                                             </Typography>

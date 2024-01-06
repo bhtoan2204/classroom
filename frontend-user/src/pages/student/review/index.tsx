@@ -25,6 +25,7 @@ const classroomImages: any =
 //             class_name: "Advanced Web Programming",
 //             description: "In this course, you will be able to study more detail about how to create a modern website",
 //             host: "6592df7c8058c601d6f46414",
+//             is_active: true,
 //             gradeCompo_name: "Midterm",
 //             current_grade: 7,
 //             expected_grade: 10,
@@ -38,6 +39,7 @@ const classroomImages: any =
 //             class_name: "Data structure and Algorithm",
 //             description: "In this course, you will study how to solve regular and famous problem by great applying of data structure and algorithms",
 //             host: "6592df7c8058c601d6f46414",
+//             is_active: false,
 //             gradeCompo_name: "Midterm",
 //             current_grade: 7,
 //             expected_grade: 10,
@@ -100,7 +102,7 @@ const StudentRoute = () => {
                                     </ListItemAvatar>
                                     <ListItemText primary={value.class_name + " - " + value.class_id} secondary={value.class_description} />
                                 </ListItemButton>
-                                <ListItemButton href={`/student/review/${value.class_id}`}>
+                                <ListItemButton href={`/student/review/${value._id}`}>
                                     <IconButton size="large">
                                         <ReadMoreIcon />
                                     </IconButton>
@@ -126,9 +128,9 @@ const StudentRoute = () => {
                                             <Typography>
                                                 Final decision:
                                             </Typography>
-                                            <Typography color={value.finalDecision.status == "final" ? "green" : "gray"}>
+                                            <Typography color={value.finalDecision.status == "approved" ? "green" : "gray"}>
                                                 <IconButton>
-                                                    {value.finalDecision.status == "final" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon/>}
+                                                    {value.finalDecision.status == "approved" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon/>}
                                                 </IconButton>
                                                 {value.finalDecision.status}
                                             </Typography>

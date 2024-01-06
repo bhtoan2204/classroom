@@ -118,13 +118,32 @@ export class GradeViewerService {
     }
 
     async viewGradeReview(user: User, reviewId: string) {
-        const review = await this.gradeReviewRepository.findOne({ _id: reviewId });
-        if (!review) {
+        const dbReview = await this.gradeReviewRepository.findOne({ _id: reviewId });
+        if (!dbReview) {
             return new HttpException("Review not found", HttpStatus.NOT_FOUND);
         }
-        if (review.student_id.toString() !== user._id.toString()) {
+        if (dbReview.student_id.toString() !== user._id.toString()) {
             return new HttpException("You are not allowed to view this review", HttpStatus.FORBIDDEN);
         }
+
+        const classDetail = await this.classRepository.findOne({_id: dbReview.class_id})
+
+        const review = 
+        {
+            _id: dbReview._id,
+            class_id: dbReview.class_id,
+            class_name: classDetail.className,
+            description: classDetail.description,
+            is_active: classDetail.is_active,
+            host: classDetail.host,
+            gradeCompo_name: dbReview.gradeCompo_name,
+            current_grade: dbReview.current_grade,
+            expected_grade: dbReview.expected_grade,
+            student_explain: dbReview.student_explain,
+            comments: dbReview.comments,
+            finalDecision: dbReview.finalDecision
+        }
+
         return review;
     }
 
@@ -190,7 +209,6 @@ export class GradeViewerService {
                 current_grade: review.current_grade,
                 expected_grade: review.expected_grade,
                 student_explain: review.student_explain,
-                comments: review.comments,
                 finalDecision: review.finalDecision
             }
 
@@ -199,5 +217,22 @@ export class GradeViewerService {
 
 
         return results;
+    }
+
+    async getComments(user: User, review_id: string)
+    {
+        const dbReview_id = new Types.ObjectId(review_id);
+        const dbGradeReview = await this.gradeReviewRepository.findOne({_id: dbReview_id})
+        if(! dbGradeReview)
+        {
+            return new HttpException("Grade review not found", HttpStatus.NOT_FOUND);
+        }
+
+        if(user._id.toString() != dbGradeReview.student_id.toString())
+        {
+            return new HttpException("You are not allowed to view this document", HttpStatus.FORBIDDEN)
+        }
+
+        return dbGradeReview.comments;
     }
 }

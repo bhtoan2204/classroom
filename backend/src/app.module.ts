@@ -19,7 +19,8 @@ import { DatabaseModule } from './database/database.module';
     ConfigModule.forRoot({
       validationSchema: validateSchemaConfig,
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV}`
+      // envFilePath: `.env.${process.env.NODE_ENV}`
+      envFilePath: `.env.development`
     }),
     MailModule,
     UserModule,

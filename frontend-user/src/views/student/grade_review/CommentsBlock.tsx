@@ -1,10 +1,66 @@
 import { Box, Button, Card, CardActions, CardContent, Divider, FormControl, IconButton, List, ListItem, Stack, TextField, Typography } from "@mui/material"
 import SendIcon from '@mui/icons-material/Send';
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { GET_getGradeReviewComment, POST_sendComment } from "src/api/student/grade/grade_review/api";
 
-function CommentsBlock({ListOfComments, width, maxHeight, heightOfCommentView}: any)
+function CommentsBlock({ListOfComments, width, maxHeight, heightOfCommentView, ReviewId}: any)
 {
-    const commentDisplay: any = (ListOfComments && ListOfComments.length > 0) ?
-    ListOfComments.map((value: any, index: number) =>
+
+    const [comments, setComments] = useState<any>(ListOfComments);
+    const [updateCommentFlat, setUpdateCommentFlat] = useState<any>(false)
+    const [currentComment, setCurrentComment] = useState<any>("")
+
+    useEffect(() =>
+    {
+        setComments(ListOfComments)
+    },[ListOfComments])
+
+    // useEffect(() =>
+    // {
+    //     async function fetchComments()
+    //     {
+    //         if(ReviewId === undefined)
+    //         {
+
+    //             return;
+    //         }
+
+    //         const {status, data} = await GET_getGradeReviewComment(ReviewId);
+    //         if(status == 200)
+    //         {
+    //             setComments(data)
+    //         }
+    //         //else keep the current data
+    //     }
+
+    //     fetchComments()
+
+    // }, [updateCommentFlat])
+
+    async function handleCommentSubmit(event: FormEvent<HTMLFormElement>)
+    {
+        event.preventDefault();
+        if(ReviewId === undefined)
+        {
+            return;
+        }
+
+        if(currentComment.length < 1)
+        {
+            return;
+        }
+
+        const {status} = await POST_sendComment(ReviewId, currentComment)
+        if(status == 201)
+        {
+            const nextFlat = !updateCommentFlat
+            setUpdateCommentFlat(nextFlat);
+        }
+
+    }
+
+    const commentDisplay: any = (comments && comments.length > 0) ?
+    comments.map((value: any, index: number) =>
     {
 
         return(
@@ -47,11 +103,14 @@ function CommentsBlock({ListOfComments, width, maxHeight, heightOfCommentView}: 
                     </CardContent>
                     <CardActions sx={{maxHeight:"70px", height:"100%"}}>
                         <Box position={"relative"} width={"100%"} height={"100%"}>
-                            <form style={{width: "100%" ,position:"absolute", bottom: 0}}>
+                            <form onSubmit={(handleCommentSubmit)}
+                            style={{width: "100%" ,position:"absolute", bottom: 0}}>
                                 <FormControl fullWidth={true}>
                                     <Stack direction={"row"}>
-                                        <TextField size="medium" sx={{width: "100%"}} multiline={true}/>
-                                        <Button>
+                                        <TextField 
+                                            value={currentComment} onChange={(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {setCurrentComment(event.target.value)}}
+                                        size="medium" sx={{width: "100%"}} multiline={true}/>
+                                        <Button type="submit">
                                             <IconButton size="large" color={"primary"}>
                                                 <SendIcon/>
                                             </IconButton>

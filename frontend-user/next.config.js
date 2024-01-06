@@ -7,6 +7,7 @@ module.exports = {
     esmExternals: false,
     jsconfigPaths: true
   },
+
   webpack: config =>
   {
     config.resolve.alias = {
