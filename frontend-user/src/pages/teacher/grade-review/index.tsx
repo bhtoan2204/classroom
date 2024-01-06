@@ -1,9 +1,10 @@
 import { Avatar, Collapse, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Paper, Stack, Typography } from "@mui/material";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
-
+import { getCookieCustom } from "src/utils/cookies";
+import { fetchGradeReviews } from "src/api/teacher/gradeReview/getGradeReview";
 
 
 const classroomImages: any =
@@ -16,71 +17,30 @@ const classroomImages: any =
         "https://img.freepik.com/free-vector/teaching-concept-illustration_114360-2666.jpg?w=740&t=st=1703740458~exp=1703741058~hmac=87a169eb5dfdad3850a9e9e43db31a22dd297f4381e9b6ac9a97bc9a25a65c5b",
     ]
 
-
-const MockData =
-    [
-        {
-            _id: "mockdata-01",
-            class_id: "6592e0148058c601d6f46419",
-            class_name: "Advanced Web Programming",
-            description: "In this course, you will be able to study more detail about how to create a modern website",
-            host: "6592df7c8058c601d6f46414",
-            is_active: true,
-            gradeCompo_name: "Midterm",
-            current_grade: 7,
-            expected_grade: 10,
-            student_explain: "missing grade at the third question, sir",
-            comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
-            finalDecision: { status: "Unknown", updatedGrade: null }
-        },
-        {
-            _id: "mockdata-02",
-            class_id: "6592e0148058c601d6f46419",
-            class_name: "Data structure and Algorithm",
-            description: "In this course, you will study how to solve regular and famous problem by great applying of data structure and algorithms",
-            host: "6592df7c8058c601d6f46414",
-            is_active: false,
-            gradeCompo_name: "Midterm",
-            current_grade: 7,
-            expected_grade: 10,
-            student_explain: "missing grade at the third question, sir",
-            comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
-            finalDecision: { status: "final", updatedGrade: null }
-        }
-    ]
+interface GradeReviewData {
+    _id: string;
+    class_id: {
+        _id: string;
+        className: string;
+    };
+    student_id: {
+        _id: string;
+        fullname: string;
+    };
+    gradeCompo_name: string;
+    current_grade: number;
+    expected_grade: number;
+    finalDecision: {
+        status: string;
+        updatedGrade: number;
+    }
+}
 
 
 const StudentRoute = () => {
 
-    const [gradeReviews] = useState<any>(MockData);
-    const [collapseOpenProps, setCollapseOpenProps] = useState<any>(new Array(MockData.length).fill(false));
-
-    //NOTE: load grade reviews here!
-
-    // useEffect(() => {
-    //     async function fetchGradeReviews() {
-    //         const { status, data } = await GET_getGradeReviews()
-
-    //         if (status == 200) {
-    //             setGradeReviews(data)
-    //             setCollapseOpenProps(new Array(data.length).fill(false))
-    //         }
-    //         else {
-    //             setGradeReviews([])
-    //             setCollapseOpenProps([])
-    //         }
-    //     }
-
-    //     fetchGradeReviews()  
-
-    // }, [])
-
-    function getRandomImage() {
-        const randomNum = Math.round(Math.random() * 100) + classroomImages.length;
-
-        return classroomImages[randomNum % classroomImages.length]
-    }
-
+    const [gradeReviews, setGradeReviews] = useState<GradeReviewData[]>([]);
+    const [collapseOpenProps, setCollapseOpenProps] = useState<any>(new Array(gradeReviews.length).fill(false));
 
     function handleListItemClick(event: MouseEvent, valueIndex: any) {
         event.target
@@ -89,6 +49,18 @@ const StudentRoute = () => {
         copiedCollapseOpenProps[valueIndex] = !currentState;
         setCollapseOpenProps(copiedCollapseOpenProps)
     }
+
+    const fetchData = async () => {
+        const accessToken = getCookieCustom("accessToken");
+        const data = await fetchGradeReviews(accessToken as string);
+        if (data.status === 200) {
+            setGradeReviews(data.data);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    });
 
     const displayedClasses: any = (gradeReviews.length > 0) ?
         gradeReviews.map((value: any, index: any) => {
@@ -99,11 +71,11 @@ const StudentRoute = () => {
                             <Stack direction={"row"}>
                                 <ListItemButton sx={{ width: "100%" }} onClick={(e) => { handleListItemClick(e, index) }}>
                                     <ListItemAvatar>
-                                        <Avatar alt={`Class ${value.class_name}`} src={getRandomImage()} />
+                                        <Avatar alt={`Class ${value.class_name}`} src={classroomImages[index % 6]} />
                                     </ListItemAvatar>
-                                    <ListItemText primary={value.class_name + " - " + value.class_id} secondary={value.class_description} />
+                                    <ListItemText primary={value.class_id.className} secondary={value.class_description} />
                                 </ListItemButton>
-                                <ListItemButton href={`/teacher/review/${value._id}`}>
+                                <ListItemButton href={`/teacher/grade-review/${value._id}`}>
                                     <IconButton size="large">
                                         <ReadMoreIcon />
                                     </IconButton>
@@ -150,6 +122,14 @@ const StudentRoute = () => {
                                             </Typography>
                                             <Typography marginLeft={2}>
                                                 {value.expected_grade}
+                                            </Typography>
+                                        </Stack>
+                                        <Stack direction={"row"} alignItems={"center"} paddingY={1}>
+                                            <Typography>
+                                                Student Name:
+                                            </Typography>
+                                            <Typography marginLeft={2}>
+                                                {value.student_id.fullname}
                                             </Typography>
                                         </Stack>
                                     </Stack>

@@ -4,7 +4,7 @@ import { getCookieCustom } from "src/utils/cookies";
 let socket: Socket | null = null;
 
 export interface SendNotification {
-    receiver: string;
+    receiver_id: string;
     title: string;
     content: string;
     id: string;
@@ -30,7 +30,6 @@ export const createConnection = () => {
             Authorization: 'Bearer ' + accessToken,
         },
     });
-    console.log("connected");
 
 }
 

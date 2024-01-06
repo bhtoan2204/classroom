@@ -21,6 +21,13 @@ export class GradeReviewController {
     ) { }
 
     @HttpCode(HttpStatus.OK)
+    @Get('/getGradeReviewList')
+    @ApiOperation({ summary: 'Get grade review list' })
+    async getGradeReviewList(@CurrentUser() currentUser: User) {
+        return await this.gradeService.getGradeReviewList(currentUser);
+    }
+
+    @HttpCode(HttpStatus.OK)
     @Get('/getGradeReview/:classId')
     @ApiOperation({ summary: 'Get grade review' })
     @ApiParam({ name: 'classId', type: String })

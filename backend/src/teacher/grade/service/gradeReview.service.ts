@@ -1,10 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
+import { CommentGradeReviewDto } from "src/teacher/dto/commentGradeReview.dto";
 import { MarkFinalDescistionDto } from "src/teacher/dto/markFinalDescistion.dto";
 import { RealStatus } from "src/utils/enum/realStatus.enum";
 import { Status } from "src/utils/enum/status.enum";
 import { Class, ClassDocument } from "src/utils/schema/class.schema";
+import { ClassUser, ClassUserDocument } from "src/utils/schema/classUser.schema";
 import { GradeReview, GradeReviewDocument } from "src/utils/schema/gradeReview.schema";
 import { User, UserDocument } from "src/utils/schema/user.schema";
 import { UserGrade, UserGradeDocument } from "src/utils/schema/userGrade.schema";
@@ -16,6 +18,7 @@ export class GradeReviewService {
         @InjectModel(Class.name) private classRepository: Model<ClassDocument>,
         @InjectModel(User.name) private userRepository: Model<UserDocument>,
         @InjectModel(UserGrade.name) private userGradeRepository: Model<UserGradeDocument>,
+        @InjectModel(ClassUser.name) private classUserRepository: Model<ClassUserDocument>,
     ) { }
 
     async checkInClass(user: User, classId: Types.ObjectId): Promise<any> {
@@ -26,6 +29,16 @@ export class GradeReviewService {
         if (!userGrade) {
             return new HttpException('You are not in this class', HttpStatus.FORBIDDEN);
         }
+    }
+
+    async getGradeReviewList(currentUser: User) {
+        const classIds = await this.classUserRepository.find({ "teachers.user_id": currentUser._id }).distinct('class_id').exec();
+
+        return await this.gradeReviewRepository
+            .find({ class_id: { $in: classIds } })
+            .populate('class_id', 'className')
+            .populate('student_id', 'fullname')
+            .exec();
     }
 
     async viewGradeReview(currentUser: User, classid: string) {
@@ -40,34 +53,15 @@ export class GradeReviewService {
     }
 
     async viewGradeReviewDetail(currentUser: User, gradeReviewId: string) {
-        const gradeReview = await this.gradeReviewRepository.findOne({ _id: gradeReviewId }).exec();
-        if (!gradeReview) {
-            return new HttpException('Grade review not found', HttpStatus.NOT_FOUND);
-        }
-        const clazz = await this.classRepository.findOne({ _id: gradeReview.class_id }).exec();
-        if (!clazz) {
-            return new HttpException('Class not found', HttpStatus.NOT_FOUND);
-        }
-        this.checkInClass(currentUser, gradeReview.class_id);
-
-        const student = await this.userRepository.findOne(
-            { _id: gradeReview.student_id },
-            { student_id: 1, fullname: 1 }
-        ).exec();
-
-        delete gradeReview.student_id;
-
-        return {
-            student,
-            gradeReview
-        };
+        return await this.gradeReviewRepository.
+            findOne({ _id: gradeReviewId })
+            .populate('class_id', 'className')
+            .populate('student_id', 'fullname')
+            .exec();
     }
 
-    async commentGradeReview(currentUser: User, dto: any) {
-        const classId = new Types.ObjectId(dto.classId);
-        const gradeReviewId = new Types.ObjectId(dto.gradeReviewId);
-
-        this.checkInClass(currentUser, classId);
+    async commentGradeReview(currentUser: User, dto: CommentGradeReviewDto) {
+        const gradeReviewId = new Types.ObjectId(dto.grade_review_id);
 
         const gradeReview = await this.gradeReviewRepository.findOne({ _id: gradeReviewId }).exec();
         if (!gradeReview) {
@@ -88,6 +82,7 @@ export class GradeReviewService {
 
     async markFinalGrade(currentUser: User, dto: MarkFinalDescistionDto) {
         const gradeReviewId = new Types.ObjectId(dto.gradeReview_id);
+
         const gradeReview = await this.gradeReviewRepository.findOne({ _id: gradeReviewId }).exec();
         if (!gradeReview) {
             return new HttpException('Grade review not found', HttpStatus.NOT_FOUND);
