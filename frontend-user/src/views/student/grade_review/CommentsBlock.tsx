@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { GET_getGradeReviewComment, POST_sendComment } from "src/api/student/grade/grade_review/api";
 import { SendNotification, sendNotification } from "src/api/socket";
 
-function CommentsBlock({ ListOfComments, width, maxHeight, heightOfCommentView, ReviewId, ClassId, ClassName, Host }: any) {
+function CommentsBlock({ ListOfComments, width, maxHeight, heightOfCommentView, ReviewId, ClassName, Host }: any) {
 
     const [comments, setComments] = useState<any>(ListOfComments);
     const [updateCommentFlat, setUpdateCommentFlat] = useState<any>(false)
