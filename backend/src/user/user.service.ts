@@ -13,6 +13,7 @@ import { SearchService } from 'src/elastic/search.service';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
+import { Class, ClassDocument } from 'src/utils/schema/class.schema';
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,7 @@ export class UserService {
     @InjectModel(User.name) private userRepository: Model<UserDocument>,
     @InjectModel(RegisterOtp.name) private registerOtpRepository: Model<RegisterOtpDocument>,
     @InjectModel(ResetOtp.name) private resetOtpRepository: Model<ResetOtpDocument>,
+    @InjectModel(Class.name) private classRepository: Model<ClassDocument>,
     @Inject(MailService) private readonly mailService: MailService,
     @Inject(SearchService) private readonly searchService: SearchService,
     @Inject(ConfigService) private readonly configService: ConfigService,
@@ -340,6 +342,18 @@ export class UserService {
     }
     catch (err) {
       throw new ConflictException(err);
+    }
+  }
+
+  async getStatistics() {
+    const totalTeacher = await this.userRepository.countDocuments({ role: 'teacher' }).exec();
+    const totalStudent = await this.userRepository.countDocuments({ role: 'student' }).exec();
+    const totalClass = await this.classRepository.countDocuments().exec();
+
+    return {
+      totalTeacher,
+      totalStudent,
+      totalClass,
     }
   }
 }

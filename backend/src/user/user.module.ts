@@ -9,12 +9,14 @@ import { RegisterOtpSchema } from 'src/utils/schema/registerOtp.schema';
 import { ResetOtpSchema } from 'src/utils/schema/resetOtp.schema';
 import { SearchService } from 'src/elastic/search.service';
 import { SearchModule } from 'src/elastic/search.module';
+import { ClassSchema } from 'src/utils/schema/class.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     MongooseModule.forFeature([{ name: 'RegisterOtp', schema: RegisterOtpSchema }]),
     MongooseModule.forFeature([{ name: 'ResetOtp', schema: ResetOtpSchema }]),
+    MongooseModule.forFeature([{ name: 'Class', schema: ClassSchema }]),
     MailModule,
     SearchModule,
   ],
