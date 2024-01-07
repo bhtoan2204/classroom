@@ -29,6 +29,7 @@ function CommentsBlock({ ListOfComments, width, maxHeight, heightOfCommentView, 
             {
                 setComments(data)
             }
+
             //else keep the current data
         }
 
@@ -38,11 +39,15 @@ function CommentsBlock({ ListOfComments, width, maxHeight, heightOfCommentView, 
 
     async function handleCommentSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        if (ReviewId === undefined) {
+        if (ReviewId === undefined) 
+        {
+
             return;
         }
 
-        if (currentComment.length < 1) {
+        if (currentComment.length < 1) 
+        {
+            
             return;
         }
 
