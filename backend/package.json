@@ -35,6 +35,7 @@
     "@nestjs/platform-socket.io": "^10.2.10",
     "@nestjs/swagger": "^7.1.15",
     "@nestjs/websockets": "^10.2.10",
+    "axios": "^1.6.5",
     "azure-storage": "^2.10.7",
     "bcrypt": "^5.1.1",
     "cache-manager": "^4.1.0",

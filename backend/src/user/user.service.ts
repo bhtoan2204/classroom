@@ -264,7 +264,8 @@ export class UserService {
         await newOtp.save();
       }
       const title = "Register your account";
-      await this.mailService.sendOtp(email, otp, title);
+      // await this.mailService.sendOtp(email, otp, title);
+      await this.mailService.sendMail(email, title, "Here your OTP", otp.toString());
       return { message: "OTP sent" };
     }
     catch (err) {
@@ -275,7 +276,6 @@ export class UserService {
   async sendResetOTP(email: string) {
     try {
       await this.checkExistForReset(email);
-
       const otp = Math.floor(100000 + Math.random() * 900000);
       const otpRecord = await this.resetOtpRepository.findOne({ email }).exec();
       if (otpRecord) {
@@ -290,7 +290,7 @@ export class UserService {
         await newOtp.save();
       }
       const title = "Reset your password";
-      await this.mailService.sendOtp(email, otp, title);
+      await this.mailService.sendMail(email, title, "Here your OTP", otp.toString());
       return { message: "OTP sent" };
     }
     catch (err) {
