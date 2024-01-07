@@ -225,7 +225,7 @@ const StudentRoute = () => {
           </Card>
           <Stack direction={"row"} spacing={20} width={"100%"} marginTop={25}>
             <ClassSupportedFeature ClassId={class_id} />
-            <ClassTasks />
+            <ClassTasks ListAssignments={classDetail.list_assignment_url} height={"100%"} maxHeight={"400px"}/>
           </Stack>
         </div>
         <Backdrop

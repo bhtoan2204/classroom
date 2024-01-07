@@ -43,9 +43,12 @@ export class ClassService {
             host: host._id,
         });
 
+        const initializedTeacherList = []
+        initializedTeacherList.push({user_id: host._id})
+
         const newClassUser = await this.classUserRepository.create({
             class_id: newClass._id,
-            teachers: [{ user_id: host._id }]
+            teachers: initializedTeacherList,
         });
 
         const user = await this.userRepository.findOne({ _id: host._id });

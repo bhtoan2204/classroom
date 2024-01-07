@@ -33,7 +33,7 @@ export async function POST_joinClassByCode(class_id)
 
 export async function POST_joinClassByLink(class_id, class_token)
 {
-    const path = `/student/class/joinClassByCode/${class_id}/${class_token}`
+    const path = `/student/class/joinClassByLink/${class_token}/${class_id}`
     const accessToken = getCookieCustom("accessToken")
 
     try
@@ -49,8 +49,6 @@ export async function POST_joinClassByLink(class_id, class_token)
 
         const status = response.status;
         const data = await response.json();
-        console.log(status)
-        console.log(data)
 
         return {status, data}
     }

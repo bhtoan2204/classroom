@@ -38,7 +38,7 @@ function ClassSupportedFeature({ ClassId }: any) {
             }
 
             const { status, data } = await GET_getClassMembers(ClassId)
-
+            console.log(data)
             if (status == 200) {
                 setStudents(data)
             }
@@ -60,6 +60,7 @@ function ClassSupportedFeature({ ClassId }: any) {
 
     const teachersOfTheClass = teachers.length > 0 ?
         teachers.map((teacher: any) => {
+            
             return (
                 <>
                     <ListItem disableGutters key={teacher._id}>
@@ -78,15 +79,19 @@ function ClassSupportedFeature({ ClassId }: any) {
 
     const studentOfTheClass = students.length > 0 ?
         students.map((student: any) => {
-            <>
-                <ListItem disableGutters key={student._id}>
-                    <ListItemButton style={{ display: "flex", justifyContent: "left", flexDirection: "column", alignItems: "start" }}>
-                        <ListItemText primary={student.fullname ? student.fullname : "Student Name"} />
-                        <ListItemText primary={student.email} />
-                    </ListItemButton>
-                </ListItem>
-                <Divider />
-            </>
+
+            return (
+                <>
+                    <ListItem disableGutters key={student._id}>
+                        <ListItemButton style={{ display: "flex", justifyContent: "left", flexDirection: "column", alignItems: "start" }}>
+                            <ListItemText primary={student.fullname ? student.fullname : "Student Name"} />
+                            <ListItemText primary={student.email} />
+                        </ListItemButton>
+                    </ListItem>
+                    <Divider />
+                </>
+            )
+
         }) :
         <ListItem>
             <ListItemText primary="No member found" />

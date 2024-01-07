@@ -191,10 +191,11 @@ export class ClassService {
             return new ForbiddenException('You are not in this class')
         }
         const classUser = await this.classUserRepository.findOne({
-            class_id: new Types.ObjectId(classId)
+            class_id: classId,
         })
+
         const studentIds = classUser.students.map(student => student.user_id);
-        const students = await this.userRepository.find({ _id: { $in: studentIds, $ne: user._id } }).select("fullname email").exec();
+        const students = await this.userRepository.find({ _id: { $in: studentIds } }).select("fullname email").exec();
 
         return students;
     }
@@ -209,7 +210,7 @@ export class ClassService {
             return new ForbiddenException('You are not in this class')
         }
         const classUser = await this.classUserRepository.findOne({
-            class_id: new Types.ObjectId(classId)
+            class_id: classId
         })
         const teacherIds = classUser.teachers.map(teacher => teacher.user_id);
         const teachers = await this.userRepository.find({ _id: { $in: teacherIds } }).select("fullname email").exec();
