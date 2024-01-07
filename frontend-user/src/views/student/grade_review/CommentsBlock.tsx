@@ -34,7 +34,7 @@ function CommentsBlock({ ListOfComments, width, maxHeight, heightOfCommentView, 
 
         fetchComments()
 
-    }, [updateCommentFlat])
+    }, [updateCommentFlat, ReviewId])
 
     async function handleCommentSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
