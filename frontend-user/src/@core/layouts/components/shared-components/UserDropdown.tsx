@@ -1,5 +1,5 @@
 
-import { useState, SyntheticEvent, Fragment } from 'react'
+import { useState, SyntheticEvent, Fragment, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
@@ -11,8 +11,9 @@ import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
-import { removeCookieCustom } from 'src/utils/cookies'
+import { getCookieCustom, removeCookieCustom } from 'src/utils/cookies'
 import { closeConnection } from 'src/api/socket'
+import { fetchProfile } from 'src/api/user/getProfile'
 
 
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -25,6 +26,11 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 
 const UserDropdown = () => {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
+  const [profile, setProfile] = useState({
+    fullname: '',
+    role: '',
+    avatar: null,
+  });
 
   const router = useRouter()
 
@@ -45,6 +51,24 @@ const UserDropdown = () => {
     removeCookieCustom('role')
     router.push('/pages/login')
   }
+
+  const getProfile = async () => {
+    const response = await fetchProfile(getCookieCustom('accessToken') as string);
+    if (response.status === 200) {
+      setProfile(response.data)
+    }
+    else {
+      setProfile({
+        fullname: '',
+        role: '',
+        avatar: null,
+      })
+    }
+  }
+
+  useEffect(() => {
+    getProfile()
+  })
 
   const styles = {
     py: 2,
@@ -73,7 +97,7 @@ const UserDropdown = () => {
           alt='John Doe'
           onClick={handleDropdownOpen}
           sx={{ width: 40, height: 40 }}
-          src='/images/avatars/1.png'
+          src={profile.avatar ? profile.avatar : '/images/avatars/1.png'}
         />
       </Badge>
       <Menu
@@ -91,12 +115,12 @@ const UserDropdown = () => {
               badgeContent={<BadgeContentSpan />}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
-              <Avatar alt='' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar alt='' src={profile.avatar ? profile.avatar : '/images/avatars/1.png'} sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 600 }}>LeLe</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{profile.fullname}</Typography>
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                Teacher
+                {profile.role}
               </Typography>
             </Box>
           </Box>

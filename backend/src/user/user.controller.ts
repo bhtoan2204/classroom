@@ -109,4 +109,10 @@ export class UserController {
   async promoteAdmin(@CurrentUser() user: User, @Body() code: any) {
     return this.usersService.promoteAdmin(user, code);
   }
+
+  @Get('/getStatistics')
+  @ApiOperation({ summary: 'Get statistics' })
+  async getStatistics() {
+    return this.usersService.getStatistics();
+  }
 }

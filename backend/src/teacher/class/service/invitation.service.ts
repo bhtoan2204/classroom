@@ -43,7 +43,7 @@ export class InvitationService {
 
         classUser.teachers.forEach(teacher => {
             if (teacher.user_id.equals(user._id)) {
-                throw new ForbiddenException('You are already in this class');
+                return new ForbiddenException('You are already in this class');
             }
         });
     }
