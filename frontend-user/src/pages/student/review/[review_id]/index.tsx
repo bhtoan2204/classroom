@@ -62,35 +62,6 @@ function ReviewDetailPage()
     }, [review_id])
 
 
-
-    // const commentDisplay: any = (reviewDetail.comments && reviewDetail.comments.length > 0) ?
-    //     reviewDetail.comments.map((value: any, index: number) =>
-    //     {
-
-    //         return(
-    //             <>
-    //                 <ListItem key={new String(index) + value.commenter}>
-    //                     <Stack direction={"column"}>
-    //                         <Typography fontWeight={500} component={"div"}>
-    //                             {value.commenter}
-    //                         </Typography>
-    //                         <Typography fontSize={"small"}>
-    //                             {value.text}
-    //                         </Typography>
-    //                     </Stack>
-    //                 </ListItem>
-    //             </>
-    //         )
-    //     }):
-    //     <>
-    //         <Box justifyContent={"center"}>
-    //             <Typography>
-    //                 No comment found
-    //             </Typography>
-    //         </Box>
-    //     </>
-
-
     return(
         <>
 
@@ -157,7 +128,8 @@ function ReviewDetailPage()
                             </CardContent>
                         </Card>
                     </Stack>
-                    <CommentsBlock ReviewId={review_id} ListOfComments={reviewDetail.comments} width={"50%"} maxHeight={"400px"} heightOfCommentView={"250px"}/>
+                    <CommentsBlock ReviewId={review_id} ClassName={reviewDetail.class_name} ClassId={reviewDetail.class_id} Host={reviewDetail.host}
+                    ListOfComments={reviewDetail.comments} width={"50%"} maxHeight={"400px"} heightOfCommentView={"250px"}/>
                 </Stack>
             </Stack>
         </>

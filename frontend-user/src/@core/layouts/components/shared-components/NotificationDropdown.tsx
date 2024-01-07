@@ -20,6 +20,7 @@ import { Badge, Snackbar } from '@mui/material'
 import { fetchMarkRead } from 'src/api/notification/markRead'
 import { GradingOutlined } from '@mui/icons-material'
 import { BookMarkerOutline } from 'mdi-material-ui'
+import { useRouter } from 'next/router'
 
 const Menu = styled(MuiMenu)<MenuProps>(({ theme }) => ({
   '& .MuiMenu-paper': {
@@ -95,6 +96,8 @@ const NotificationDropdown = () => {
   const [unread, setUnread] = useState<number>(0);
   const [showNotification, setShowNotification] = useState(false);
 
+  const router = useRouter();
+
   const handleDropdownOpen = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget)
   }
@@ -118,11 +121,27 @@ const NotificationDropdown = () => {
     if (!is_read) {
       await fetchMarkRead(_id.toString(), accessToken);
     }
+    const role = getCookieCustom("role")
+
     if (type === 'grade_review') {
-      console.log('grade_review' + url_id);
+      if(role == "teacher")
+      {
+        router.push(`/teacher/grade-review/${url_id}`)
+      }
+      else if(role == "student")
+      {
+        router.push(`/student/review/${url_id}}`)
+      }
     }
     else if (type === 'mark_final') {
-      console.log('comment');
+      if(role == "teacher")
+      {
+        router.push(`/teacher/class-detail/${url_id}`)
+      }
+      else if(role == "student")
+      {
+        router.push(`/student/class/${url_id}}`)
+      }
     }
   }
 
