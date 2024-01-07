@@ -1,9 +1,10 @@
 import { Box, Button, Card, CardActions, CardContent, Divider, FormControl, IconButton, List, ListItem, Stack, TextField, Typography } from "@mui/material"
 import SendIcon from '@mui/icons-material/Send';
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { POST_sendComment } from "src/api/student/grade/grade_review/api";
+import { GET_getGradeReviewComment, POST_sendComment } from "src/api/student/grade/grade_review/api";
+import { SendNotification, sendNotification } from "src/api/socket";
 
-function CommentsBlock({ ListOfComments, width, maxHeight, heightOfCommentView, ReviewId }: any) {
+function CommentsBlock({ ListOfComments, width, maxHeight, heightOfCommentView, ReviewId, ClassName, Host }: any) {
 
     const [comments, setComments] = useState<any>(ListOfComments);
     const [updateCommentFlat, setUpdateCommentFlat] = useState<any>(false)
@@ -13,42 +14,61 @@ function CommentsBlock({ ListOfComments, width, maxHeight, heightOfCommentView, 
         setComments(ListOfComments)
     }, [ListOfComments])
 
-    // useEffect(() =>
-    // {
-    //     async function fetchComments()
-    //     {
-    //         if(ReviewId === undefined)
-    //         {
+    useEffect(() =>
+    {
+        async function fetchComments()
+        {
+            if(ReviewId === undefined)
+            {
 
-    //             return;
-    //         }
+                return;
+            }
 
-    //         const {status, data} = await GET_getGradeReviewComment(ReviewId);
-    //         if(status == 200)
-    //         {
-    //             setComments(data)
-    //         }
-    //         //else keep the current data
-    //     }
+            const {status, data} = await GET_getGradeReviewComment(ReviewId);
+            if(status == 200)
+            {
+                setComments(data)
+            }
 
-    //     fetchComments()
+            //else keep the current data
+        }
 
-    // }, [updateCommentFlat])
+        fetchComments()
+
+    }, [updateCommentFlat, ReviewId])
 
     async function handleCommentSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        if (ReviewId === undefined) {
+        if (ReviewId === undefined) 
+        {
+
             return;
         }
 
-        if (currentComment.length < 1) {
+        if (currentComment.length < 1) 
+        {
+            
             return;
         }
 
-        const { status } = await POST_sendComment(ReviewId, currentComment)
+        const timeCommentSent = new Date(Date.now()).toUTCString()
+        const { status, data } = await POST_sendComment(ReviewId, currentComment)
+
         if (status == 201) {
             const nextFlat = !updateCommentFlat
             setUpdateCommentFlat(nextFlat);
+
+            const notiTitle = `Reply at Grade review ${data.gradeCompo_name} - class ${ClassName}`
+            const notiContent = `${currentComment}\n(at ${timeCommentSent}`
+            const notification: SendNotification =
+            {
+                receiver_id: Host,
+                title: notiTitle,
+                content: notiContent,
+                id: data._id
+            }
+
+            sendNotification(notification)
         }
 
     }

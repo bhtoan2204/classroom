@@ -2,9 +2,9 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Button, Card, CardContent, Stack, Tab } from "@mui/material";
 import { useRouter } from "next/router";
 import { SyntheticEvent, useEffect, useState } from "react";
+import { GET_getClassDetail } from "src/api/student/class/get_class_detail/api";
 import { GET_getStudentGrade } from "src/api/student/grade/grade_management/api";
 import { GET_getGradeReviews } from "src/api/student/grade/grade_review/api";
-import { GET_getGradeStructure } from "src/api/student/grade/grade_structure/api";
 import GradeManagement from "src/views/student/grade/GradeManagement";
 import GradeReview from "src/views/student/grade/GradeReview";
 import GradeStructure from "src/views/student/grade/GradeStructure";
@@ -15,10 +15,38 @@ function StudentGrade() {
     const router = useRouter()
     const class_id = router.query.class_id;
 
+    const [classDetail, setClassDetail] = useState<any>({})
     const [tabValue, setTabValue] = useState("1")
     const [gradeCompositions, setGradeCompositions] = useState<any>([])
-    const [gradeStructures, setGradeStructures] = useState<any>([])
     const [gradeReviews, setGradeReviews] = useState<any>([])
+
+    const [gradeStructures, setGradeStructures] = useState<any>([])
+
+    //load student's class detail
+
+    useEffect(() =>
+    {
+        if(class_id === undefined)
+        {
+            return;
+        }
+
+        async function fetchClassDetail()
+        {
+            const {status, data} = await GET_getClassDetail(class_id);
+            if(status == 200)
+            {
+                setClassDetail(data)
+            }
+            else
+            {
+                setClassDetail({})
+            }
+        }
+
+        fetchClassDetail();
+
+    }, [class_id])
 
     //load student's grade compositions
 
@@ -78,37 +106,27 @@ function StudentGrade() {
 
     //load student's grade structure
 
-    useEffect(() => {
-        async function fetchGradeStructure() {
-            if (class_id === undefined) {
+    useEffect(() => 
+    {
+        if (classDetail.grade_compositions !== undefined) {
+            const controlledData = classDetail.grade_compositions.map((value: any) => {
+                const item: any =
+                {
+                    key: value._id,
+                    nameOfGrade: value.gradeCompo_name,
+                    gradeScale: value.gradeCompo_scale,
+                    isFinalized: value.is_finalized,
+                }
 
-                return;
-            }
-
-            const { status, data } = await GET_getGradeStructure(class_id);
-            console.log(data);
-            if (status == 200 && data) {
-                const controlledData = data.map((value: any) => {
-                    const item: any =
-                    {
-                        key: value._id,
-                        nameOfGrade: value.gradeCompo_name,
-                        gradeScale: value.gradeCompo_scale,
-                        isFinalized: value.is_finalized,
-                    }
-
-                    return item;
-                })
-                setGradeStructures(controlledData)
-            }
-            else {
-                setGradeStructures([])
-            }
+                return item;
+            })
+            setGradeStructures(controlledData)
+        }
+        else {
+            setGradeStructures([])
         }
 
-        fetchGradeStructure()
-
-    }, [class_id])
+    }, [classDetail])
 
 
     //load student's grade reviews
@@ -156,7 +174,7 @@ function StudentGrade() {
                             <Tab label="Grade review" value={"3"} />
                         </TabList>
                         <TabPanel value="1">
-                            <GradeManagement ClassId={class_id} GradeCompositions={gradeCompositions}/>
+                            <GradeManagement ClassId={class_id} GradeCompositions={gradeCompositions} HostId={classDetail.host} ClassName={classDetail.className}/>
                         </TabPanel>
                         <TabPanel value="2">
                             <GradeStructure DataSource={gradeStructures}/>

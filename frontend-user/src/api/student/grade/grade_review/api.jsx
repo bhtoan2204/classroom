@@ -93,7 +93,7 @@ export async function GET_getGradeReviewDetail(reviewId)
 
 export async function POST_sendComment(reviewId, comment)
 {
-    const path = "student/gradeViewer/postAComment"
+    const path = "/student/gradeViewer/postAComment"
     const accessToken = getCookieCustom("accessToken")
     const gradeReview_id = "gradeReview_id"
     const content = "content"
