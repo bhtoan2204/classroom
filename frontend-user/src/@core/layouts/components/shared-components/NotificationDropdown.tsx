@@ -119,28 +119,25 @@ const NotificationDropdown = () => {
   const handleNavigate = async (type: string, url_id: string, _id: string, is_read: boolean) => {
     const accessToken = getCookieCustom('accessToken') as string;
     if (!is_read) {
-      await fetchMarkRead(_id.toString(), accessToken);
+      await fetchMarkRead(_id, accessToken);
     }
-    const role = getCookieCustom("role")
-
+    const role = getCookieCustom("role") as string;
+    console.log(type)
+    console.log(role)
     if (type === 'grade_review') {
-      if(role == "teacher")
-      {
+      if (role === "teacher") {
         router.push(`/teacher/grade-review/${url_id}`)
       }
-      else if(role == "student")
-      {
-        router.push(`/student/review/${url_id}}`)
+      else if (role === "student") {
+        router.push(`/student/review/${url_id}`)
       }
     }
     else if (type === 'mark_final') {
-      if(role == "teacher")
-      {
+      if (role === "teacher") {
         router.push(`/teacher/class-detail/${url_id}`)
       }
-      else if(role == "student")
-      {
-        router.push(`/student/class/${url_id}}`)
+      else if (role === "student") {
+        router.push(`/student/class/${url_id}`)
       }
     }
   }

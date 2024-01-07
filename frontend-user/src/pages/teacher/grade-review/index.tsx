@@ -5,7 +5,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
 import { getCookieCustom } from "src/utils/cookies";
 import { fetchGradeReviews } from "src/api/teacher/gradeReview/getGradeReview";
-
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const classroomImages: any =
     [
@@ -103,7 +103,10 @@ const StudentRoute = () => {
                                             </Typography>
                                             <Typography color={value.finalDecision.status == "approved" ? "green" : "gray"}>
                                                 <IconButton>
-                                                    {value.finalDecision.status == "approved" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon />}
+                                                    {value.finalDecision.status == "approved" ?
+                                                        <CheckCircleOutlineIcon color={"success"} /> :
+                                                        value.finalDecision.status == "pending" ?
+                                                            <HourglassTopIcon color={"warning"} /> : <CancelIcon color={"error"} />}
                                                 </IconButton>
                                                 {value.finalDecision.status}
                                             </Typography>

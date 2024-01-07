@@ -14,23 +14,18 @@ function CommentsBlock({ ListOfComments, width, maxHeight, heightOfCommentView, 
         setComments(ListOfComments)
     }, [ListOfComments])
 
-    useEffect(() =>
-    {
-        async function fetchComments()
-        {
-            if(ReviewId === undefined)
-            {
+    useEffect(() => {
+        async function fetchComments() {
+            if (ReviewId === undefined) {
 
                 return;
             }
 
-            const {status, data} = await GET_getGradeReviewComment(ReviewId);
-            if(status == 200)
-            {
+            const { status, data } = await GET_getGradeReviewComment(ReviewId);
+            if (status == 200) {
                 setComments(data)
             }
 
-            //else keep the current data
         }
 
         fetchComments()
@@ -39,15 +34,13 @@ function CommentsBlock({ ListOfComments, width, maxHeight, heightOfCommentView, 
 
     async function handleCommentSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        if (ReviewId === undefined) 
-        {
+        if (ReviewId === undefined) {
 
             return;
         }
 
-        if (currentComment.length < 1) 
-        {
-            
+        if (currentComment.length < 1) {
+
             return;
         }
 
@@ -68,7 +61,8 @@ function CommentsBlock({ ListOfComments, width, maxHeight, heightOfCommentView, 
                 id: data._id
             }
 
-            sendNotification(notification)
+            sendNotification(notification);
+            setCurrentComment("");
         }
 
     }

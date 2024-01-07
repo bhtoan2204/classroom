@@ -112,8 +112,11 @@ export class GradeReviewService {
             };
         }
         else if (dto.status === RealStatus.REJECTED) {
-            gradeReview.finalDecision.status = Status.REJECTED;
-
+            gradeReview.finalDecision = {
+                status: Status.REJECTED,
+                updatedGrade: 0,
+            }
+            gradeReview.save();
             return {
                 message: 'Grade Review rejected'
             };

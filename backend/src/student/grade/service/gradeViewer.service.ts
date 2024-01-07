@@ -126,9 +126,9 @@ export class GradeViewerService {
             return new HttpException("You are not allowed to view this review", HttpStatus.FORBIDDEN);
         }
 
-        const classDetail = await this.classRepository.findOne({_id: dbReview.class_id})
+        const classDetail = await this.classRepository.findOne({ _id: dbReview.class_id })
 
-        const review = 
+        const review =
         {
             _id: dbReview._id,
             class_id: dbReview.class_id,
@@ -162,42 +162,37 @@ export class GradeViewerService {
         return await review.save();
     }
 
-    async getGradeReviews(user: User)
-    {
-        const dbGradeReviews = await this.gradeReviewRepository.find({student_id: user._id})
+    async getGradeReviews(user: User) {
+        const dbGradeReviews = await this.gradeReviewRepository.find({ student_id: user._id })
 
-        if(dbGradeReviews.length < 1)
-        {
+        if (dbGradeReviews.length < 1) {
             return [];
         }
 
         const classDetails = new Map()
 
-        dbGradeReviews.forEach((review: GradeReview) =>
-        {
+        dbGradeReviews.forEach((review: GradeReview) => {
             classDetails.set(review.class_id, {});
         })
 
         const classIds = Array.from(classDetails.keys());
 
-        const dbClasses = await this.classRepository.find({_id: classIds}).select("_id className description host is_active").exec();
+        const dbClasses = await this.classRepository.find({ _id: classIds }).select("_id className description host is_active").exec();
 
         classDetails.clear();
 
         //clear Map<ObjectId, Object> to use Map<String_ClassID, Object>
 
-        dbClasses.forEach((record: any) =>
-        {
+        dbClasses.forEach((record: any) => {
             const id = record._id.toString();
             classDetails.set(id, record)
         })
 
-        const results = dbGradeReviews.map((review: GradeReview) =>
-        {
+        const results = dbGradeReviews.map((review: GradeReview) => {
             const str_key = review.class_id.toString();
             const classDetail = classDetails.get(str_key)
 
-            const result = 
+            const result =
             {
                 _id: review._id,
                 class_id: review.class_id,
@@ -219,17 +214,14 @@ export class GradeViewerService {
         return results;
     }
 
-    async getComments(user: User, review_id: string)
-    {
+    async getComments(user: User, review_id: string) {
         const dbReview_id = new Types.ObjectId(review_id);
-        const dbGradeReview = await this.gradeReviewRepository.findOne({_id: dbReview_id})
-        if(! dbGradeReview)
-        {
+        const dbGradeReview = await this.gradeReviewRepository.findOne({ _id: dbReview_id })
+        if (!dbGradeReview) {
             return new HttpException("Grade review not found", HttpStatus.NOT_FOUND);
         }
 
-        if(user._id.toString() != dbGradeReview.student_id.toString())
-        {
+        if (user._id.toString() != dbGradeReview.student_id.toString()) {
             return new HttpException("You are not allowed to view this document", HttpStatus.FORBIDDEN)
         }
 

@@ -22,39 +22,29 @@ import CommentsBlock from "src/views/student/grade_review/CommentsBlock";
 // };
 
 
-function ReviewDetailPage()
-{
+function ReviewDetailPage() {
     const router = useRouter();
     const review_id = router.query.review_id;
 
     const [reviewDetail, setReviewDetail] = useState<any>({})
 
-    useEffect(() =>
-    {
-        async function fetchGradeReviewDetail()
-        {
-            if(review_id === undefined)
-            {
-    
+    useEffect(() => {
+        async function fetchGradeReviewDetail() {
+            if (review_id === undefined) {
+
                 return;
             }
-    
-            //load review detail herer
-    
-            const {status, data} = await GET_getGradeReviewDetail(review_id);
-            
-            if(status == 200)
-            {
+
+
+            const { status, data } = await GET_getGradeReviewDetail(review_id);
+
+            if (status == 200) {
                 setReviewDetail(data)
             }
-            else
-            {
+            else {
                 setReviewDetail({})
             }
-    
-            //mock data
 
-            // setReviewDetail(MockData)
         }
 
         fetchGradeReviewDetail();
@@ -62,23 +52,23 @@ function ReviewDetailPage()
     }, [review_id])
 
 
-    return(
+    return (
         <>
 
             <Stack paddingX={2} width={"100%"}>
                 <Typography variant="h4" component={"div"}>
-                    Review {reviewDetail._id !== undefined ? reviewDetail._id: "Loading"}
+                    Review {reviewDetail._id !== undefined ? reviewDetail.class_name : "Loading"}
                 </Typography>
                 <Box marginY={2}>
                     <Typography component={"div"}>
-                        {reviewDetail.class_name !== undefined ? reviewDetail.class_name : "Loading"}
+                        Class Name: {reviewDetail.class_name !== undefined ? reviewDetail.class_name : "Loading"}
                     </Typography>
                     <Typography component={"div"} prefix="Grade composition">
-                        {reviewDetail.gradeCompo_name !== undefined ? reviewDetail.gradeCompo_name : "Loading"}
+                        Grade Name: {reviewDetail.gradeCompo_name !== undefined ? reviewDetail.gradeCompo_name : "Loading"}
                     </Typography>
                     <Stack direction={"row"} width={"50%"}>
                         <Typography component={"div"} marginRight={2}>
-                            Reason: 
+                            Reason:
                         </Typography>
                         <Typography component={"div"} textOverflow={"clip"}>
                             {reviewDetail.student_explain !== undefined ? reviewDetail.student_explain : "Loading"}
@@ -87,7 +77,7 @@ function ReviewDetailPage()
                 </Box>
                 <Stack direction={"row"} width={"100%"} paddingY={3}>
                     <Stack width={"50%"} height={"100%"} alignItems={"center"} justifyContent={"center"}>
-                        <Card sx={{borderWidth:2, width:"95%", marginBottom: 3}}>
+                        <Card sx={{ borderWidth: 2, width: "95%", marginBottom: 3 }}>
                             <CardContent>
                                 <Stack direction={"row"}>
                                     <Typography component={"div"} width={"30%"}>
@@ -99,7 +89,7 @@ function ReviewDetailPage()
                                 </Stack>
                                 <Stack direction={"row"}>
                                     <Typography component={"div"} width={"30%"}>
-                                        Expected grade: 
+                                        Expected grade:
                                     </Typography>
                                     <Typography component={"div"}>
                                         {reviewDetail.expected_grade !== undefined ? reviewDetail.expected_grade : "Loading"}
@@ -107,7 +97,7 @@ function ReviewDetailPage()
                                 </Stack>
                             </CardContent>
                         </Card>
-                        <Card sx={{borderWidth:3, borderColor:"#094885", borderStyle:"solid" ,width:"95%"}}>
+                        <Card sx={{ borderWidth: 3, borderColor: "#094885", borderStyle: "solid", width: "95%" }}>
                             <CardContent>
                                 <Stack direction={"row"}>
                                     <Typography component={"div"} width={"30%"}>
@@ -119,7 +109,7 @@ function ReviewDetailPage()
                                 </Stack>
                                 <Stack direction={"row"}>
                                     <Typography component={"div"} width={"30%"} fontWeight={"700"}>
-                                        Updated grade: 
+                                        Updated grade:
                                     </Typography>
                                     <Typography component={"div"}>
                                         {reviewDetail.finalDecision !== undefined ? reviewDetail.finalDecision.updated_grade : "Loading"}
@@ -129,7 +119,7 @@ function ReviewDetailPage()
                         </Card>
                     </Stack>
                     <CommentsBlock ReviewId={review_id} ClassName={reviewDetail.class_name} ClassId={reviewDetail.class_id} Host={reviewDetail.host}
-                    ListOfComments={reviewDetail.comments} width={"50%"} maxHeight={"400px"} heightOfCommentView={"250px"}/>
+                        ListOfComments={reviewDetail.comments} width={"50%"} maxHeight={"400px"} heightOfCommentView={"250px"} />
                 </Stack>
             </Stack>
         </>

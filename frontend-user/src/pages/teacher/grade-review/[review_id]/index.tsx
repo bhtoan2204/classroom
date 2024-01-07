@@ -9,6 +9,7 @@ import { sendNotification } from "src/api/socket";
 import { fetchMakeDecision } from "src/api/teacher/gradeReview/makeDecision";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 interface GradeReviewDetailData {
     _id: string;
@@ -201,7 +202,10 @@ function ReviewDetailPage() {
                                     </Typography>
                                     <Typography color={reviewDetail?.finalDecision.status == "approved" ? "green" : "gray"}>
                                         <IconButton>
-                                            {reviewDetail?.finalDecision.status == "approved" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon />}
+                                            {reviewDetail?.finalDecision.status == "approved" ?
+                                                <CheckCircleOutlineIcon color={"success"} /> :
+                                                reviewDetail?.finalDecision.status == "pending" ?
+                                                    <HourglassTopIcon color={"warning"} /> : <CancelIcon color={"error"} />}
                                         </IconButton>
                                         {reviewDetail?.finalDecision.status}
                                     </Typography>
