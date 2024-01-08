@@ -315,7 +315,12 @@ const StudentRoute = () => {
         </Backdrop>
         <Dialog
           open={studentIdDialogOpen}
-          onClose={(e: any) => setStudentIdDialogOpen(false)}
+          onClose={(e: any) => 
+            {
+              e.target; 
+              setStudentIdDialogOpen(false)
+            }
+          }
           fullWidth
         >
           <Stack width={"100%"} paddingY={4} paddingX={4}>
