@@ -6,6 +6,8 @@ import { Class, ClassDocument } from "src/utils/schema/class.schema";
 import { ClassUser, ClassUserDocument } from "src/utils/schema/classUser.schema";
 import { User, UserDocument } from "src/utils/schema/user.schema";
 import { SearchService } from "src/elastic/search.service";
+import { InviteEmailDto } from "../dto/inviteEmail.dto";
+import { MailService } from "src/mail/mail.service";
 
 @Injectable()
 export class InvitationService {
@@ -15,6 +17,7 @@ export class InvitationService {
         @InjectModel(ClassUser.name) private readonly classUserRepository: Model<ClassUserDocument>,
         @InjectModel(User.name) private readonly userRepository: Model<UserDocument>,
         @Inject(SearchService) private readonly searchService: SearchService,
+        @Inject(MailService) private readonly mailService: MailService,
     ) { }
 
     async checkIsHost(user: User, classId: Types.ObjectId): Promise<any> {
@@ -128,5 +131,22 @@ export class InvitationService {
         catch (err) {
             throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    async sendEmailInvite(user: User, dto: InviteEmailDto): Promise<any> {
+        const classId = new Types.ObjectId(dto.class_id);
+        const classUser = await this.classUserRepository.findOne({
+            class_id: classId,
+            'teachers.user_id': user._id
+        }).populate('class_id', 'className').exec();
+        if (!classUser) {
+            return new HttpException('You are not in this class', HttpStatus.FORBIDDEN);
+        }
+        const invitation = await this.invitationRepository.findOne({ class_id: classId, class_token: dto.class_token }).exec();
+        if (!invitation) {
+            return new NotFoundException("Invitation not found");
+        }
+
+        return await this.mailService.sendMailInvitation(dto.email, dto.class_id, dto.class_token);;
     }
 }

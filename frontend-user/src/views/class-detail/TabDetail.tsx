@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
-import { Box, Button, Card, Collapse, Divider, InputAdornment, List, ListItem, Typography, styled } from "@mui/material";
+import { Box, Button, Card, Collapse, Divider, InputAdornment, List, ListItem, Modal, Typography, styled } from "@mui/material";
 import AccountOutline from "mdi-material-ui/AccountOutline";
 import { AddBoxOutlined, PeopleAltOutlined } from "@mui/icons-material";
 import format from 'date-fns/format';
@@ -13,6 +13,7 @@ import { fetchGenerateCode } from "src/api/teacher/invitation/generateCode";
 import CardImgTop from "../card/CardTop";
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { fetchSendInvitationByEmail } from "src/api/teacher/invitation/sendInvitationByEmail";
 
 interface AssignmentUrlData {
     gradeCompo_name: string,
@@ -60,6 +61,24 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
     const [invitationCode, setInvitationCode] = useState<string>('');
     const [invitationLink, setInvitationLink] = useState<string>('');
     const [isCollapsed, setIsCollapsed] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
+    const [invitedEmail, setInvitedEmail] = useState<string>('');
+    const [content, setContent] = useState<string>('');
+    const [color, setColor] = useState<'success' | 'error' | 'primary'>('primary');
+
+    const handleSendInvitationEmail = async () => {
+        const accessToken = getCookieCustom('accessToken') as string;
+        const data = await fetchSendInvitationByEmail(accessToken, invitedEmail, class_id, invitationCode);
+
+        if (data.status === 200) {
+            setColor('success');
+        }
+        else {
+            setColor('error');
+        }
+        setInvitedEmail('');
+        setContent(data.message);
+    }
 
     const generateCode = () => {
         const accessToken = getCookieCustom('accessToken') as string;
@@ -221,6 +240,11 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
                             }}
                         />
                     </Grid>
+                    <Grid item xs={12} sm={12}>
+                        <Button variant="contained" color="primary" onClick={() => { setIsOpen(true) }}>
+                            Invite by Email
+                        </Button>
+                    </Grid>
                 </Grid>
             </Grid>
             <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
@@ -239,6 +263,41 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
                 List Uploaded Assignment
                 {isCollapsed ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
             </Typography>
+            <Modal open={isOpen} onClose={() => {
+                setIsOpen(false);
+                setContent('');
+                setColor('primary');
+            }}>
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,
+                }}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Send Invitation
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2, marginBottom: 3 }}>
+                        <TextField
+                            fullWidth
+                            label='Email'
+                            value={invitedEmail}
+                            onChange={(e) => setInvitedEmail(e.target.value)}
+                        />
+                    </Typography>
+                    <Button variant="contained" color="primary" onClick={handleSendInvitationEmail}>
+                        Send
+                    </Button>
+                    <Typography sx={{ marginTop: 2, color: { color } }}>
+                        {content}
+                    </Typography>
+                </Box>
+            </Modal>
             <Collapse in={!isCollapsed} sx={{ transitionDuration: '0.3s' }}>
                 {classDetail?.list_assignment_url.length === 0 ? (
                     <Typography variant="h6" component="div" sx={{ textAlign: "center", padding: "16px" }}>

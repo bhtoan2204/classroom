@@ -97,10 +97,46 @@ export class MailService {
                     'Content-type': 'application/json',
                 },
             });
-            console.log('API Response:', response.data);
+            return { status: 200, message: response.data };
         }
         catch (err) {
-            console.log('API Error:', err.response.data);
+            return { status: 500, message: err.message };
+        }
+    }
+
+    public async sendMailInvitation(email: string, class_id: string, code: string) {
+        const apiUrl = `${this.configService.get<string>('EMAIL_ENGINE_URL')}`;
+        const apiKey = `${this.configService.get<string>('EMAIL_ENGINE_API_KEY')}`;
+        const apiId = `${this.configService.get<string>('EMAIL_ENGINE_ID')}`;
+        const endpoint = `${apiUrl}/v1/account/${apiId}/submit`;
+        const invitationLink = `${this.configService.get<string>('FRONTEND_URL_CLIENT')}/join-class?code=${code}&class_id=${class_id}`;
+        const data = {
+            from: {
+                name: 'Educa',
+                address: 'mjkundta@gmail.com',
+            },
+            to: [
+                {
+                    name: 'Ethereal',
+                    address: email,
+                },
+            ],
+            subject: "Invitation to Join Class",
+            text: "Invitation to Join Class ",
+            html: `<a href="${invitationLink}">Join class by this link</a>`
+        }
+        try {
+            const response = await axios.post(endpoint, data, {
+                headers: {
+                    Authorization: `Bearer ${apiKey}`,
+                    'Content-type': 'application/json',
+                },
+            });
+            console.log(response.data);
+            return { status: 200, message: response.data };
+        }
+        catch (err) {
+            return { status: 500, message: err.message };
         }
     }
 }
