@@ -272,4 +272,32 @@ export class ClassService {
         }
         return dbClass;
     }
+
+    async getStudentId(user: User, class_id: string)
+    {
+        const dbClassId = new Types.ObjectId(class_id);
+
+        const dbUserClassesProp = (await this.userRepository.findOne({_id: user._id}).exec()).classes;
+
+        const isJoinedClass = dbUserClassesProp.findIndex((value: any) => value.class_id == class_id)
+        if(isJoinedClass == -1)
+        {
+
+            return new HttpException("Class not found", HttpStatus.NOT_FOUND)
+        }
+
+        const dbUserClass = await this.classUserRepository.findOne({class_id: dbClassId})
+
+        const target = dbUserClass.students.find((student) => student.user_id.equals(user._id));
+        if(target === undefined)
+        {
+
+            return new HttpException("Not found", HttpStatus.NOT_FOUND)
+        }
+        else
+        {
+
+            return {student_id: target.student_id};
+        }
+    }
 }
