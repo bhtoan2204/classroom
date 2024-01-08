@@ -89,4 +89,12 @@ export class ClassController {
     async getClassDetail(@CurrentUser() user, @Param() params: any) {
         return this.classService.getClassDetail(user, params.classId)
     }
+
+    @HttpCode(HttpStatus.OK)
+    @Get("/getStudentId/:classId")
+    @ApiParam({ name: "classId", type: String })
+    @ApiOperation({ summary: "Get student id in a specified class" })
+    async getStudentId(@CurrentUser() user, @Param() params: any) {
+        return this.classService.getStudentId(user, params.classId);
+    }
 }
