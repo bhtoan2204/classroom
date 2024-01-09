@@ -153,8 +153,6 @@ const GradeManagement: React.FC<ClassDetailProps> = ({ class_id }) => {
             body: formData
         });
 
-        const data = await response.json();
-
         if (response.ok) {
             setSeverity('success');
             setContent('Upload file successful!');

@@ -89,24 +89,24 @@ const TabClassDetail: React.FC<ClassDetailProps> = ({ class_id }) => {
         }
         fetchGenerate();
     }
-    const fetchUserData = async () => {
-        try {
-            const data = await fetchClassDetailTeacher(class_id as string, getCookieCustom('accessToken') as string);
-            const code = await fetchInvitationCode(class_id as string, getCookieCustom('accessToken') as string);
-
-            if (data) {
-                setClassDetail(data);
-            }
-            if (code.status !== 400) {
-                setInvitationCode(code.class_token);
-                setInvitationLink(`${process.env.NEXT_PUBLIC_BASE_URL}/join-class?code=${code.class_token}&class_id=${class_id}`)
-            }
-        }
-        catch (error) {
-            setClassDetail(null);
-        }
-    };
     useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const data = await fetchClassDetailTeacher(class_id as string, getCookieCustom('accessToken') as string);
+                const code = await fetchInvitationCode(class_id as string, getCookieCustom('accessToken') as string);
+
+                if (data) {
+                    setClassDetail(data);
+                }
+                if (code.status !== 400) {
+                    setInvitationCode(code.class_token);
+                    setInvitationLink(`${process.env.NEXT_PUBLIC_BASE_URL}/join-class?code=${code.class_token}&class_id=${class_id}`)
+                }
+            }
+            catch (error) {
+                setClassDetail(null);
+            }
+        };
         if (class_id != undefined) {
             fetchUserData();
         }
