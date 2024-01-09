@@ -52,19 +52,6 @@ function ReviewDetailPage() {
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
     const [status, setStatus] = useState<string>("");
 
-    const fetchData = async () => {
-        const accessToken = getCookieCustom("accessToken");
-        const data = await fetchGradeReviewDetail(accessToken as string, review_id as string);
-        if (data.status === 200) {
-            setReviewDetail(data.data);
-            setComments(data.data.comments);
-        }
-        else {
-            setReviewDetail(null);
-            setComments([]);
-        }
-    };
-
     const openConfirmModal = () => {
         setIsConfirmModalOpen(true);
     };
@@ -75,6 +62,18 @@ function ReviewDetailPage() {
 
 
     const handleComment = async () => {
+        const fetchData = async () => {
+            const accessToken = getCookieCustom("accessToken");
+            const data = await fetchGradeReviewDetail(accessToken as string, review_id as string);
+            if (data.status === 200) {
+                setReviewDetail(data.data);
+                setComments(data.data.comments);
+            }
+            else {
+                setReviewDetail(null);
+                setComments([]);
+            }
+        };
         if (review_id === undefined) {
             return;
         }
@@ -144,6 +143,18 @@ function ReviewDetailPage() {
         </>
 
     useEffect(() => {
+        const fetchData = async () => {
+            const accessToken = getCookieCustom("accessToken");
+            const data = await fetchGradeReviewDetail(accessToken as string, review_id as string);
+            if (data.status === 200) {
+                setReviewDetail(data.data);
+                setComments(data.data.comments);
+            }
+            else {
+                setReviewDetail(null);
+                setComments([]);
+            }
+        };
         if (review_id !== undefined)
             fetchData();
     }, [review_id])

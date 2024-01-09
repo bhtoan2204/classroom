@@ -91,7 +91,7 @@ const TabAccount = () => {
       try {
         const accessToken = getCookieCustom('accessToken');
         if (image !== null) {
-          const response = await fetch(process.env.NEXT_PUBLIC_API_HOST + '/user/upload_avatar', {
+          await fetch(process.env.NEXT_PUBLIC_API_HOST + '/user/upload_avatar', {
             method: 'PATCH',
             headers: {
               'Authorization': 'Bearer ' + accessToken,
