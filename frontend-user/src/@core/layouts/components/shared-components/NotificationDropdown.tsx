@@ -122,8 +122,6 @@ const NotificationDropdown = () => {
       await fetchMarkRead(_id, accessToken);
     }
     const role = getCookieCustom("role") as string;
-    console.log(type)
-    console.log(role)
     if (type === 'grade_review') {
       if (role === "teacher") {
         router.push(`/teacher/grade-review/${url_id}`)

@@ -132,7 +132,7 @@ export class MailService {
                     'Content-type': 'application/json',
                 },
             });
-            console.log(response.data);
+
             return { status: 200, message: response.data };
         }
         catch (err) {

@@ -43,7 +43,7 @@ export class NotificationGateway implements OnModuleInit {
                 else {
                     this.socketMap.set(payload._id, [socketId]);
                 }
-                console.log('New Connection:', payload._id, socketId);
+
                 return socketId;
             }
             catch (error) {
@@ -68,7 +68,7 @@ export class NotificationGateway implements OnModuleInit {
                 }
                 this.socketMap.set(payload._id, socketIds);
             }
-            console.log('Disconnected:', payload._id, socketId);
+
         }
         catch (error) {
             console.error('Error handling disconnection:', error.message);
@@ -84,7 +84,6 @@ export class NotificationGateway implements OnModuleInit {
             const receiverId = notification.receiver_id;
             const receiverSocketIds = this.socketMap.get(receiverId);
             if (!receiverSocketIds) {
-                console.log('No socket found for user:', receiverId);
                 return;
             }
             for (const socketId of receiverSocketIds) {

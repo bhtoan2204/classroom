@@ -10,8 +10,7 @@ function ClassSupportedFeature({ ClassId }: any) {
 
     useEffect(() => {
         async function fetchTeachers() {
-            if(ClassId === undefined)
-            {
+            if (ClassId === undefined) {
 
                 return
             }
@@ -31,14 +30,13 @@ function ClassSupportedFeature({ ClassId }: any) {
     useEffect(() => {
         async function fetchStudents() {
 
-            if(ClassId === undefined)
-            {
-                
+            if (ClassId === undefined) {
+
                 return;
             }
 
             const { status, data } = await GET_getClassMembers(ClassId)
-            console.log(data)
+
             if (status == 200) {
                 setStudents(data)
             }
@@ -60,7 +58,7 @@ function ClassSupportedFeature({ ClassId }: any) {
 
     const teachersOfTheClass = teachers.length > 0 ?
         teachers.map((teacher: any) => {
-            
+
             return (
                 <>
                     <ListItem disableGutters key={teacher._id}>

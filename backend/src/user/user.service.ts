@@ -332,8 +332,6 @@ export class UserService {
 
   async promoteAdmin(user: User, code: any) {
     try {
-      console.log(this.configService.get('PROMOTE_ADMIN_CODE'))
-      console.log(code)
       if (code.code !== this.configService.get('PROMOTE_ADMIN_CODE')) throw new ConflictException("Code not match");
 
       const updatedUser = await this.userRepository.findOneAndUpdate({ _id: user._id }, { role: 'admin' }).exec();

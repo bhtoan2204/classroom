@@ -105,8 +105,6 @@ function ReviewDetailPage() {
         const accessToken = getCookieCustom("accessToken");
         const data = await fetchMakeDecision(accessToken as string, review_id as string, status);
 
-        console.log(data);
-
         if (data.status === 201) {
             if (reviewDetail !== null) {
                 sendNotification({
