@@ -33,7 +33,6 @@ export class NotificationService {
     }
 
     async markRead(currentUser: User, notificationId: string) {
-        console.log(notificationId);
         const notification = await this.notificationRepository.findOne({
             receiver_id: currentUser._id
         });

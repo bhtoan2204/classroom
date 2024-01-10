@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Param, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiParam } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/utils/guard/authenticate/jwt-auth.guard";
 import { CurrentUser } from "src/utils/decorator/current-user.decorator";
@@ -7,6 +7,7 @@ import { InvitationService } from "../service/invitation.service";
 import { RolesGuard } from "src/utils/guard/authorize/role.guard";
 import { Role } from "src/utils/enum/role.enum";
 import { Roles } from "src/utils/decorator/role.decorator";
+import { InviteEmailDto } from "../dto/inviteEmail.dto";
 
 @ApiTags('Invitation for Teacher')
 @Controller('invitation')
@@ -41,6 +42,13 @@ export class InvitationController {
     @ApiParam({ name: 'classId', type: String })
     async joinClass(@CurrentUser() user, @Param() params: any) {
         return this.invitationService.joinClass(user, params.classToken, params.classId);
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Post('/inviteByEmail')
+    @ApiOperation({ summary: 'Join class' })
+    async sendInviteEmail(@CurrentUser() user, @Body() dto: InviteEmailDto) {
+        return this.invitationService.sendEmailInvite(user, dto);
     }
 
 }

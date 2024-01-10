@@ -99,7 +99,7 @@ const GradeStructure: React.FC<ClassDetailProps> = ({ class_id }) => {
                 id: class_id,
             }
             multipleNotifications(notificationData);
-            console.log('notification sent');
+
         }
     }
     const handleDeleteGradeCompo = (gradeCompo_name: string) => {

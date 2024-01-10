@@ -1,6 +1,6 @@
-import { Backdrop, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Menu, MenuItem, Stack, Tooltip, Typography } from "@mui/material";
+import { Backdrop, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Dialog, FormControl, IconButton, Menu, MenuItem, Stack, TextField, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { MouseEvent, useEffect, useState } from "react";
+import React, {MouseEvent, useEffect, useState } from "react";
 import ClassSupportedFeature from "src/views/student/class/ClassSupportedFeature";
 import ClassTasks from "src/views/student/class/ClassTasks";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -9,7 +9,8 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { DELETE_leaveClass } from "src/api/student/class/leave_class/api";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { GET_getClassDetail } from "src/api/student/class/get_class_detail/api";
+import { GET_getClassDetail, GET_getStudentId, POST_mapStudentId } from "src/api/student/class/get_class_detail/api";
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 
 
 const classroomImages: any =
@@ -34,6 +35,10 @@ const StudentRoute = () => {
   const [backdropOpen, setBackdropOpen] = useState<any>(false)
   const [backdropContent, setBackdropContent] = useState<any>(<></>)
   const [classDetail, setClassDetail] = useState<any>({})
+  const [studentId, setStudentId] = useState<any>("loading...")
+  const [onChangeStudentId, setOnChangeStudentId] = useState<any>("loading...")
+  const [studentIdDialogOpen, setStudentIdDialogOpen] = useState<any>(false);
+  const [editStudentIdMessageProps, setEditStudentIdMessageProps] = useState<any>({display: 'none', color: "green", text: ""})
 
   useEffect(() =>
   {
@@ -62,6 +67,33 @@ const StudentRoute = () => {
   useEffect(() => {
     setImageSrc(getRandomImage())
   }, [])
+
+  useEffect(() =>
+  {
+    if(class_id === undefined)
+    {
+      
+      return;
+    }
+
+    async function fetchStudentId()
+    {
+      const {status, data} = await GET_getStudentId(class_id);
+      if(status == 200 && !data.message)
+      {
+        setStudentId(data.student_id)
+        setOnChangeStudentId(data.student_id)
+      }
+      else
+      {
+        setStudentId("Error happend...")
+        setOnChangeStudentId("Error happen...")
+      }
+    }
+
+    fetchStudentId();
+  }
+  ,[class_id])
 
   function getRandomImage() {
     const randomNum = Math.round(Math.random() * 100) + classroomImages.length;
@@ -139,7 +171,44 @@ const StudentRoute = () => {
     }
   }
 
+  async function handleSubmitEditStudentId(event: React.FormEvent<HTMLFormElement>)
+  {
+    event.preventDefault();
+    if(onChangeStudentId.length < 1)
+    {
 
+      return;
+    }
+
+    if(classDetail.is_active == false)
+    {
+      setEditStudentIdMessageProps({display: 'block', color: 'orange', text: 'this class is inactive now!'})
+
+      return;
+    }
+
+    const {status} = await POST_mapStudentId(class_id, onChangeStudentId);
+    if(status == 200)
+    {
+      setEditStudentIdMessageProps({display: 'block', color: 'green', text: 'Edit your student ID successfully!'})
+      setStudentId(onChangeStudentId)
+    }
+    else
+    {
+      setEditStudentIdMessageProps({display: 'block', color: 'red', text: 'Edit your student ID failed!'})
+      setOnChangeStudentId(studentId)
+    }
+
+    setTimeout(() =>
+    {
+      setEditStudentIdMessageProps({display: 'none', color: 'black', text: ""})
+    }, 3000)
+  }
+
+  function handleChangeStudentId(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
+  {
+    setOnChangeStudentId(event.target.value)
+  }
 
   //Callbacks
 
@@ -171,6 +240,13 @@ const StudentRoute = () => {
       </>
 
     setBackdropContent(warningDisplay)
+  }
+
+  const menuItemClick_studentIdDialog: any = () =>
+  {
+    setAnchorEl(null)
+    setMoreMenuOpen(false)
+    setStudentIdDialogOpen(true)
   }
 
   const isActiveState = 
@@ -218,6 +294,7 @@ const StudentRoute = () => {
                   anchorEl={anchorEl}
                   onClose={handleMoreVertButtonClose}
                 >
+                  <MenuItem onClick={(e) => {handleMenuItemClick(e, menuItemClick_studentIdDialog)}}><Stack direction={"row"}><PermIdentityIcon/><Typography component={"div"} marginLeft={3}>Student Id</Typography></Stack></MenuItem>
                   <MenuItem onClick={(e) => {handleMenuItemClick(e, menuItemClick_leaveTheClass)}}><Stack direction={"row"}><LogoutIcon/><Typography color={"red"} marginLeft={3}>Leave the class</Typography></Stack></MenuItem>
                 </Menu>
               </Stack>
@@ -225,7 +302,7 @@ const StudentRoute = () => {
           </Card>
           <Stack direction={"row"} spacing={20} width={"100%"} marginTop={25}>
             <ClassSupportedFeature ClassId={class_id} />
-            <ClassTasks />
+            <ClassTasks ListAssignments={classDetail.list_assignment_url} height={"100%"} maxHeight={"400px"}/>
           </Stack>
         </div>
         <Backdrop
@@ -236,6 +313,37 @@ const StudentRoute = () => {
             {backdropContent}
           </Card>
         </Backdrop>
+        <Dialog
+          open={studentIdDialogOpen}
+          onClose={(e: any) => 
+            {
+              e.target; 
+              setStudentIdDialogOpen(false)
+            }
+          }
+          fullWidth
+        >
+          <Stack width={"100%"} paddingY={4} paddingX={4}>
+              <Typography component={"div"}>
+                  Your student ID
+              </Typography>
+              <Typography component={"div"} fontSize={"small"} color={"gray"} marginBottom={2}>
+                  You can ask to change the ID by editing and sending right here
+              </Typography>
+              <form onSubmit={(handleSubmitEditStudentId)}>
+                <FormControl fullWidth>
+                  <TextField fullWidth
+                  value={onChangeStudentId} onChange={handleChangeStudentId}/>
+                  <Typography color={editStudentIdMessageProps.color} component={"div"} display={editStudentIdMessageProps.display}>
+                      {editStudentIdMessageProps.text}
+                  </Typography>
+                  <Button type="submit" sx={{paddingY:2, marginY:2, width:"100%"}}>
+                    Edit
+                  </Button>
+                </FormControl>
+              </form>
+          </Stack>
+        </Dialog>
       </>
   )
 }

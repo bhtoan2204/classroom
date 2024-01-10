@@ -25,13 +25,18 @@ export class ClassService {
             class_id: classId,
         });
 
-        classUser.students.forEach(student => {
-            if (student.user_id.equals(user._id)) {
-                return true;
-            }
-        });
+        const foundResult = classUser.students.find((student) => student.user_id.equals(user._id))
 
-        return false;
+        if(foundResult)
+        {
+
+            return true;
+        }
+        else
+        {
+
+            return false;
+        }
     }
 
     async checkInClassForJoin(user: User, classId: Types.ObjectId): Promise<any> {
@@ -168,7 +173,7 @@ export class ClassService {
         const clazzz = await this.classRepository.findOne({ _id: classId }).exec();
         if (!clazzz) return new NotFoundException("Class not found");
         const check = await this.checkInClassForView(user, classId);
-        if (check) {
+        if (!check) {
             return new ForbiddenException('You are not in this class')
         }
         const clazz = await this.classRepository.findOne({ _id: classId });
@@ -181,14 +186,16 @@ export class ClassService {
         if (!clazzz) return new NotFoundException("Class not found");
 
         const check = await this.checkInClassForView(user, classId);
+
         if (!check) {
-            return new ForbiddenException('You are already in this class')
+            return new ForbiddenException('You are not in this class')
         }
         const classUser = await this.classUserRepository.findOne({
-            class_id: new Types.ObjectId(classId)
+            class_id: classId,
         })
+
         const studentIds = classUser.students.map(student => student.user_id);
-        const students = await this.userRepository.find({ _id: { $in: studentIds, $ne: user._id } }).select("fullname email").exec();
+        const students = await this.userRepository.find({ _id: { $in: studentIds } }).select("fullname email").exec();
 
         return students;
     }
@@ -200,10 +207,10 @@ export class ClassService {
 
         const check = await this.checkInClassForView(user, classId);
         if (!check) {
-            return new ForbiddenException('You are already in this class')
+            return new ForbiddenException('You are not in this class')
         }
         const classUser = await this.classUserRepository.findOne({
-            class_id: new Types.ObjectId(classId)
+            class_id: classId
         })
         const teacherIds = classUser.teachers.map(teacher => teacher.user_id);
         const teachers = await this.userRepository.find({ _id: { $in: teacherIds } }).select("fullname email").exec();
@@ -264,5 +271,33 @@ export class ClassService {
             return new HttpException("Class not found", HttpStatus.NOT_FOUND)
         }
         return dbClass;
+    }
+
+    async getStudentId(user: User, class_id: string)
+    {
+        const dbClassId = new Types.ObjectId(class_id);
+
+        const dbUserClassesProp = (await this.userRepository.findOne({_id: user._id}).exec()).classes;
+
+        const isJoinedClass = dbUserClassesProp.findIndex((value: any) => value.class_id == class_id)
+        if(isJoinedClass == -1)
+        {
+
+            return new HttpException("Class not found", HttpStatus.NOT_FOUND)
+        }
+
+        const dbUserClass = await this.classUserRepository.findOne({class_id: dbClassId})
+
+        const target = dbUserClass.students.find((student) => student.user_id.equals(user._id));
+        if(target === undefined)
+        {
+
+            return new HttpException("Not found", HttpStatus.NOT_FOUND)
+        }
+        else
+        {
+
+            return {student_id: target.student_id};
+        }
     }
 }

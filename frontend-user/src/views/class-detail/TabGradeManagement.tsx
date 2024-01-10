@@ -143,7 +143,7 @@ const GradeManagement: React.FC<ClassDetailProps> = ({ class_id }) => {
         formData.append('grade', specifiedAssignmentFile);
         formData.append('class_id', class_id);
         formData.append('gradeCompo_name', selectedItem);
-        console.log(selectedItem)
+
         const accessToken = getCookieCustom('accessToken') as string;
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/teacher/gradeManagement/uploadGradeByAssignment`, {
             method: 'POST',
@@ -152,9 +152,6 @@ const GradeManagement: React.FC<ClassDetailProps> = ({ class_id }) => {
             },
             body: formData
         });
-
-        const data = await response.json();
-        console.log(data);
 
         if (response.ok) {
             setSeverity('success');

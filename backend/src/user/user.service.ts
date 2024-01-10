@@ -13,6 +13,7 @@ import { SearchService } from 'src/elastic/search.service';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
+import { Class, ClassDocument } from 'src/utils/schema/class.schema';
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,7 @@ export class UserService {
     @InjectModel(User.name) private userRepository: Model<UserDocument>,
     @InjectModel(RegisterOtp.name) private registerOtpRepository: Model<RegisterOtpDocument>,
     @InjectModel(ResetOtp.name) private resetOtpRepository: Model<ResetOtpDocument>,
+    @InjectModel(Class.name) private classRepository: Model<ClassDocument>,
     @Inject(MailService) private readonly mailService: MailService,
     @Inject(SearchService) private readonly searchService: SearchService,
     @Inject(ConfigService) private readonly configService: ConfigService,
@@ -264,7 +266,8 @@ export class UserService {
         await newOtp.save();
       }
       const title = "Register your account";
-      await this.mailService.sendOtp(email, otp, title);
+      // await this.mailService.sendOtp(email, otp, title);
+      await this.mailService.sendMail(email, title, "Here your OTP", otp.toString());
       return { message: "OTP sent" };
     }
     catch (err) {
@@ -275,7 +278,6 @@ export class UserService {
   async sendResetOTP(email: string) {
     try {
       await this.checkExistForReset(email);
-
       const otp = Math.floor(100000 + Math.random() * 900000);
       const otpRecord = await this.resetOtpRepository.findOne({ email }).exec();
       if (otpRecord) {
@@ -290,7 +292,7 @@ export class UserService {
         await newOtp.save();
       }
       const title = "Reset your password";
-      await this.mailService.sendOtp(email, otp, title);
+      await this.mailService.sendMail(email, title, "Here your OTP", otp.toString());
       return { message: "OTP sent" };
     }
     catch (err) {
@@ -330,8 +332,6 @@ export class UserService {
 
   async promoteAdmin(user: User, code: any) {
     try {
-      console.log(this.configService.get('PROMOTE_ADMIN_CODE'))
-      console.log(code)
       if (code.code !== this.configService.get('PROMOTE_ADMIN_CODE')) throw new ConflictException("Code not match");
 
       const updatedUser = await this.userRepository.findOneAndUpdate({ _id: user._id }, { role: 'admin' }).exec();
@@ -340,6 +340,18 @@ export class UserService {
     }
     catch (err) {
       throw new ConflictException(err);
+    }
+  }
+
+  async getStatistics() {
+    const totalTeacher = await this.userRepository.countDocuments({ role: 'teacher' }).exec();
+    const totalStudent = await this.userRepository.countDocuments({ role: 'student' }).exec();
+    const totalClass = await this.classRepository.countDocuments().exec();
+
+    return {
+      totalTeacher,
+      totalStudent,
+      totalClass,
     }
   }
 }

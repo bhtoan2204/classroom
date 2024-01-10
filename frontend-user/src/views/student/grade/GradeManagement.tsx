@@ -12,9 +12,9 @@ import Tooltip from '@mui/material/Tooltip';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import { POST_requestGradeReview } from 'src/api/student/grade/grade_review/api';
 
-// import { SendNotification, sendNotification } from 'src/api/socket';
+import { SendNotification, sendNotification } from 'src/api/socket';
 
-function GradeManagement({ ClassId, GradeCompositions }: any) {
+function GradeManagement({ ClassId, GradeCompositions, HostId, ClassName }: any) {
 
     const [AskToReviewDialogOpen, setAskToReviewDialogOpen] = useState<any>(false)
 
@@ -77,16 +77,17 @@ function GradeManagement({ ClassId, GradeCompositions }: any) {
         if (status == 201) {
             const copiedDialogMessageProp = { display: 'block', color: "green", text: "Send request successfully!" }
             setDialogMessageProp(copiedDialogMessageProp)
-            console.log(data);
 
-            // const notification: SendNotification = 
-            // {
-            //     receiver: "",
-            //     title: "",
-            //     content: "",
-            //     id: ""
-            // }
-            // sendNotification(notification)
+            const notiTitle = `Request to review ${data.gradeCompo_name} - ${ClassName}`;
+            const notiContent = `Student ${data.student_id} has asked to review ${data.gradeCompo_name} - ${ClassName}:${data.class_id}\nAt: ${data.createdAt}\nReason: ${data.student_explain}`
+            const notification: SendNotification = 
+            {
+                receiver_id: HostId,
+                title: notiTitle,
+                content: notiContent,
+                id: data._id
+            }
+            sendNotification(notification)
         }
         else {
             const copiedDialogMessageProp = { display: 'block', color: "red", text: "Send request failed. Please try again" }

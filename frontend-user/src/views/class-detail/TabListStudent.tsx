@@ -86,7 +86,7 @@ const StudentOfClass: React.FC<ClassDetailProps> = ({ class_id }) => {
             const fetchStudentData = async () => {
                 const accessToken = getCookieCustom('accessToken');
                 const { data, status } = await fetchListStudent(class_id, page + 1, rowsPerPage, accessToken as string);
-                console.log(data, status)
+
                 if (status === 200) {
                     setRows(data);
                     setContent('');

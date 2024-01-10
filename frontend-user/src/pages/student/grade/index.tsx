@@ -58,7 +58,7 @@ const StudentRoute = () => {
                         <ListItemAvatar>
                             <Avatar alt={`Class ${value.class_name}`} src={getRandomImage()} />
                         </ListItemAvatar>
-                        <ListItemText primary={value.class_name + " - " + value.class_id} secondary={value.class_description} />
+                        <ListItemText primary={value.class_name} secondary={value.class_description} />
                     </ListItemButton>
                 </ListItem>
             )
@@ -68,16 +68,6 @@ const StudentRoute = () => {
                 No class has been joined yet
             </div>
         </>
-
-    // interface ClassInfo { _id: string, className: string, description: string, id: string }
-
-    // const MockClassInfo: ClassInfo =
-    // {
-    //     _id: "658bf5a063abdfb1dc18cc14",
-    //     className: "Physics II",
-    //     description: "This is a Physics II class",
-    //     id: "658bf5a063abdfb1dc18cc14"
-    // }
 
     return (
         <div>

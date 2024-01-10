@@ -5,6 +5,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
 import { GET_getGradeReviews } from "src/api/student/grade/grade_review/api";
 
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const classroomImages: any =
     [
@@ -15,40 +16,6 @@ const classroomImages: any =
         "https://img.freepik.com/free-vector/interior-classroom_1308-26552.jpg?w=900&t=st=1703740419~exp=1703741019~hmac=4429dca33aab7a65a0e8cee9ff6d46859f359a329a51dd0c8f8abbfc3405b68a",
         "https://img.freepik.com/free-vector/teaching-concept-illustration_114360-2666.jpg?w=740&t=st=1703740458~exp=1703741058~hmac=87a169eb5dfdad3850a9e9e43db31a22dd297f4381e9b6ac9a97bc9a25a65c5b",
     ]
-
-
-// const MockData =
-//     [
-//         {
-//             _id: "mockdata-01",
-//             class_id: "6592e0148058c601d6f46419",
-//             class_name: "Advanced Web Programming",
-//             description: "In this course, you will be able to study more detail about how to create a modern website",
-//             host: "6592df7c8058c601d6f46414",
-//             is_active: true,
-//             gradeCompo_name: "Midterm",
-//             current_grade: 7,
-//             expected_grade: 10,
-//             student_explain: "missing grade at the third question, sir",
-//             comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
-//             finalDecision: { status: "Unknown", updatedGrade: null }
-//         },
-//         {
-//             _id: "mockdata-02",
-//             class_id: "6592e0148058c601d6f46419",
-//             class_name: "Data structure and Algorithm",
-//             description: "In this course, you will study how to solve regular and famous problem by great applying of data structure and algorithms",
-//             host: "6592df7c8058c601d6f46414",
-//             is_active: false,
-//             gradeCompo_name: "Midterm",
-//             current_grade: 7,
-//             expected_grade: 10,
-//             student_explain: "missing grade at the third question, sir",
-//             comments: [{ commenter: "Macle Mike M", text: "Sir" }, { commenter: "Phuong Le", text: "Oke, let me check it" }],
-//             finalDecision: { status: "final", updatedGrade: null }
-//         }
-//     ]
-
 
 const StudentRoute = () => {
 
@@ -71,7 +38,7 @@ const StudentRoute = () => {
             }
         }
 
-        fetchGradeReviews()  
+        fetchGradeReviews()
 
     }, [])
 
@@ -100,7 +67,7 @@ const StudentRoute = () => {
                                     <ListItemAvatar>
                                         <Avatar alt={`Class ${value.class_name}`} src={getRandomImage()} />
                                     </ListItemAvatar>
-                                    <ListItemText primary={value.class_name + " - " + value.class_id} secondary={value.class_description} />
+                                    <ListItemText primary={value.class_name} secondary={value.class_description} />
                                 </ListItemButton>
                                 <ListItemButton href={`/student/review/${value._id}`}>
                                     <IconButton size="large">
@@ -109,12 +76,12 @@ const StudentRoute = () => {
                                 </ListItemButton>
                             </Stack>
                             <Divider />
-                            <Collapse 
-                            in={collapseOpenProps[index]} timeout={"auto"} unmountOnExit sx={{ paddingX: 4 }}>
-                                <Stack 
-                                paddingY={3}
-                                paddingX={5}
-                                sx={{borderColor: "#094885", borderWidth: 2, borderStyle:"solid", borderRadius:"10px"}}>
+                            <Collapse
+                                in={collapseOpenProps[index]} timeout={"auto"} unmountOnExit sx={{ paddingX: 4 }}>
+                                <Stack
+                                    paddingY={3}
+                                    paddingX={5}
+                                    sx={{ borderColor: "#094885", borderWidth: 2, borderStyle: "solid", borderRadius: "10px" }}>
                                     <Stack direction={"row"}>
                                         <Typography component={"div"} fontSize={"large"}>
                                             Grade review -
@@ -130,7 +97,10 @@ const StudentRoute = () => {
                                             </Typography>
                                             <Typography color={value.finalDecision.status == "approved" ? "green" : "gray"}>
                                                 <IconButton>
-                                                    {value.finalDecision.status == "approved" ? <CheckCircleOutlineIcon color={"success"} /> : <HourglassTopIcon/>}
+                                                    {value.finalDecision.status == "approved" ?
+                                                        <CheckCircleOutlineIcon color={"success"} /> :
+                                                        value.finalDecision.status == "pending" ?
+                                                            <HourglassTopIcon color={"warning"} /> : <CancelIcon color={"error"} />}
                                                 </IconButton>
                                                 {value.finalDecision.status}
                                             </Typography>

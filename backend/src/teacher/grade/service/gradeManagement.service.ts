@@ -193,7 +193,6 @@ export class GradeManagementService {
                 const userxgrade = await this.userGradeRepository.findOne({ user_id: user._id, class_id: classId }).exec();
                 const grades = userxgrade.grades;
                 const current_grade = grades.find((grade) => grade.gradeCompo_name == targetGradeCompoName).current_grade;
-                console.log(user.fullname, studentId, current_grade)
                 rows.push(Object.values({ Name: user.fullname, Id: studentId, [targetGradeCompoName]: current_grade }));
             }
             rows.unshift(Object.values({ Name: 'Student Name', Id: 'Student Id', [targetGradeCompoName]: targetGradeCompoName }));

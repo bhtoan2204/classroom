@@ -41,18 +41,15 @@ function JoinClassByLinkTab() {
         if (indexOfClassIdParamName < 0) {
             return result
         }
-        const endIndexOfClassId = inviteLink.indexOf(separator, indexOfClassIdParamName)
 
         const indexOfClassTokenParamName = inviteLink.indexOf(classTokenParamName)
         if (indexOfClassTokenParamName < 0) {
             return result
         }
-        const endIndexOfClassToken = inviteLink.indexOf(separator, endIndexOfClassId + 1)
+        const endIndexOfClassToken = inviteLink.indexOf(separator)
 
-        const class_id = inviteLink.substring((indexOfClassIdParamName + classIdParamName.length), endIndexOfClassId)
+        const class_id = inviteLink.substring((indexOfClassIdParamName + classIdParamName.length))
         const class_token = inviteLink.substring((indexOfClassTokenParamName + classTokenParamName.length), endIndexOfClassToken)
-        console.log(`classId: ${class_id}`)
-        console.log(`classToken: ${class_token}`)
 
         if (class_id !== undefined && class_token !== undefined) {
             result =
@@ -72,7 +69,7 @@ function JoinClassByLinkTab() {
 
         const response = await POST_joinClassByLink(class_id, class_token)
 
-        if (response.status == 201) {
+        if (response.status == 200) {
             const display =
                 <>
                     <CardContent>

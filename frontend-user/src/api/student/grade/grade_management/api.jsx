@@ -20,8 +20,6 @@ export async function GET_getStudentGrade(class_id)
 
         const status = response.status;
         const data = await response.json();
-        console.log(status)
-        console.log(data)
 
         return {status, data}
     }

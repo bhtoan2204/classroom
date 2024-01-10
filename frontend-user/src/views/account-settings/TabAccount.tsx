@@ -90,21 +90,14 @@ const TabAccount = () => {
     if (image !== null || profile.fullname !== originalFullname || profile.birthday !== originalBirthday) {
       try {
         const accessToken = getCookieCustom('accessToken');
-        const response = await fetch(process.env.NEXT_PUBLIC_API_HOST + '/user/upload_avatar', {
-          method: 'PATCH',
-          headers: {
-            'Authorization': 'Bearer ' + accessToken,
-          },
-          body: formData
-        });
-
-        if (response.status !== 201) {
-          const data = await response.json();
-          setSeverity('error');
-          setContent(data.error);
-          setOpenAlert(true);
-
-          return;
+        if (image !== null) {
+          await fetch(process.env.NEXT_PUBLIC_API_HOST + '/user/upload_avatar', {
+            method: 'PATCH',
+            headers: {
+              'Authorization': 'Bearer ' + accessToken,
+            },
+            body: formData
+          });
         }
 
         const updateData = await fetchUpdateProfile(profile.fullname, profile.birthday, accessToken as string);

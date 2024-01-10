@@ -12,6 +12,7 @@ import { UserSchema } from 'src/utils/schema/user.schema';
 import { UserGradeSchema } from 'src/utils/schema/userGrade.schema';
 import { SearchService } from 'src/elastic/search.service';
 import { SearchModule } from 'src/elastic/search.module';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { SearchModule } from 'src/elastic/search.module';
         MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
         MongooseModule.forFeature([{ name: 'UserGrade', schema: UserGradeSchema }]),
         SearchModule,
+        MailModule,
     ],
     controllers: [ClassController, InvitationController],
     providers: [ClassService, InvitationService, SearchService],
